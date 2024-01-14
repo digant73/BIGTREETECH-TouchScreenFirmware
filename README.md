@@ -378,6 +378,23 @@ After a new Marlin firmware is installed (see section [Marlin Firmware Installat
 
 ### TFT Firmware Changes
 
+- 1.27.x Patch 10, January 14 2024
+
+  **IMPROVEMENTS:**
+  - Event driven sounds, no polling (made by user @rondln on TFT official repo)
+  - Added TX Interrupt/DMA based serial writing
+  - Improved RX serial reading: the TFT is now able to manage contiguous (not separated by IDLE on serial line) and very long ACK messages (e.g. M43 output) from mainboard without any loss
+  - Added priorities to back end and front end tasks to speed up more critical tasks (e.g. printing)
+  - Extended baudrates range for serial ports. Values range for param serial_port in config.ini has been extended providing other standard baudrates such as 230400 and 921600 (e.g. supported by ESP3D)
+  - Added advanced_ok setting on config.ini file to allow Marlin ADVANCED_OK and static (TFT based) ADVANCED_OK support
+  - Added Monitoring menu: Available in Notification menu (pressing on Info button)
+  - Minor code cleanup/optimization
+
+  **BUGFIXES:**
+  - Fixed Random pauses or hesitation when printing
+  - Improved partial message retrieval handling
+  - Many other bugfixes
+
 - 1.27.x Patch 9.5, May 16 2023
 
   **BUG FIXES:**
@@ -627,6 +644,11 @@ After a new Marlin firmware is installed (see section [Marlin Firmware Installat
 <a name="Marlin-Firmware-Changes"></a>
 
 ### Marlin Firmware Changes
+
+- 2.1.2.1, January 14 2024
+
+  **IMPROVEMENTS:**
+  - Enabled and configured ADVANCED_OK feature to work in tandem with the ADVANCED_OK support provided on new TFT fw patch 10
 
 - 2.1.2, May 14 2023
   - Last update to Marlin 2.1.2 (May 14 2023)
