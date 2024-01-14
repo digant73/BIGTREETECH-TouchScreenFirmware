@@ -1113,34 +1113,24 @@ void sendQueueCmd(void)
 
         #ifdef BUZZER_PIN
           case 300:  // M300
-          {
-            uint16_t hz = 260;  // default Marlin tone frequency: 260Hz
-
             if (cmd_seen('S'))
-              hz = cmd_value();
-
-            if (fromTFT || cmd_seen_from(cmd_base_index, "TFT") || (hz <= SOUND_KEYPRESS))  // "M300 TFT", play on TFT
             {
-              uint16_t ms = 1000;  // default Marlin tone duration: 1000ms
+              uint16_t hz = cmd_value();
 
               if (cmd_seen('P'))
-                ms = cmd_value();
+              {
+                uint16_t ms = cmd_value();
 
-              Buzzer_TurnOn(hz, ms);
+                Buzzer_TurnOn(hz, ms);
 
-              if (!fromTFT)
-                Serial_Forward(cmd_port_index, "ok\n");
-
-              sendCmd(true, avoid_terminal);
-              return;
-            }
-            else  // forward sound to the host
-            {
-              sendCmd(false, avoid_terminal);
-              return;
+                if (!fromTFT && cmd_seen_from(cmd_base_index, "TFT"))  // "M300 TFT"
+                {
+                  sendCmd(true, avoid_terminal);
+                  return;
+                }
+              }
             }
             break;
-          }
         #endif
 
         case 301:  // Hotend PID
