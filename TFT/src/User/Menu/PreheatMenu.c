@@ -74,7 +74,7 @@ void refreshPreheatIcon(PREHEAT_STORE * preheatStore, uint8_t index, bool redraw
 
   char temptool[5];
   char tempbed[5];
-  sprintf(temptool, "%d", preheatStore->preheat_temp[index]);
+  sprintf(temptool, "%d", preheatStore->preheat_hotend[index]);
   sprintf(tempbed, "%d", preheatStore->preheat_bed[index]);
   lvIcon.lines[1].text = (uint8_t *)temptool;
   lvIcon.lines[2].text = (uint8_t *)tempbed;
@@ -105,9 +105,9 @@ void menuPreheat(void)
   PREHEAT_STORE preheatStore;
 
   setPreheatIcon(&preheatItems.items[KEY_ICON_6], nowHeater);
+  menuDrawPage(&preheatItems);
 
   W25Qxx_ReadBuffer((uint8_t*)&preheatStore, PREHEAT_STORE_ADDR, sizeof(PREHEAT_STORE));
-  menuDrawPage(&preheatItems);
 
   for (int i = 0; i < PREHEAT_COUNT; i++)
   {
@@ -129,7 +129,7 @@ void menuPreheat(void)
         {
           case BOTH:
             heatSetTargetTemp(BED, preheatStore.preheat_bed[key_num], FROM_GUI);
-            heatSetTargetTemp(heatGetCurrentHotend(), preheatStore.preheat_temp[key_num], FROM_GUI);
+            heatSetTargetTemp(heatGetCurrentHotend(), preheatStore.preheat_hotend[key_num], FROM_GUI);
             break;
 
           case BED_PREHEAT:
@@ -137,7 +137,7 @@ void menuPreheat(void)
             break;
 
           case NOZZLE0_PREHEAT:
-            heatSetTargetTemp(heatGetCurrentHotend(), preheatStore.preheat_temp[key_num], FROM_GUI);
+            heatSetTargetTemp(heatGetCurrentHotend(), preheatStore.preheat_hotend[key_num], FROM_GUI);
             break;
 
           default:
