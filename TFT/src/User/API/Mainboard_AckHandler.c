@@ -653,7 +653,7 @@ void parseAck(void)
       fanSetCurSpeed(ack_continue_seen("P") ? ack_value() : 0, ack_seen("S") ? ack_value() : 100);
     }
     #ifdef BUZZER_PIN
-      // parse M300 sound coming from the host, play on TFT
+      // parse M300 sound coming from mainboard, play on TFT
       else if (ack_seen("M300"))
       {
         uint16_t hz = 260;   // default Marlin tone frequency: 260Hz

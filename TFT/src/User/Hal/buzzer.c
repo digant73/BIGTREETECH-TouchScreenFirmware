@@ -64,7 +64,7 @@ void Buzzer_DeConfig(void)
 #endif
 }
 
-// play a sound with the help of interrupts
+// play a tone with the help of interrupts
 void Buzzer_PlaySound(uint16_t frequency, const uint16_t duration)
 {
   uint32_t silence = (frequency == SILENCE_FREQ);       // frequency == 0 indicates silence/pause in the sound

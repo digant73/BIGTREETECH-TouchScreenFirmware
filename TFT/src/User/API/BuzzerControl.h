@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+#include <stdbool.h>
 #include "variants.h"  // for BUZZER_PIN etc...
 
 typedef enum
@@ -26,6 +27,9 @@ typedef enum
 } SOUND;
 
 #ifdef BUZZER_PIN
+  // mute (with the exception of touch type sound, if enabled) or unmute the TFT if not already muted/unmuted respectively
+  void Buzzer_HandleMute(bool mute);
+
   void Buzzer_Play(SOUND sound);
 
   #define BUZZER_PLAY(x) Buzzer_Play(x)

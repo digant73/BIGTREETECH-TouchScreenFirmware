@@ -1,6 +1,8 @@
 #include "BuzzerControl.h"
 #include "includes.h"
 
+#ifdef BUZZER_PIN
+
 #define SILENCE              0
 
 #define C_SUBOCTAVE6         33
@@ -107,7 +109,23 @@
 #define A_SHARP_OCTAVE1    7459
 #define B_OCTAVE1          7902
 
-#ifdef BUZZER_PIN
+#define NO_SOUNDS_SET 0xFF  // flag to indicate no sound set
+
+static uint8_t origSounds = NO_SOUNDS_SET;
+
+void Buzzer_HandleMute(bool mute)
+{
+  if (mute && origSounds == NO_SOUNDS_SET)  // if mute is requested and sounds not already muted, mute all sounds
+  {
+    origSounds = infoSettings.sounds;                                     // backup current sounds setting
+    infoSettings.sounds = infoSettings.sounds & (1 << SOUND_TYPE_TOUCH);  // mute all sounds with the exception of touch sound if enabled
+  }
+  else if (!mute && origSounds != NO_SOUNDS_SET)  // if unmute is requested and sounds not already unmuted, restore sounds setting
+  {
+    infoSettings.sounds = origSounds;  // restore original sounds setting
+    origSounds = NO_SOUNDS_SET;        // reset flag
+  }
+}
 
 void Buzzer_Play(SOUND sound)
 {
