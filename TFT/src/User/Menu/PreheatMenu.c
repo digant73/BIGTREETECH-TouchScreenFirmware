@@ -117,6 +117,7 @@ void menuPreheat(void)
   while (MENU_IS(menuPreheat))
   {
     key_num = menuKeyGetValue();
+
     switch (key_num)
     {
       case KEY_ICON_0:
@@ -143,11 +144,13 @@ void menuPreheat(void)
           default:
             break;
         }
+
         refreshPreheatIcon(&preheatStore, key_num, false);
         break;
 
       case KEY_ICON_6:
         nowHeater = (TOOLPREHEAT)((nowHeater + 1) % PREHEAT_TOOL_COUNT);
+
         setPreheatIcon(&preheatItems.items[key_num], nowHeater);
         menuDrawItem(&preheatItems.items[key_num], key_num);
         break;
