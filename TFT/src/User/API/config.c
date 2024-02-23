@@ -579,7 +579,7 @@ void parseConfigKey(uint16_t index)
 
       case C_INDEX_MARLIN_TITLE:
       {
-        char * pchr = strrchr(cur_line, ':') + 1;
+        char * pchr = strchr(cur_line, ':') + 1;
         int utf8len = getUTF8Length((uint8_t*)pchr);
         int bytelen = strlen(pchr) + 1;
         if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_GCODE_LENGTH))
@@ -765,7 +765,7 @@ void parseConfigKey(uint16_t index)
     case C_INDEX_PREHEAT_NAME_6:
     {
       char pchr[LINE_MAX_CHAR];
-      strcpy(pchr, strrchr(cur_line, ':') + 1);
+      strcpy(pchr, strchr(cur_line, ':') + 1);
       int utf8len = getUTF8Length((uint8_t *)pchr);
       int bytelen = strlen(pchr) + 1;
       if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_STRING_LENGTH))
@@ -927,7 +927,7 @@ void parseConfigKey(uint16_t index)
     case C_INDEX_CUSTOM_LABEL_15:
     {
       char pchr[LINE_MAX_CHAR];
-      strcpy(pchr, strrchr(cur_line, ':') + 1);
+      strcpy(pchr, strchr(cur_line, ':') + 1);
       int utf8len = getUTF8Length((uint8_t*)pchr);
       int bytelen = strlen(pchr) + 1;
       if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_GCODE_NAME_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_GCODE_LENGTH))
@@ -959,7 +959,7 @@ void parseConfigKey(uint16_t index)
     {
       int lineIndex = index - C_INDEX_CUSTOM_GCODE_1;  // actual gcode index in config file
       char pchr[LINE_MAX_CHAR];
-      strcpy(pchr, strrchr(cur_line, ':') + 1);
+      strcpy(pchr, strchr(cur_line, ':') + 1);
       int len = strlen(pchr) + 1;
       // check if gcode length is ok and the name was ok
       if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH) && (customcode_good[lineIndex] == 1))
@@ -979,7 +979,7 @@ void parseConfigKey(uint16_t index)
 
     case C_INDEX_START_GCODE:
     {
-      char * pchr = strrchr(cur_line, ':') + 1;
+      char * pchr = strchr(cur_line, ':') + 1;
       int len = strlen(pchr);
       if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH))
       {
@@ -996,7 +996,7 @@ void parseConfigKey(uint16_t index)
 
     case C_INDEX_END_GCODE:
     {
-      char * pchr = strrchr(cur_line, ':') + 1;
+      char * pchr = strchr(cur_line, ':') + 1;
       int len = strlen(pchr);
       if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH))
       {
@@ -1013,7 +1013,7 @@ void parseConfigKey(uint16_t index)
 
     case C_INDEX_CANCEL_GCODE:
     {
-      char * pchr = strrchr(cur_line, ':') + 1;
+      char * pchr = strchr(cur_line, ':') + 1;
       int len = strlen(pchr);
       if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH))
       {
