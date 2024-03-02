@@ -366,8 +366,6 @@ void parseAck(void)
       Serial_Put(SERIAL_DEBUG_PORT, ack_cache);
     #endif
 
-    InfoHost_UpdateAckTimestamp();  // update last received ACK message timestamp
-
     bool avoid_terminal = false;
 
     //----------------------------------------
@@ -573,13 +571,23 @@ void parseAck(void)
     }
 
     //----------------------------------------
-    // "wait" response handling
+    // "wait" and "echo:busy: processing" response handling
     //----------------------------------------
 
-    // it is checked second (and not later on) because it is the most frequent response during printer idle
+    // it is checked second (and not later on) because it is the most frequent response during printing
     if (ack_starts_with("wait"))
     {
       avoid_terminal = !infoSettings.terminal_ack;  // suppress "wait" from terminal
+
+      // "wait" ACK message is a sort of "OK" ACK message for long and blocking gcodes so we update
+      // last received ACK message timestamp to avoid a later possible and wrong ACK message timeout
+      InfoHost_UpdateAckTimestamp();
+    }
+    else if (ack_starts_with("echo:busy: processing"))
+    {
+      // "echo:busy: processing" ACK message is a sort of "OK" ACK message for long and blocking gcodes so we update
+      // last received ACK message timestamp to avoid a later possible and wrong ACK message timeout
+      InfoHost_UpdateAckTimestamp();
     }
 
     //----------------------------------------
@@ -653,7 +661,7 @@ void parseAck(void)
       fanSetCurSpeed(ack_continue_seen("P") ? ack_value() : 0, ack_seen("S") ? ack_value() : 100);
     }
     #ifdef BUZZER_PIN
-      // parse M300 sound coming from mainboard, play on TFT
+      // parse M300 sound coming from the host, play on TFT
       else if (ack_seen("M300"))
       {
         uint16_t hz = 260;   // default Marlin tone frequency: 260Hz
