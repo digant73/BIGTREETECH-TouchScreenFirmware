@@ -378,6 +378,14 @@ After a new Marlin firmware is installed (see section [Marlin Firmware Installat
 
 ### TFT Firmware Changes
 
+- 1.27.x Patch 11, March 04 2024
+
+  **IMPROVEMENTS:**
+  - Added command checksum feature
+
+  **BUGFIXES:**
+  - Fixed some bugs
+
 - 1.27.x Patch 10, January 14 2024
 
   **IMPROVEMENTS:**
