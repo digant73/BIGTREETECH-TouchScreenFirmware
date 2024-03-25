@@ -2,15 +2,11 @@
  * For MKS_TFT35_V1_0 I2C FLASH MEMORY EEPROM support
  * HARD CODED FOR I2C1!!!
  */
-
-#include "includes.h"
+#include "i2c_eeprom.h"
+#include "includes.h"  // for I2C_EEPROM, GUI_DispString, Delay_us etc.
+#include "GPIO_Init.h"
 
 #if defined(I2C_EEPROM)
-
-#include "i2c_eeprom.h"
-#include "my_misc.h"
-#include "GPIO_Init.h"
-#include "variants.h"
 
 #define EEPROM_OK         0
 #define EEPROM_FAIL       1
