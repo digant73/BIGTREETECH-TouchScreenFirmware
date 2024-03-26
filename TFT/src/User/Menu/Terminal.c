@@ -599,14 +599,13 @@ static inline void menuKeyboardView(void)
 
       case GKEY_ABC_123:
         TOGGLE_BIT(numpad, 0);
+
         drawKeyboard();
         break;
 
       case GKEY_SPACE:
         if (nowIndex > 0 && nowIndex < CMD_MAX_SIZE - 2)  // -2 to leave space for '\n' and '\0' char
-        {
           gcodeBuf[nowIndex++] = ' ';
-        }
         break;
 
       case GKEY_DEL:
@@ -630,6 +629,7 @@ static inline void menuKeyboardView(void)
     {
       lastIndex = nowIndex;  // update gcode size
       gcodeBuf[nowIndex] = '\0';
+
       drawGcodeText(gcodeBuf);
 
       if (*gcodeBuf == '\0')  // text area empty
@@ -710,6 +710,7 @@ static TERMINAL_SRC getLastSrc(char * ptr)
     if (ptr[0] == 0x5 || ptr[0] == 0x6)
     {
       lastSrc = ptr[0] - 0x5;
+
       break;
     }
 
@@ -866,6 +867,7 @@ static void menuTerminalView(void)
 
       case TERM_TOGGLE_ACK:  // toggle ack in terminal
         TOGGLE_BIT(infoSettings.terminal_ack, 0);
+
         terminalDrawButton(TERM_TOGGLE_ACK, false);
         break;
 
@@ -934,6 +936,7 @@ static void menuTerminalView(void)
       if (info.bytes == 0)  // if '\0' is found, move to next byte in the buffer (avoiding an infinite loop due to info.bytes set to 0)
       {
         bufIndex = (bufIndex + 1) % terminalData->bufSize;
+
         break;
       }
 

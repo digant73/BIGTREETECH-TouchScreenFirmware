@@ -57,6 +57,7 @@ static void resetSettings(void)
 {
   initSettings();
   storePara();
+
   popupReminder(DIALOG_TYPE_SUCCESS, LABEL_INFO, LABEL_SETTINGS_RESET_DONE);
 }
 
@@ -179,6 +180,7 @@ static void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t it
         case SKEY_FIL_RUNOUT:
         {
           LABEL sensorLabel = itemToggleSmart[GET_BIT(infoSettings.runout, 1)];
+
           item->valueLabel.index = (GET_BIT(infoSettings.runout, 0)) ? sensorLabel.index : LABEL_OFF;
           break;
         }

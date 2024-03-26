@@ -55,15 +55,14 @@
 
 static uint8_t tempLabelString[MAX_LANG_LABEL_LENGTH];
 
-const char *const default_pack[LABEL_NUM] = {
+const char * const default_pack[LABEL_NUM] = {
   #define X_WORD(NAME) STRING_##NAME ,
     #include "Language.inc"
   #undef X_WORD
 };
 
 // keyword list for language.ini
-const char *const lang_key_list[LABEL_NUM] =
-{
+const char * const lang_key_list[LABEL_NUM] = {
   #define X_WORD(NAME) LANG_KEY_##NAME ,
     #include "Language.inc"
   #undef X_WORD
@@ -77,7 +76,7 @@ uint32_t getLabelFlashAddr(uint16_t index)
   return (LANGUAGE_ADDR + (MAX_LANG_LABEL_LENGTH * index));
 }
 
-uint8_t *textSelect(uint16_t index)
+uint8_t * textSelect(uint16_t index)
 {
   switch (infoSettings.language)
   {

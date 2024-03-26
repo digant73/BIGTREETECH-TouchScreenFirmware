@@ -56,7 +56,8 @@ extern "C" {
 #define strtod strtod_ligth  // light weight strtod() function without exponential support
 
 #define strncpy(...) \
-  do { \
+  do                 \
+  {                  \
     _Pragma("GCC error \"Error: strncpy() is deprecated! Use the alternatives like strncpy_pad() or strncpy_no_pad()\""); \
   } while (0)
 

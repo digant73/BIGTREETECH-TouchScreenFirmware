@@ -62,9 +62,11 @@ static void menuEmulatorFontColor(void)
     {
       totalItems[i].icon = CHARICON_UNCHECKED;
     }
+
     totalItems[i].itemType = LIST_LABEL;
     totalItems[i].titlelabel = lcd_color_names[i];
   }
+
   uint16_t curPage = curItem / LISTITEM_PER_PAGE;
 
   listViewCreate(title, totalItems, COUNT(totalItems), &curPage, true, NULL, NULL);
@@ -78,9 +80,12 @@ static void menuEmulatorFontColor(void)
       if (curIndex < (uint16_t)LCD_COLOR_COUNT && curIndex != curItem)  // has changed
       {
         totalItems[curItem].icon = CHARICON_UNCHECKED;
+
         listViewRefreshItem(curItem);  // refresh unchecked status
+
         curItem = curIndex;
         totalItems[curItem].icon = CHARICON_CHECKED;
+
         listViewRefreshItem(curItem);  // refresh checked status
 
         infoSettings.marlin_font_color = lcd_colors[curItem];
@@ -112,9 +117,11 @@ static void menuEmulatorBGColor(void)
     {
       totalItems[i].icon = CHARICON_UNCHECKED;
     }
+
     totalItems[i].itemType = LIST_LABEL;
     totalItems[i].titlelabel = lcd_color_names[i];
   }
+
   uint16_t curPage = curItem / LISTITEM_PER_PAGE;
 
   listViewCreate(title, totalItems, COUNT(totalItems), &curPage, true, NULL, NULL);
@@ -128,9 +135,12 @@ static void menuEmulatorBGColor(void)
       if (curIndex < (uint16_t)LCD_COLOR_COUNT && curIndex != curItem)  // has changed
       {
         totalItems[curItem].icon = CHARICON_UNCHECKED;
+
         listViewRefreshItem(curItem);  // refresh unchecked status
+
         curItem = curIndex;
         totalItems[curItem].icon = CHARICON_CHECKED;
+
         listViewRefreshItem(curItem);  // refresh checked status
 
         infoSettings.marlin_bg_color = lcd_colors[curItem];
@@ -190,18 +200,21 @@ static void menuMarlinModeSettings(void)
       case 2:
         TOGGLE_BIT(infoSettings.marlin_fullscreen, 0);
         marlinModeitems[2].icon = iconToggle[infoSettings.marlin_fullscreen];
+
         listViewRefreshItem(curIndex);
         break;
 
       case 3:
         TOGGLE_BIT(infoSettings.marlin_show_title, 0);
         marlinModeitems[3].icon = iconToggle[infoSettings.marlin_show_title];
+
         listViewRefreshItem(curIndex);
         break;
 
       case 4:
         infoSettings.marlin_type = (infoSettings.marlin_type + 1) % ITEM_MARLIN_TYPE_NUM;
         setDynamicTextValue(curIndex, (char *)labelMarlinType[infoSettings.marlin_type]);
+
         listViewRefreshItem(curIndex);
         break;
 
@@ -254,9 +267,12 @@ static void menuLanguage(void)
       if (curIndex < (uint16_t)LANGUAGE_NUM && curIndex != curItem)  // has changed
       {
         totalItems[curItem].icon = CHARICON_UNCHECKED;
+
         listViewRefreshItem(curItem);  // refresh unchecked status
+
         curItem = curIndex;  // update selected index
         totalItems[curItem].icon = CHARICON_CHECKED;
+
         listViewRefreshItem(curItem);  // refresh checked status
 
         infoSettings.language = curItem;
@@ -367,6 +383,7 @@ static void menuUISettings(void)
         case 8:
           infoSettings.knob_led_color = (infoSettings.knob_led_color + 1 ) % KNOB_LED_COLOR_COUNT;
           uiItems[curIndex].valueLabel = knob_led_color_names[infoSettings.knob_led_color];
+
           Knob_LED_SetColor(knob_led_colors[infoSettings.knob_led_color], infoSettings.neopixel_pixels);
           break;
 
@@ -421,6 +438,7 @@ static void menuSoundSettings(void)
     {
       TOGGLE_BIT(infoSettings.sounds, curIndex);
       sounditems[curIndex].icon = iconToggle[GET_BIT(infoSettings.sounds, curIndex)];
+
       listViewRefreshItem(curIndex);
     }
 
@@ -473,6 +491,7 @@ static void menuBrightnessSettings(void)
 
         sprintf(tempstr, (char *)textSelect(LABEL_PERCENT_VALUE), lcd_brightness[infoSettings.lcd_brightness]);
         setDynamicTextValue(curIndex, tempstr);
+
         LCD_SET_BRIGHTNESS(lcd_brightness[infoSettings.lcd_brightness]);
         break;
 
@@ -555,6 +574,7 @@ void menuScreenSettings(void)
       case KEY_ICON_0:
         TOGGLE_BIT(infoSettings.rotated_ui, 0);
         LCD_RefreshDirection(infoSettings.rotated_ui);
+
         TS_Calibrate();
         menuDrawPage(&screenSettingsItems);
         break;

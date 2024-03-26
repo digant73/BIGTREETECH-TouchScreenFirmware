@@ -24,7 +24,9 @@ void menuMarlinMode(void)
   if (infoSettings.marlin_show_title == 1)
   {
     STRINGS_STORE tempST;
+
     W25Qxx_ReadBuffer((uint8_t *)&tempST, STRINGS_STORE_ADDR, sizeof(STRINGS_STORE));
+
     GUI_DispStringInRect(0, 0, LCD_WIDTH, ST7920_GYSTART_FULLSCREEN, (uint8_t *)tempST.marlin_title);
   }
 

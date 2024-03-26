@@ -213,6 +213,7 @@ static inline bool processKnownEcho(void)
     if (strstr(ack_cache, knownEcho[i].msg))
     {
       isKnown = true;
+
       break;
     }
   }

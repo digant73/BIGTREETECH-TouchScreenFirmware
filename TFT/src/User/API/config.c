@@ -1011,7 +1011,7 @@ static void parseConfigKey(uint16_t index)
         strcpy(configPrintGcodes->start_gcode, pchr);
         #ifdef CONFIG_DEBUG
           GUI_DispStringInRect(recterrortxt.x0, recterrortxt.y0 + (BYTE_HEIGHT * 2), recterrortxt.x1, recterrortxt.y1,
-                              (uint8_t *)configPrintGcodes->start_gcode);
+                               (uint8_t *)configPrintGcodes->start_gcode);
           Delay_ms(1000);
           Delay_ms(1000);
         #endif

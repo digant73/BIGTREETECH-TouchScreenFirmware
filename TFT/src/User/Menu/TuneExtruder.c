@@ -114,6 +114,7 @@ static void menuNewExtruderESteps(void)
     if (now != measured_length)
     {
       now = measured_length;
+
       showNewESteps(measured_length, old_esteps, &new_esteps);
     }
 

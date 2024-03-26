@@ -59,6 +59,7 @@ static void drawSelectedMode(int8_t nowMode)
 void menuMode(void)
 {
   int8_t nowMode = GET_BIT(infoSettings.mode, 0);
+
   TS_ReDrawIcon = NULL;  // disable icon redraw callback function
 
   GUI_Clear(infoSettings.bg_color);
@@ -82,6 +83,7 @@ void menuMode(void)
     if (key_num == MKEY_0 || key_num == MKEY_1)
     {
       nowMode = key_num;
+
       break;
     }
 
@@ -89,8 +91,9 @@ void menuMode(void)
       if (encoderPosition)
       {
         nowMode = NOBEYOND(0, nowMode + encoderPosition, MODE_COUNT - 1);
-        drawSelectedMode(nowMode);
         encoderPosition = 0;
+
+        drawSelectedMode(nowMode);
       }
 
       if (LCD_Enc_ReadBtn(LCD_ENC_BUTTON_INTERVAL))
