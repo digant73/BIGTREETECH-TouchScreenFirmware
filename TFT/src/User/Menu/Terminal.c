@@ -913,6 +913,7 @@ static void menuTerminalView(void)
           // move to next first page and move on top of the loop and check again (with this block of code)
           terminalData->pageHead = (terminalData->pageHead + 1) % terminalData->maxPageCount;
           terminalUpdatePageCount();  // update page count
+
           break;
         }
       }
@@ -923,6 +924,7 @@ static void menuTerminalView(void)
         // set index to first page in page range and move on top of the loop to select the new page
         // to display (with block of code "if (oldPageIndex != terminalData->pageIndex)")
         terminalData->pageIndex = terminalData->pageCount;
+
         break;
       }
 
