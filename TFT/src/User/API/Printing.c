@@ -456,6 +456,7 @@ bool startPrint(void)
           // disable print restore flag (one shot flag) for the next print.
           // The flag must always be explicitly re-enabled (e.g by powerFailedSetRestore function)
           powerFailedSetRestore(false);
+
           break;
         }
 
