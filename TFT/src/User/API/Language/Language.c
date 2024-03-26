@@ -51,17 +51,17 @@
 #else
   #error "Error: invalid language defined"
 #endif
-// add new keywords in Language.inc file only
 
 static uint8_t tempLabelString[MAX_LANG_LABEL_LENGTH];
 
+// this list is Auto-Generated. Please add new keywords in Language.inc file only
 const char * const default_pack[LABEL_NUM] = {
   #define X_WORD(NAME) STRING_##NAME ,
     #include "Language.inc"
   #undef X_WORD
 };
 
-// keyword list for language.ini
+// this list is Auto-Generated. Please add new keywords in Language.inc file only
 const char * const lang_key_list[LABEL_NUM] = {
   #define X_WORD(NAME) LANG_KEY_##NAME ,
     #include "Language.inc"

@@ -208,14 +208,14 @@ const uint16_t charIconColor[CHARICON_NUM] =
 #define CHAR_TOGGLE_SMALL_OFF      "\u08D3"
 #define CHAR_TOGGLE_BODY           "\u08D4\u08D5"
 #define CHAR_TOGGLE_SWITCH         "\u08D6"
-#define CHAR_TOGGLE_ON             ""       // only for toggle state detection in list menu
-#define CHAR_TOGGLE_OFF            ""       // only for toggle state detection in list menu
+#define CHAR_TOGGLE_ON             ""              // only for toggle state detection in list menu
+#define CHAR_TOGGLE_OFF            ""              // only for toggle state detection in list menu
 
+// this list is Auto-Generated. Please add new icons in CharIcon.inc only
 static const char * const charIcon[CHARICON_NUM] = {
   #define X_CHAR(NAME) CHAR_##NAME ,
-  #include "CharIcon.inc"
-  #undef  X_CHAR
-// add new icons in icon_list.inc only
+    #include "CharIcon.inc"
+  #undef X_CHAR
 };
 
 uint8_t * IconCharSelect(uint8_t sel)

@@ -286,8 +286,8 @@ static void shutdownLoop(void)
 static void shutdownStart(void)
 {
   char tempstr[75];
-
   LABELCHAR(tempbody, LABEL_WAIT_TEMP_SHUT_DOWN);
+
   sprintf(tempstr, tempbody, infoSettings.auto_shutdown_temp);
 
   for (uint8_t i = 0; i < infoSettings.fan_count; i++)

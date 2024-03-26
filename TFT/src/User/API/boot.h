@@ -72,6 +72,7 @@ enum
     #include "icon_list.inc"
   #undef X_ICON
 
+  // keep the following always at the end of this list
   //ICON_RESERVE,
   ICON_PREVIEW,  // preview should be in the last place before ICON_NULL to save flash storage space
   ICON_NULL      // back ground sign

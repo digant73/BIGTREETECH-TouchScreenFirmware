@@ -41,12 +41,13 @@ enum
   LANGUAGE_NUM,
 };
 
-enum {
+// this list is Auto-Generated. Please add new keywords in Language.inc file only
+enum
+{
   #define X_WORD(NAME) LABEL_##NAME ,
     #include "Language.inc"
   #undef X_WORD
 
-  // add new keywords in 'Language.inc' file only
   // keep the following always at the end of this list
   LABEL_NUM,
   LABEL_NULL,
