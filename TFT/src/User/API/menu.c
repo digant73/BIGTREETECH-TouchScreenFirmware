@@ -509,7 +509,9 @@ static void menuClearGaps(void)
     GUI_SetBkColor(infoSettings.bg_color);
 
     for (uint8_t i = 1; i < COUNT(gapsSS); i++)
+    {
       GUI_ClearPrect(gapsSS + i);
+    }
   }
   else
   {
@@ -517,7 +519,9 @@ static void menuClearGaps(void)
     GUI_SetBkColor(infoSettings.bg_color);
 
     for (uint8_t i = 1; i < COUNT(gaps); i++)
+    {
       GUI_ClearPrect(gaps + i);
+    }
   }
 #else  // clear gaps on Landscape Mode except TFT70
   const GUI_RECT gaps[] = {
@@ -535,7 +539,9 @@ static void menuClearGaps(void)
   GUI_SetBkColor(infoSettings.bg_color);
 
   for (uint8_t i = 1; i < COUNT(gaps); i++)
+  {
     GUI_ClearPrect(gaps + i);
+  }
 #endif
 }
 
@@ -596,6 +602,7 @@ void setReminderMsg(int16_t inf, SYS_STATUS status)
   if (reminder.status != SYS_STATUS_IDLE)
   {
     reminder.status = SYS_STATUS_IDLE;
+
     menuDrawTitle();
   }
 
@@ -603,7 +610,8 @@ void setReminderMsg(int16_t inf, SYS_STATUS status)
   reminder.status = status;
   reminder.time = OS_GetTimeMs() + STATUS_BAR_REFRESH_TIME;
 
-  if (menuType != MENU_TYPE_FULLSCREEN) drawReminderMsg();
+  if (menuType != MENU_TYPE_FULLSCREEN)
+    drawReminderMsg();
 }
 
 void loopReminderManage(void)
@@ -634,6 +642,7 @@ void loopReminderManage(void)
   else
   { // clear status message
     reminder.status = SYS_STATUS_IDLE;
+
     menuDrawTitle();
   }
 }
@@ -645,6 +654,7 @@ void drawBusySign(void)
     GUI_SetColor(MENU_BUSY_DOT_COLOR);
     GUI_FillCircle(busySign.x, busySign.y, busySign.r);
     GUI_SetColor(infoSettings.font_color);
+
     busySign.status = SYS_STATUS_BUSY;
   }
 
@@ -756,6 +766,7 @@ void menuRefreshListPage(void)
   for (uint8_t i = 0; i < ITEM_PER_PAGE; i++)
   {
     RAPID_PRINTING_COMM()  // perform backend printing loop between drawing icons to avoid printer idling
+
     menuDrawListItem(&curListItems->items[i], i);
   }
 }
@@ -789,6 +800,7 @@ void setMenu(MENU_TYPE menu_type, LABEL * title, uint16_t rectCount, const GUI_R
 void menuSetTitle(const LABEL * title)
 {
   curTitle = title;
+
   menuDrawTitle();
 }
 
@@ -829,6 +841,7 @@ void menuDrawTitle(void)
   {
     GUI_SetTextMode(GUI_TEXTMODE_NORMAL);
     GUI_DispLenString(10, start_y, titleString, LCD_WIDTH - 20, true);
+
     start_x += GUI_StrPixelWidth(titleString);
 
     if (start_x > LCD_WIDTH - 20)
@@ -841,7 +854,8 @@ void menuDrawTitle(void)
   notificationDot();
 
   // draw reminder/storage status
-  if (reminder.status != SYS_STATUS_IDLE) drawReminderMsg();
+  if (reminder.status != SYS_STATUS_IDLE)
+    drawReminderMsg();
 }
 
 // when there is a button value, the icon changes color and redraws
@@ -936,6 +950,7 @@ void menuDrawPage(const MENUITEMS * menuItems)
   for (i = 0; i < ITEM_PER_PAGE; i++)
   {
     menuDrawItem(&curMenuItems->items[i], i);
+
     RAPID_PRINTING_COMM()  // perform backend printing loop between drawing icons to avoid printer idling
   }
 
@@ -1142,6 +1157,7 @@ KEY_VALUES menuKeyGetValue(void)
   if (menuType != MENU_TYPE_FULLSCREEN && tempkey == KEY_TITLEBAR)
   {
     titleBarPress();
+
     tempkey = KEY_IDLE;
   }
 
