@@ -16,18 +16,20 @@ static void blUpdateState(MENUITEMS * menu, const uint8_t bedLevelState)
 }
 
 #if DELTA_PROBE_TYPE == 2  // if Delta printer with removable probe
-  static void deltaMeshEditor(void)
-  {
-    OPEN_MENU(menuMeshEditor);
-  }
 
-  static void deltaZOffset(void)
-  {
-    storeCmd("M851\n");
+static void deltaMeshEditor(void)
+{
+  OPEN_MENU(menuMeshEditor);
+}
 
-    zOffsetSetMenu(true);  // use Probe Offset menu
-    OPEN_MENU(menuZOffset);
-  }
+static void deltaZOffset(void)
+{
+  storeCmd("M851\n");
+
+  zOffsetSetMenu(true);  // use Probe Offset menu
+  OPEN_MENU(menuZOffset);
+}
+
 #endif
 
 void menuBedLeveling(void)

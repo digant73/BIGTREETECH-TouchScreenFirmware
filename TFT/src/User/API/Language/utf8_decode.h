@@ -5,10 +5,11 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
-typedef struct {
+typedef struct
+{
   uint32_t startCodePoint;        // start unicode code point for language
   uint32_t endCodePoint;          // end unicode code point for language
   uint8_t  pixelHeight;           // font display pixel height

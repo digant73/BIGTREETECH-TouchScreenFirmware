@@ -30,7 +30,7 @@ void menuMarlinMode(void)
     GUI_DispStringInRect(0, 0, LCD_WIDTH, ST7920_GYSTART_FULLSCREEN, (uint8_t *)tempST.marlin_title);
   }
 
-  #if defined(ST7920_EMULATOR)
+  #ifdef ST7920_EMULATOR
     ST7920 st7920;
 
     if (infoSettings.marlin_type == LCD12864)
@@ -44,7 +44,7 @@ void menuMarlinMode(void)
     }
   #endif
 
-  #if defined(LCD2004_EMULATOR)
+  #ifdef LCD2004_EMULATOR
     if (infoSettings.marlin_type == LCD2004)
     {
       marlinInit = HD44780_Config;

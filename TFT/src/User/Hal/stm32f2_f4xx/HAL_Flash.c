@@ -16,7 +16,7 @@
  * Sector 11 0x080E 0000 - 0x080F FFFF 128 Kbyte
  */
 
-#ifdef MKS_TFT35_V1_0  // added for MKS TFT 35 V1.0 support. MKS_TFT35_V1_0 bootloader is 48KB, adjust flash mapping
+#if defined(MKS_TFT35_V1_0)  // added for MKS TFT 35 V1.0 support. MKS_TFT35_V1_0 bootloader is 48KB, adjust flash mapping
   #define ADDR_FLASH_SECTOR_0  ((uint32_t)0x08000000)  // base @ of sector 0, 16 Kbytes
   #define ADDR_FLASH_SECTOR_1  ((uint32_t)0x08004000)  // base @ of sector 1, 16 Kbytes
   #define ADDR_FLASH_SECTOR_2  ((uint32_t)0x08008000)  // base @ of sector 2, 16 Kbytes
@@ -51,7 +51,7 @@
   #define FLASH_SECTOR FLASH_Sector_1
 #endif
 
-#ifdef MKS_TFT35_V1_0
+#if defined(MKS_TFT35_V1_0)
 
 static inline uint32_t GetSector(uint32_t address)
 {
@@ -103,11 +103,11 @@ void HAL_FlashWrite(uint8_t * data, uint32_t len)
 
   FLASH_Unlock();
 
-#ifdef MKS_TFT35_V1_0  // added for MKS_TFT35_V1_0 support
-  FLASH_EraseSector(GetSector(SIGN_ADDRESS), VoltageRange_1);
-#else
-  FLASH_EraseSector(FLASH_SECTOR, VoltageRange_1);
-#endif
+  #if defined(MKS_TFT35_V1_0)  // added for MKS_TFT35_V1_0 support
+    FLASH_EraseSector(GetSector(SIGN_ADDRESS), VoltageRange_1);
+  #else
+    FLASH_EraseSector(FLASH_SECTOR, VoltageRange_1);
+  #endif
 
   for (i = 0; i < len; i++)
   {

@@ -22,10 +22,12 @@ static uint8_t item_index = 0;
 static uint8_t percentSteps_index = 1;
 
 #ifdef TFT70_V3_0
+
 void setSpeedItemIndex(uint8_t index)
 {
   item_index = index;
 }
+
 #endif
 
 void menuSpeed(void)

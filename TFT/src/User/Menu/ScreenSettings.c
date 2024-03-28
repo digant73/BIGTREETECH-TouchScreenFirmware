@@ -15,25 +15,15 @@ enum
   #endif
 };
 
-#define ITEM_MARLIN_TYPE_NUM 2
-static const char * const labelMarlinType[ITEM_MARLIN_TYPE_NUM] =
-{
-  // item value text(only for custom value)
-  "128x64",
-  "20x4"
-};
-
 #define ITEM_NOTIFICATION_TYPE_NUM 3
-static const char * const itemNotificationType[ITEM_NOTIFICATION_TYPE_NUM] =
-{
+static const char * const itemNotificationType[ITEM_NOTIFICATION_TYPE_NUM] = {
   // item value text(only for custom value)
   "OFF",
   "POPUP",
   "TOAST"
 };
 
-static const char * const itemSortBy[SORT_BY_COUNT] =
-{
+static const char * const itemSortBy[SORT_BY_COUNT] = {
   // item value text(only for custom value)
   "Date ▼",
   "Date ▲",
@@ -42,6 +32,13 @@ static const char * const itemSortBy[SORT_BY_COUNT] =
 };
 
 #ifdef HAS_EMULATOR
+
+#define ITEM_MARLIN_TYPE_NUM 2
+static const char * const labelMarlinType[ITEM_MARLIN_TYPE_NUM] = {
+  // item value text(only for custom value)
+  "128x64",
+  "20x4"
+};
 
 static void menuEmulatorFontColor(void)
 {
@@ -228,7 +225,7 @@ static void menuMarlinModeSettings(void)
   saveSettings();  // save settings
 }
 
-#endif  // ST7920_EMULATOR
+#endif  // HAS_EMULATOR
 
 static void menuLanguage(void)
 {

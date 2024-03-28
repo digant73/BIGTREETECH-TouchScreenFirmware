@@ -6,7 +6,7 @@
 #include "includes.h"  // for I2C_EEPROM, GUI_DispString, Delay_us etc.
 #include "GPIO_Init.h"
 
-#if defined(I2C_EEPROM)
+#ifdef I2C_EEPROM
 
 #define EEPROM_OK         0
 #define EEPROM_FAIL       1

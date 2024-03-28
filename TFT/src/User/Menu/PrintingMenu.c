@@ -105,10 +105,10 @@ static void setLayerNumberTxt(char * layer_number_txt)
   if (layerNumber > 0)
   {
     if (layerCount > 0
-        #ifndef TFT70_V3_0
-          && layerCount < 1000  // there's no space to display layer number & count if the layer count is above 999
-        #endif
-       )
+      #ifndef TFT70_V3_0
+        && layerCount < 1000  // there's no space to display layer number & count if the layer count is above 999
+      #endif
+      )
     {
       sprintf(layer_number_txt, " %u/%u ", layerNumber, layerCount);
     }

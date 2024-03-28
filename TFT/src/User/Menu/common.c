@@ -13,8 +13,7 @@ uint8_t currentFan = 0;
 uint8_t currentSpeedID = 0;
 
 // icons list for tool change
-const ITEM itemTool[MAX_HEATER_COUNT] =
-{
+const ITEM itemTool[MAX_HEATER_COUNT] = {
 // icon                          label
   {ICON_NOZZLE,                  LABEL_NOZZLE},
   {ICON_NOZZLE,                  LABEL_NOZZLE},
@@ -27,8 +26,7 @@ const ITEM itemTool[MAX_HEATER_COUNT] =
 };
 
 // icons list for Temperature step change
-const ITEM itemDegreeSteps[ITEM_DEGREE_NUM] =
-{
+const ITEM itemDegreeSteps[ITEM_DEGREE_NUM] = {
 // icon                          label
   {ICON_1_DEGREE,                LABEL_1_DEGREE},
   {ICON_5_DEGREE,                LABEL_5_DEGREE},
@@ -39,8 +37,7 @@ const ITEM itemDegreeSteps[ITEM_DEGREE_NUM] =
 const uint8_t degreeSteps[ITEM_DEGREE_NUM] = {1, 5, 10};
 
 // icons list for speed change steps
-const ITEM itemSpeed[ITEM_SPEED_NUM] =
-{
+const ITEM itemSpeed[ITEM_SPEED_NUM] = {
 // icon                          label
   {ICON_SLOW_SPEED,              LABEL_SLOW},
   {ICON_NORMAL_SPEED,            LABEL_NORMAL},
@@ -48,8 +45,7 @@ const ITEM itemSpeed[ITEM_SPEED_NUM] =
 };
 
 // icons list for percent change steps
-const ITEM itemPercent[ITEM_PERCENT_STEPS_NUM] =
-{
+const ITEM itemPercent[ITEM_PERCENT_STEPS_NUM] = {
 // icon                          label
   {ICON_E_1_PERCENT,             LABEL_1_PERCENT},
   {ICON_E_5_PERCENT,             LABEL_5_PERCENT},
@@ -60,8 +56,7 @@ const ITEM itemPercent[ITEM_PERCENT_STEPS_NUM] =
 const uint8_t percentSteps[ITEM_PERCENT_STEPS_NUM] = {1, 5, 10};
 
 // icons list for axis length/distance change steps
-const ITEM itemMoveLen[ITEM_MOVE_LEN_NUM] =
-{
+const ITEM itemMoveLen[ITEM_MOVE_LEN_NUM] = {
 // icon                          label
   {ICON_001_MM,                  LABEL_001_MM},
   {ICON_01_MM,                   LABEL_01_MM},
@@ -74,8 +69,7 @@ const ITEM itemMoveLen[ITEM_MOVE_LEN_NUM] =
 const float moveLenSteps[ITEM_MOVE_LEN_NUM] = {0.01f, 0.1f, 1, 10, 100};
 
 // icons list for Extruder length/distance change steps
-const ITEM itemExtLenSteps[ITEM_EXT_LEN_NUM] =
-{
+const ITEM itemExtLenSteps[ITEM_EXT_LEN_NUM] = {
 // icon                          label
   {ICON_E_1_MM,                  LABEL_1_MM},
   {ICON_E_5_MM,                  LABEL_5_MM},
@@ -88,14 +82,12 @@ const ITEM itemExtLenSteps[ITEM_EXT_LEN_NUM] =
 const float extlenSteps[ITEM_EXT_LEN_NUM] = {1.0f, 5.0f, 10.0f, 100.0f, 200.0f};
 
 // labels list for ON/OFF settings
-const LABEL itemToggle[ITEM_TOGGLE_NUM] =
-{
+const LABEL itemToggle[ITEM_TOGGLE_NUM] = {
   LABEL_OFF,
   LABEL_ON
 };
 
-const uint16_t iconToggle[ITEM_TOGGLE_NUM] =
-{
+const uint16_t iconToggle[ITEM_TOGGLE_NUM] = {
   CHARICON_TOGGLE_OFF,
   CHARICON_TOGGLE_ON
 };
@@ -115,16 +107,18 @@ bool nextScreenUpdate(uint32_t refreshTime)
 }
 
 #ifdef FRIENDLY_Z_OFFSET_LANGUAGE
-  void invertZAxisIcons(MENUITEMS * menuItems)
+
+void invertZAxisIcons(MENUITEMS * menuItems)
+{
+  if (GET_BIT(infoSettings.inverted_axis, Z_AXIS))
   {
-    if (GET_BIT(infoSettings.inverted_axis, Z_AXIS))
-    {
-      menuItems->items[KEY_ICON_0].icon = ICON_Z_INC;
-      menuItems->items[KEY_ICON_0].label.index = LABEL_UP;
-      menuItems->items[KEY_ICON_3].icon = ICON_Z_DEC;
-      menuItems->items[KEY_ICON_3].label.index = LABEL_DOWN;
-    }
+    menuItems->items[KEY_ICON_0].icon = ICON_Z_INC;
+    menuItems->items[KEY_ICON_0].label.index = LABEL_UP;
+    menuItems->items[KEY_ICON_3].icon = ICON_Z_DEC;
+    menuItems->items[KEY_ICON_3].label.index = LABEL_DOWN;
   }
+}
+
 #endif
 
 void drawBorder(const GUI_RECT * rect, uint16_t color, uint16_t edgeDistance)
