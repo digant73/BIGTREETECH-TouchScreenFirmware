@@ -4,15 +4,6 @@
 
 #ifdef STM32_HAS_FSMC
 
-uint16_t LCD_RD_DATA(void)
-{
-  volatile uint16_t ram;
-
-  ram = LCD->LCD_RAM;
-
-  return ram;
-}
-
 static void LCD_WriteReg(uint8_t LCD_Reg, uint16_t LCD_RegValue)
 {
   LCD->LCD_REG = LCD_Reg;
@@ -25,6 +16,15 @@ static uint16_t LCD_ReadReg(uint8_t LCD_Reg)
   Delay_us(5);
 
   return LCD_RD_DATA();
+}
+
+uint16_t LCD_RD_DATA(void)
+{
+  volatile uint16_t ram;
+
+  ram = LCD->LCD_RAM;
+
+  return ram;
 }
 
 static inline void LCD_GPIO_Config(void)
@@ -57,11 +57,11 @@ static inline void LCD_GPIO_Config(void)
   GPIO_InitSet(PD4, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);
   GPIO_InitSet(PD5, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);
 
-#ifdef MKS_TFT35_V1_0  // different pinout for MKS_TFT35_V1_0
-  GPIO_InitSet(PD12, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);
-#else
-  GPIO_InitSet(PE2, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);
-#endif
+  #if defined(MKS_TFT35_V1_0)  // different pinout for MKS_TFT35_V1_0
+    GPIO_InitSet(PD12, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);
+  #else
+    GPIO_InitSet(PE2, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);
+  #endif
   GPIO_InitSet(PD7, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);
 }
 
@@ -121,5 +121,7 @@ void LCD_HardwareConfig(void)
 }
 
 #else
-  #error "don't support LCD-GPIO yet"
-#endif
+
+#error "don't support LCD-GPIO yet"
+
+#endif  // STM32_HAS_FSMC

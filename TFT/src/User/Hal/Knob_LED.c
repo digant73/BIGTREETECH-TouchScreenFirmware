@@ -4,7 +4,7 @@
 
 #ifdef KNOB_LED_COLOR_PIN
 
-static uint32_t frameTimeStamp = 0;  // Frame unit need > 280us for WS2812
+static uint32_t frameTimeStamp = 0;  // frame unit need > 280us for WS2812
 
 // total 2.5us, run in 400Khz
 #define NEOPIXEL_T0H_US 0.35  // Neopixel code 0 high level hold time in us
@@ -47,12 +47,12 @@ void Knob_LED_SetColor(uint32_t color, uint8_t neopixel_pixels)
   uint16_t led_num;
   int8_t bit;
   uint16_t cycle = mcuClocks.PCLK1_Timer_Frequency * (0.000001 * (NEOPIXEL_T0H_US + NEOPIXEL_T1H_US)) / 2 - 1;  // Neopixel frequency
-  uint16_t code_0_tim_h_cnt = cycle * (NEOPIXEL_T0H_US / (NEOPIXEL_T0H_US + NEOPIXEL_T1H_US));  // Code 0, High level hold time,
+  uint16_t code_0_tim_h_cnt = cycle * (NEOPIXEL_T0H_US / (NEOPIXEL_T0H_US + NEOPIXEL_T1H_US));  // code 0, High level hold time
   uint16_t code_1_tim_h_cnt = cycle - code_0_tim_h_cnt;
 
   while (frameTimeStamp == OS_GetTimeMs());
 
-  __disable_irq();  // Disable interrupt, avoid disturbing the timing of WS2812
+  __disable_irq();  // disable interrupt, avoid disturbing the timing of WS2812
   NEOPIXEL_TIMER_ARR() = cycle;
   NEOPIXEL_TIMER_CR1() |= 0x01;
 
@@ -81,7 +81,7 @@ void Knob_LED_SetColor(uint32_t color, uint8_t neopixel_pixels)
   }
 
   NEOPIXEL_TIMER_CR1() &= ~0x01;
-  __enable_irq();  // Enable interrupt
+  __enable_irq();  // enable interrupt
 
   frameTimeStamp = OS_GetTimeMs();
 }
