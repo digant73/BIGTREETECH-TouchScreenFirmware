@@ -64,7 +64,9 @@ static const MENUITEMS statusItems = {
 };
 
 static const uint8_t bedIcons[2]     = {ICON_STATUS_BED, ICON_STATUS_CHAMBER};
-static const uint8_t speedIcons[2]   = {ICON_STATUS_SPEED, ICON_STATUS_FLOW};
+#ifndef TFT70_V3_0
+  static const uint8_t speedIcons[2] = {ICON_STATUS_SPEED, ICON_STATUS_FLOW};
+#endif
 static const char * const speedID[2] = SPEED_ID;
 
 static int8_t lastConnectionStatus = -1;

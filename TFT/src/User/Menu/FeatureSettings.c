@@ -36,20 +36,22 @@ typedef enum
 
 // parameter values
 
-#define ITEM_TOGGLE_AUTO_NUM 3
-static const LABEL itemToggleAuto[ITEM_TOGGLE_AUTO_NUM] =
-{
-  LABEL_OFF,
-  LABEL_ON,
-  LABEL_AUTO
-};
+#ifdef FIL_RUNOUT_PIN
+  #define ITEM_TOGGLE_AUTO_NUM 3
+  static const LABEL itemToggleAuto[ITEM_TOGGLE_AUTO_NUM] = {
+    LABEL_OFF,
+    LABEL_ON,
+    LABEL_AUTO
+  };
+#endif
 
-#define ITEM_TOGGLE_SMART_NUM 2
-static const LABEL itemToggleSmart[ITEM_TOGGLE_SMART_NUM] =
-{
-  LABEL_ON,
-  LABEL_SMART
-};
+#ifdef PS_ON_PIN
+  #define ITEM_TOGGLE_SMART_NUM 2
+  static const LABEL itemToggleSmart[ITEM_TOGGLE_SMART_NUM] = {
+    LABEL_ON,
+    LABEL_SMART
+  };
+#endif
 
 static uint16_t fe_cur_page = 0;
 

@@ -43,7 +43,9 @@ static SERIAL_PORT_INDEX cmd_port_index;        // index of serial port originat
 static uint8_t cmd_base_index;                  // base index in case the gcode has checksum ("Nxx " is present at the beginning of gcode)
 static uint8_t cmd_index;
 static WRITING_MODE writing_mode = NO_WRITING;  // writing mode. Used by M28 and M29
-static FIL file;
+#ifdef SERIAL_PORT_2
+  static FIL file;                              // used with writing mode
+#endif
 
 uint8_t getQueueCount(void)
 {
@@ -369,6 +371,8 @@ static float cmd_float(void)
   return (strtod(&cmd_ptr[cmd_index], NULL));
 }
 
+#ifdef SERIAL_PORT_2
+
 static bool initRemoteTFT(void)
 {
   // examples:
@@ -489,6 +493,8 @@ static inline void writeRemoteTFT(void)
 
   Serial_Forward(cmd_port_index, "ok\n");
 }
+
+#endif  // SERIAL_PORT_2
 
 static void setWaitHeating(uint8_t index)
 {
@@ -628,28 +634,30 @@ void sendQueueCmd(void)
 
   bool fromTFT = getCmd();  // retrieve leading gcode in the queue and check if it is originated by TFT or other hosts
 
-  if (writing_mode != NO_WRITING)  // if writing mode (previously triggered by M28)
-  {
-    if (fromTFT)  // ignore any command from TFT media
+  #ifdef SERIAL_PORT_2
+    if (writing_mode != NO_WRITING)  // if writing mode (previously triggered by M28)
     {
-      sendCmd(true, avoid_terminal);  // skip the command
-    }
-    else if (writing_mode == TFT_WRITING)  // if the command is from remote to TFT media
-    {
-      writeRemoteTFT();
+      if (fromTFT)  // ignore any command from TFT media
+      {
+        sendCmd(true, avoid_terminal);  // skip the command
+      }
+      else if (writing_mode == TFT_WRITING)  // if the command is from remote to TFT media
+      {
+        writeRemoteTFT();
 
-      sendCmd(true, avoid_terminal);  // skip the command
-    }
-    else  // otherwise, if the command is from remote to onboard media
-    {
-      if (cmd_ptr[cmd_base_index] == 'M' && cmd_value() == 29)  // if M29, stop writing mode
-        writing_mode = NO_WRITING;
+        sendCmd(true, avoid_terminal);  // skip the command
+      }
+      else  // otherwise, if the command is from remote to onboard media
+      {
+        if (cmd_ptr[cmd_base_index] == 'M' && cmd_value() == 29)  // if M29, stop writing mode
+          writing_mode = NO_WRITING;
 
-      goto send_cmd;  // send the command
-    }
+        goto send_cmd;  // send the command
+      }
 
-    return;
-  }
+      return;
+    }
+  #endif
 
   switch (cmd_ptr[cmd_base_index])
   {
