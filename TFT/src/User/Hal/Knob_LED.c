@@ -4,8 +4,6 @@
 
 #ifdef KNOB_LED_COLOR_PIN
 
-static uint32_t frameTimeStamp = 0;  // frame unit need > 280us for WS2812
-
 // total 2.5us, run in 400Khz
 #define NEOPIXEL_T0H_US 0.35  // Neopixel code 0 high level hold time in us
 #define NEOPIXEL_T1H_US 2.15  // Neopixel code 1 high level hold time in us
@@ -25,6 +23,8 @@ static uint32_t frameTimeStamp = 0;  // frame unit need > 280us for WS2812
   #define NEOPIXEL_TIMER_SR()  TIM6->SR
   #define NEOPIXEL_TIMER_CR1() TIM6->CR1
 #endif
+
+static uint32_t frameTimeStamp = 0;  // frame unit need > 280us for WS2812
 
 void knob_LED_Init(void)
 {

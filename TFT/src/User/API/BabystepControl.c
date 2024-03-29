@@ -1,10 +1,10 @@
 #include "BabystepControl.h"
 #include "includes.h"
 
-static float babystep_value = BABYSTEP_DEFAULT_VALUE;
-
 #define BABYSTEP_CMD     "M290 Z%.2f\n"
 #define BABYSTEP_CMD_SMW "G43.2 Z%.2f\n"
+
+static float babystep_value = BABYSTEP_DEFAULT_VALUE;
 
 // set current babystep value
 void babystepSetValue(float value)
