@@ -21,8 +21,8 @@
 #define TOOL_TOGGLE_TIME 2000  // 1 seconds is 1000
 
 // text position rectangles for Live icons
-static const GUI_POINT ss_title_point = {SS_ICON_WIDTH - BYTE_WIDTH / 2, SS_ICON_NAME_Y0};
-static const GUI_POINT ss_val_point   = {SS_ICON_WIDTH / 2, SS_ICON_VAL_Y0};
+static const GUI_POINT ss_title_point   = {SS_ICON_WIDTH - BYTE_WIDTH / 2, SS_ICON_NAME_Y0};
+static const GUI_POINT ss_val_point     = {SS_ICON_WIDTH / 2, SS_ICON_VAL_Y0};
 #ifdef TFT70_V3_0
   static const GUI_POINT ss_val_point_2 = {SS_ICON_WIDTH / 2, SS_ICON_VAL_Y0_2};
 #endif
