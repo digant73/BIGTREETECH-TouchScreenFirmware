@@ -52,7 +52,7 @@ static inline void LCD_GPIO_Config(void)
    * PD4-FSMC_NOE :LCD-RD
    * PD5-FSMC_NWE :LCD-WR
    * PD7-FSMC_NE1 :LCD-CS
-   * PE2-FSMC_A23 :LCD-RS   LCD-RS data or cmd
+   * PE2-FSMC_A23 :LCD-RS LCD-RS data or cmd
    */
   GPIO_InitSet(PD4, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);
   GPIO_InitSet(PD5, MGPIO_MODE_AF_PP, GPIO_AF_FSMC);

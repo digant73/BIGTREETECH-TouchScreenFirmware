@@ -11,7 +11,7 @@
 
 void HX8558_Init_Sequential(void)
 {
-  Delay_ms(50);  // delay 50 ms
+  Delay_ms(50);  // Delay 50ms
 
   LCD_WR_REG(0xFE);
   LCD_WR_REG(0xEF);
