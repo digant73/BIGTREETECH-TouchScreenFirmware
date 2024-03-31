@@ -89,12 +89,12 @@ static inline void Serial_DMA_Config(uint8_t port)
   else
     cfg->dma_channelRX->CCR |= (0<<12);                            // RX priority level: Low
 
-//cfg->dma_channelRX->CCR |= (0<<10);                              // RX memory data size: 8 bit
-//cfg->dma_channelRX->CCR |= (0<<8);                               // RX peripheral data size: 8 bit
+  //cfg->dma_channelRX->CCR |= (0<<10);                            // RX memory data size: 8 bit
+  //cfg->dma_channelRX->CCR |= (0<<8);                             // RX peripheral data size: 8 bit
   cfg->dma_channelRX->CCR |= (1<<7);                               // RX memory increment mode
-//cfg->dma_channelRX->CCR |= (0<<6);                               // RX peripheral no increment mode
+  //cfg->dma_channelRX->CCR |= (0<<6);                             // RX peripheral no increment mode
   cfg->dma_channelRX->CCR |= (1<<5);                               // RX circular mode enabled
-//cfg->dma_channelRX->CCR &= ~(1<<4);                              // RX data transfer direction: Peripheral-to-memory
+  //cfg->dma_channelRX->CCR &= ~(1<<4);                            // RX data transfer direction: Peripheral-to-memory
 
   #ifdef TX_DMA_WRITE  // TX DMA based serial writing
     Serial_DMA_DisableAndClearFlagsTX(port);                       // TX disable DMA and clear all interrupt flags
@@ -109,15 +109,15 @@ static inline void Serial_DMA_Config(uint8_t port)
     else
       cfg->dma_channelTX->CCR |= (1<<12);                          // TX priority level: Medium
 
-  //cfg->dma_channelTX->CCR |= (0<<10);                            // TX memory data size: 8 bit
-  //cfg->dma_channelTX->CCR |= (0<<8);                             // TX peripheral data size: 8 bit
+    //cfg->dma_channelTX->CCR |= (0<<10);                          // TX memory data size: 8 bit
+    //cfg->dma_channelTX->CCR |= (0<<8);                           // TX peripheral data size: 8 bit
     cfg->dma_channelTX->CCR |= (1<<7);                             // TX memory increment mode
-  //cfg->dma_channelTX->CCR |= (0<<6);                             // TX peripheral no increment mode
-  //cfg->dma_channelTX->CCR |= (0<<5);                             // TX circular mode disabled
+    //cfg->dma_channelTX->CCR |= (0<<6);                           // TX peripheral no increment mode
+    //cfg->dma_channelTX->CCR |= (0<<5);                           // TX circular mode disabled
     cfg->dma_channelTX->CCR |= (1<<4);                             // TX data transfer direction: Memory-to-Peripheral
 
     cfg->uart->CR3 |= (1<<7);                                      // enable DMA transmitter (DMAT)
-  //cfg->dma_channelTX->CCR |= (1<<0);                             // TX enable DMA, done later when needed
+    //cfg->dma_channelTX->CCR |= (1<<0);                           // TX enable DMA, done later when needed
   #endif
 
   cfg->uart->CR3 |= (1<<6);                                        // enable DMA receiver (DMAR)

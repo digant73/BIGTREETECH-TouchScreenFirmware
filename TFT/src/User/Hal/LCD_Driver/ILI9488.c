@@ -4,7 +4,7 @@
 
 #include "ILI9488.h"
 
-#if defined(MKS_TFT35_V1_0)  // rotate display 180 degrees by default for MKS_TFT35_V1_0
+#if defined(MKS_TFT35_V1_0)  // Rotate display 180 degrees by default for MKS_TFT35_V1_0
   #define ILI9488_180_DEGREE_REG_VALUE 0X28
   #define ILI9488_0_DEGREE_REG_VALUE   0XE8
   #define ILI9488_90_DEGREE_REG_VALUE  0X88
@@ -21,7 +21,7 @@ uint8_t LCD_DriveIsILI9488(void)
   uint16_t id = 0;
 
   LCD_WR_REG(0XD3);
-  id = LCD_RD_DATA();  // dummy read
+  id = LCD_RD_DATA();  // Dummy read
   id = LCD_RD_DATA();
   id = LCD_RD_DATA();
   id <<= 8;

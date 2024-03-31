@@ -122,12 +122,12 @@ static inline void Serial_DMA_Config(uint8_t port)
   else
     DMA_CHCTL(cfg->dma_stream, cfg->dma_channelRX) |= (0<<12);    // RX priority level: Low
 
-//DMA_CHCTL(cfg->dma_stream, cfg->dma_channelRX) |= (0<<10);      // RX memory data size: 8 bit
-//DMA_CHCTL(cfg->dma_stream, cfg->dma_channelRX) |= (0<<8);       // RX peripheral data size: 8 bit
+  //DMA_CHCTL(cfg->dma_stream, cfg->dma_channelRX) |= (0<<10);    // RX memory data size: 8 bit
+  //DMA_CHCTL(cfg->dma_stream, cfg->dma_channelRX) |= (0<<8);     // RX peripheral data size: 8 bit
   DMA_CHCTL(cfg->dma_stream, cfg->dma_channelRX) |= (1<<7);       // RX memory increment mode
-//DMA_CHCTL(cfg->dma_stream, cfg->dma_channelRX) |= (0<<6);       // RX peripheral no increment mode
+  //DMA_CHCTL(cfg->dma_stream, cfg->dma_channelRX) |= (0<<6);     // RX peripheral no increment mode
   DMA_CHCTL(cfg->dma_stream, cfg->dma_channelRX) |= (1<<5);       // RX circular mode enabled
-//DMA_CHCTL(cfg->dma_stream, cfg->dma_channelRX) |= (0<<4);       // RX data transfer direction: Peripheral-to-memory
+  //DMA_CHCTL(cfg->dma_stream, cfg->dma_channelRX) |= (0<<4);     // RX data transfer direction: Peripheral-to-memory
 
   #ifdef TX_DMA_WRITE  // TX DMA based serial writing
     Serial_DMA_DisableAndClearFlagsTX(port);                      // TX disable DMA and clear all interrupt flags
@@ -142,15 +142,15 @@ static inline void Serial_DMA_Config(uint8_t port)
     else
       DMA_CHCTL(cfg->dma_stream, cfg->dma_channelTX) |= (1<<12);  // TX priority level: Medium
 
-  //DMA_CHCTL(cfg->dma_stream, cfg->dma_channelTX) |= (0<<10);    // TX memory data size: 8 bit
-  //DMA_CHCTL(cfg->dma_stream, cfg->dma_channelTX) |= (0<<8);     // TX peripheral data size: 8 bit
+    //DMA_CHCTL(cfg->dma_stream, cfg->dma_channelTX) |= (0<<10);  // TX memory data size: 8 bit
+    //DMA_CHCTL(cfg->dma_stream, cfg->dma_channelTX) |= (0<<8);   // TX peripheral data size: 8 bit
     DMA_CHCTL(cfg->dma_stream, cfg->dma_channelTX) |= (1<<7);     // TX memory increment mode
-  //DMA_CHCTL(cfg->dma_stream, cfg->dma_channelTX) |= (0<<6);     // TX peripheral no increment mode
-  //DMA_CHCTL(cfg->dma_stream, cfg->dma_channelTX) |= (0<<5);     // TX circular mode disabled
+    //DMA_CHCTL(cfg->dma_stream, cfg->dma_channelTX) |= (0<<6);   // TX peripheral no increment mode
+    //DMA_CHCTL(cfg->dma_stream, cfg->dma_channelTX) |= (0<<5);   // TX circular mode disabled
     DMA_CHCTL(cfg->dma_stream, cfg->dma_channelTX) |= (1<<4);     // TX data transfer direction: Memory-to-Peripheral
 
     USART_CTL2(cfg->uart) |= (1<<7);                              // enable DMA transmitter (DMAT)
-  //DMA_CHCTL(cfg->dma_stream, cfg->dma_channelTX) |= (1<<0);     // TX enable DMA, done later when needed
+    //DMA_CHCTL(cfg->dma_stream, cfg->dma_channelTX) |= (1<<0);   // TX enable DMA, done later when needed
   #endif
 
   USART_CTL2(cfg->uart) |= (1<<6);                                // enable DMA receiver (DMAR)

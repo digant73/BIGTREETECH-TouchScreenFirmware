@@ -14,7 +14,7 @@ uint8_t LCD_DriveIsNT35310(void)
   uint16_t id = 0;
 
   LCD_WR_REG(0XD4);
-  id = LCD_RD_DATA();  // dummy read
+  id = LCD_RD_DATA();  // Dummy read
   id = LCD_RD_DATA();
   id = LCD_RD_DATA();
   id <<= 8;

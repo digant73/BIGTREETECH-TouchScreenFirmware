@@ -17,7 +17,7 @@
   #define SSD1963_CMD_SET_Y 0x2B
 #endif
 
-// SSD1963  resolution max:864*480
+// SSD1963 resolution max:864*480
 #define SSD_HOR_RESOLUTION LCD_HARDWARE_WIDTH   // LCD width pixel
 #define SSD_VER_RESOLUTION LCD_HARDWARE_HEIGHT  // LCD height pixel
 
@@ -35,10 +35,10 @@ void SSD1963_Init_Sequential(void)
   LCD_WR_DATA(0x04);  // N = 0x04 = 4, PLL = VCO / (N + 1) = 600 / 5 = 120Mhz
   LCD_WR_DATA(0x54);  // C[2] = 1, Effectuate the multiplier and divider value
   LCD_WR_REG(0xE0);   // Start PLL command
-  LCD_WR_DATA(0x01);  // enable PLL
+  LCD_WR_DATA(0x01);  // Enable PLL
   Delay_ms(10);
   LCD_WR_REG(0xE0);   // Start PLL command again
-  LCD_WR_DATA(0x03);  // now, use PLL output as system clock
+  LCD_WR_DATA(0x03);  // Now, use PLL output as system clock
   Delay_ms(10);
   LCD_WR_REG(0x01);   // Soft reset
   Delay_ms(100);
@@ -60,7 +60,7 @@ void SSD1963_Init_Sequential(void)
   LCD_WR_DATA(SSD_HT - 1);
   LCD_WR_DATA(SSD_HPS >> 8);  // Non-display period between the start of the horizontal sync (LLINE) signal and the first display data
   LCD_WR_DATA(SSD_HPS);
-  LCD_WR_DATA(SSD_HOR_PULSE_WIDTH - 1);  // horizontal sync pulse width (LLINE) in pixel clock
+  LCD_WR_DATA(SSD_HOR_PULSE_WIDTH - 1);  // Horizontal sync pulse width (LLINE) in pixel clock
   LCD_WR_DATA(0x00);
   LCD_WR_DATA(0x00);
   LCD_WR_DATA(0x00);
@@ -74,11 +74,11 @@ void SSD1963_Init_Sequential(void)
   LCD_WR_DATA(0x00);
   LCD_WR_REG(0xF0);   // Set pixel data interface format
   LCD_WR_DATA(0x03);  // 16-bit(565 format) data for 16bpp
-  LCD_WR_REG(0xBC);   // postprocessor for contrast/brightness/saturation.
-  LCD_WR_DATA(0x34);  // Contrast value (0-127). Set to 52 to reduce banding/flickering.
-  LCD_WR_DATA(0x77);  // Brightness value (0-127). Set to 119 to reduce banding/flickering.
-  LCD_WR_DATA(0x48);  // Saturation value (0-127).
-  LCD_WR_DATA(0x01);  // Enable/disable the postprocessor for contrast/brightness/saturation (1-0).
+  LCD_WR_REG(0xBC);   // Post processor for contrast/brightness/saturation
+  LCD_WR_DATA(0x34);  // Contrast value (0-127). Set to 52 to reduce banding/flickering
+  LCD_WR_DATA(0x77);  // Brightness value (0-127). Set to 119 to reduce banding/flickering
+  LCD_WR_DATA(0x48);  // Saturation value (0-127)
+  LCD_WR_DATA(0x01);  // Enable/disable the postprocessor for contrast/brightness/saturation (1-0)
   LCD_WR_REG(0x29);   // Set display on
 
   LCD_WR_REG(0x36);   // Set address mode
