@@ -57,6 +57,7 @@ typedef enum
   AXIS_INDEX_Z,
   AXIS_INDEX_E0,
   AXIS_INDEX_E1,
+  AXIS_INDEX_E2,
   AXIS_INDEX_COUNT
 } AXIS_INDEX;
 
@@ -72,6 +73,7 @@ typedef enum
   STEPPER_INDEX_Z4,
   STEPPER_INDEX_E0,
   STEPPER_INDEX_E1,
+  STEPPER_INDEX_E2,
   STEPPER_INDEX_COUNT
 } STEPPER_INDEX;
 
@@ -82,39 +84,6 @@ typedef enum
   VAL_TYPE_FLOAT,
   VAL_TYPE_NEG_FLOAT,
 } VAL_TYPE;
-
-typedef struct
-{
-  float StepsPerMM[AXIS_INDEX_COUNT];
-  float FilamentSetting[3];
-  float MaxAcceleration[AXIS_INDEX_COUNT];
-  float MaxFeedRate[AXIS_INDEX_COUNT];
-  float Acceleration[3];
-  float Jerk[AXIS_INDEX_COUNT - 1];
-  float JunctionDeviation[1];
-  float HomeOffset[AXIS_INDEX_COUNT - 2];
-  float FwRetract[4];
-  float FwRecover[4];
-  float AutoRetract[1];
-  float HotendOffset[AXIS_INDEX_COUNT - 2];
-  float HotendPid[3];
-  float BedPid[3];
-  float ABLState[2];
-  float StealthChop[STEPPER_INDEX_COUNT];
-  float InputShaping[4];
-  float DeltaConfiguration[4];
-  float DeltaTowerAngle[3];
-  float DeltaDiagonalRod[3];
-  float DeltaEndstop[3];
-  float ProbeOffset[AXIS_INDEX_COUNT - 2];
-  float LinAdvance[2];
-  float Current[STEPPER_INDEX_COUNT];
-  float HybridThreshold[STEPPER_INDEX_COUNT];
-  float BumpSensitivity[STEPPER_INDEX_COUNT];
-  float MblOffset[1];
-} PARAMETERS;
-
-extern PARAMETERS infoParameters;
 
 // param attributes multi purpose hard coded labels
 extern char * const axisDisplayID[AXIS_INDEX_COUNT];
@@ -139,6 +108,9 @@ extern const LABEL accelDisplayID[];
 extern const LABEL junctionDeviationDisplayID[];
 extern const LABEL retractDisplayID[];
 extern const LABEL recoverDisplayID[];
+
+void infoParametersRefreshBackup(void);
+bool infoParametersHasChange(void);
 
 // get enable element count for the parameter
 uint8_t getEnabledElementCount(PARAMETER_NAME name);
