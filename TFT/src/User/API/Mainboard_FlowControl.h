@@ -80,11 +80,14 @@ void loopProcessAndGUI(void);
 
 void InfoHost_Init(bool isConnected);
 
+// set infoHost.target_tx_slots and infoSettings.tx_slots to the value detected by TFT
+void InfoHost_SetTargetTxSlots(uint8_t target_tx_slots);
+
 // handle ACK message OK response:
-//   - tx_slots (used/effective only in case "advanced_ok" configuration setting is also enabled in TFT):
+//   - target_tx_slots (used/effective only in case "advanced_ok" configuration setting is also enabled in TFT):
 //     - < 0 (HOST_SLOTS_GENERIC_OK): to increase infoHost.tx_slots up to current target and decrease infoHost.tx_count by 1
 //     - >= 0: to handle static ADVANCED_OK and Marlin ADVANCED_OK
-void InfoHost_HandleAckOk(int16_t tx_slots);
+void InfoHost_HandleAckOk(int16_t target_tx_slots);
 
 bool InfoHost_HandleAckTimeout(void);     // handle ACK message timeout, if any. Return "true" if ACK message timed out
 void InfoHost_UpdateAckTimestamp(void);   // update last received ACK message timestamp

@@ -47,14 +47,19 @@ static WRITING_MODE writing_mode = NO_WRITING;  // writing mode. Used by M28 and
   static FIL file;                              // used with writing mode
 #endif
 
-uint8_t getQueueCount(void)
-{
-  return cmdQueue.count;
-}
-
 bool isPendingCmd(void)
 {
   return (infoHost.tx_count != 0);
+}
+
+bool isIdleCmd(void)
+{
+  return (infoHost.tx_count == 0 && cmdQueue.count == 0);  // if no pending gcode and empty command queue
+}
+
+uint8_t getQueueCount(void)
+{
+  return cmdQueue.count;
 }
 
 bool isFullCmdQueue(void)
@@ -64,7 +69,7 @@ bool isFullCmdQueue(void)
 
 bool isNotEmptyCmdQueue(void)
 {
-  return (cmdQueue.count != 0 || infoHost.tx_slots == 0);  // if queue not empty or no available gcode tx slot
+  return (cmdQueue.count != 0 || infoHost.tx_slots == 0);  // if not empty command queue or no available gcode tx slot
 }
 
 bool isEnqueued(const CMD cmd)
@@ -221,7 +226,7 @@ static inline bool getCmd(void)
   // strip out any leading space from the passed command.
   // Furthermore, skip any N[-0-9] (line number) and return a pointer to the beginning of the command
   //
-  // set cmd_base_index with index of gcode command
+  // set cmd_base_index with index of gcode
   //
   cmd_base_index = stripCmd(cmd_ptr) - cmd_ptr;                 // e.g. "N1   G28*18\n" -> "G28*18\n"
 

@@ -18,14 +18,12 @@ extern "C" {
 
 typedef char CMD[CMD_MAX_SIZE];
 
-// used by Monitoring menu available in Notification menu only
-// if DEBUG_MONITORING is enabled in Configuration.h
-uint8_t getQueueCount(void);
-
-bool isPendingCmd(void);
+bool isPendingCmd(void);         // if no pending gcode
+bool isIdleCmd(void);            // if no pending gcode and empty command queue
+uint8_t getQueueCount(void);     // used by Monitoring menu (available only if DEBUG_MONITORING is enabled in Configuration.h)
 bool isFullCmdQueue(void);
-bool isNotEmptyCmdQueue(void);
-bool isEnqueued(const CMD cmd);
+bool isNotEmptyCmdQueue(void);   // if not empty command queue or no available gcode tx slot
+bool isEnqueued(const CMD cmd);  // if gcode is already enqueued on command queue
 bool isWritingMode(void);
 
 bool storeCmd(const char * format, ...);

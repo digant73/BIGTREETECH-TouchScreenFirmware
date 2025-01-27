@@ -193,6 +193,11 @@ void InfoHost_Init(bool isConnected)
   }
 }
 
+void InfoHost_SetTargetTxSlots(uint8_t target_tx_slots)
+{
+  infoHost.target_tx_slots = infoSettings.tx_slots = target_tx_slots;
+}
+
 void InfoHost_HandleAckOk(int16_t target_tx_slots)
 {
   // the following check should always be matched unless:

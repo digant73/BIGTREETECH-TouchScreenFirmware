@@ -61,7 +61,7 @@ static void resetRequestCommandInfo(
   if (string_error2)
     requestCommandInfo.error_num = 3;
 
-  TASK_LOOP_WHILE(isNotEmptyCmdQueue());  // wait for the communication to be clean
+  TASK_LOOP_WHILE(!isIdleCmd());  // wait for the communication to be clean
 
   requestCommandInfo.stream_handler = NULL;
   requestCommandInfo.inWaitResponse = true;
@@ -79,7 +79,7 @@ void detectAdvancedOk(void)
   // per time and the mainboard to reply with an ADVANCED_OK response with the maximum available buffers
   SET_BIT_OFF(infoSettings.general_settings, INDEX_ADVANCED_OK);
 
-  TASK_LOOP_WHILE(isPendingCmd() && isNotEmptyCmdQueue());  // wait for the communication to be clean
+  TASK_LOOP_WHILE(!isIdleCmd());  // wait for the communication to be clean
 
   resetRequestCommandInfo("ok",   // the magic to identify the start
                           "ok",   // the magic to identify the stop
@@ -99,7 +99,7 @@ void detectAdvancedOk(void)
       if (strtol(&requestCommandInfo.cmd_rev_buf[cmd_index], NULL, 10) != 0)  // if different than 0
       {
         // set infoHost.target_tx_slots and infoSettings.tx_slots to the value detected by TFT
-        infoHost.target_tx_slots = infoSettings.tx_slots = strtol(&requestCommandInfo.cmd_rev_buf[cmd_index], NULL, 10);
+        InfoHost_SetTargetTxSlots((uint8_t) strtol(&requestCommandInfo.cmd_rev_buf[cmd_index], NULL, 10));
       }
     }
   }
