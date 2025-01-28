@@ -8,6 +8,9 @@ extern "C" {
 #include "variants.h"  // for DEBUG_MONITORING
 
 #ifdef DEBUG_MONITORING
+
+  #include <stdbool.h>
+
   typedef struct
   {
     uint32_t tx_cmd;
@@ -51,6 +54,9 @@ extern "C" {
       infoMonitoring.scan_rate_per_second = infoMonitoring.scan_rate_counter; \
       infoMonitoring.scan_rate_counter = 0;                                   \
     }
+
+  // called by menuTuning()
+  void monitoringSetMenu(bool stressTest);
 
   void menuMonitoring(void);
 #else

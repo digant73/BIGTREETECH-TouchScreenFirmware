@@ -5,9 +5,17 @@
 
 MONITORING infoMonitoring;
 
+static bool stressTestMenu = false;
+
+void monitoringSetMenu(bool stressTest)
+{
+  stressTestMenu = stressTest;
+}
+
 void menuMonitoring(void)
 {
   const GUI_RECT fullRect = {0, 0, LCD_WIDTH - 1, LCD_HEIGHT - 1};
+  uint8_t origCmdChecksum = GET_BIT(infoSettings.general_settings, INDEX_COMMAND_CHECKSUM);  // save original command checksum feature status
   char str[30];
 
   // clear screen
@@ -27,6 +35,9 @@ void menuMonitoring(void)
   // draw bottom line and text
   GUI_HLine(0, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH);
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT * 2), LCD_WIDTH - 20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
+
+  //if (stressTestMenu)
+  //  SET_BIT_ON(infoSettings.general_settings, INDEX_COMMAND_CHECKSUM);  // temporary enable command checksum feature, if not already enabled
 
   while (MENU_IS(menuMonitoring))
   {
@@ -59,15 +70,25 @@ void menuMonitoring(void)
       GUI_RestoreColorDefault();
     }
 
-//    if (!isFullCmdQueue())
-//    {
-//      mustStoreCmd("M118 P0 A1 test\n");
-//      mustStoreCmd("M118 P0 A1 test test test test test test\n");
-//      mustStoreCmd("M118 P0 A1 test test test test test test test test test test test test test test test test test\n");
-//      mustStoreCmd("M43\n");
-//    }
+    if (stressTestMenu && !isFullCmdQueue() /*&& getQueueCount() < CMD_QUEUE_SIZE - 2*/)
+    {
+      // NOTE: the total size of each command below is given by the size of the plain command plus the command checksum overhead
+
+      mustStoreCmd("M220\n");                                                                                                // 6 chars including '\0'
+      mustStoreCmd("M118 P0 A1 test with short text\n");                                                                     // 33 chars including '\0'
+      //mustStoreCmd("M118 P0 A1 test with medium text text text text text\n");                                                // 54 chars including '\0'
+      //mustStoreCmd("M118 P0 A1 test with medium-long text text text text text text text text text text\n");                  // 84 chars including '\0'
+      //mustStoreCmd("M118 P0 A1 test with long text text text text text text text text text text text text text text te\n");  // 100 chars including '\0'
+      //mustStoreCmd("M43\n");                                                                                                 // 5 chars including '\0'
+    }
 
     loopProcess();
+  }
+
+  if (stressTestMenu)
+  {
+    SET_BIT_VALUE(infoSettings.general_settings, INDEX_COMMAND_CHECKSUM, origCmdChecksum);  // restore original command checksum feature status
+    stressTestMenu = false;                                                                 // always reset menu status to Monitoring menu
   }
 }
 

@@ -28,6 +28,8 @@ void resetPendingQueries(void)
   #ifdef FIL_RUNOUT_PIN
     FIL_PosE_ClearSendingWaiting();      // clear sending waiting for position query
   #endif
+
+  //heatClearIsWaiting();                // dangerous! it could unlock loopPrintFromTFT() prematurely
 }
 
 // non-UI background loop tasks
@@ -178,6 +180,7 @@ void InfoHost_Init(bool isConnected)
   infoHost.target_tx_slots = infoSettings.tx_slots;
   infoHost.tx_slots = 1;  // set to 1 just to allow a soft start
   infoHost.tx_count = 0;
+  infoHost.tx_delay = 2;
   infoHost.rx_timestamp = OS_GetTimeMs();
   infoHost.connected = isConnected;
   infoHost.listening_mode = false;  // temporary disable listening mode. It will be later set by InfoHost_UpdateListeningMode()

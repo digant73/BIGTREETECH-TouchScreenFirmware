@@ -2,7 +2,6 @@
 #include "includes.h"
 #include "RRFStatusControl.h"
 
-#define CMD_QUEUE_SIZE  20
 #define CMD_RETRY_COUNT 3
 
 typedef struct
@@ -626,7 +625,10 @@ void sendEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex)
 // parse and send gcode cmd in cmdQueue queue
 void sendQueueCmd(void)
 {
-  if (infoHost.tx_slots == 0 || (cmdQueue.count == 0 && !cmdRetryInfo.retry)) return;
+  // if no gcode tx slot available, or no command in queue and no pending command retry, or no minimum delay for next sending is reached, nothing to do
+  if (infoHost.tx_slots == 0 || (cmdQueue.count == 0 && !cmdRetryInfo.retry) ||
+      (OS_GetTimeMs() - Serial_GetTimestampTX(SERIAL_PORT) < infoHost.tx_delay))
+    return;
 
   bool avoid_terminal = false;
 

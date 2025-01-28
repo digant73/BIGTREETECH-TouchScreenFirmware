@@ -219,7 +219,7 @@ void powerFailedCache(uint32_t offset)
   if (!create_ok) return;  // if PLR file not created
 
   if (infoBreakPoint.axis[Z_AXIS] == coordinateGetAxisTarget(Z_AXIS)) return;  // if Z axis not changed
-  if (isNotEmptyCmdQueue()) return;
+//  if (isNotEmptyCmdQueue()) return;
 
   if (!isPaused())  // if not paused, update printing progress status
   {

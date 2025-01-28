@@ -11,6 +11,7 @@ extern "C" {
 
 #define BE_PRIORITY_DIVIDER 16     // a divider value of 16 -> run 6% of the time only. Use a power of 2 for performance reasons!
 #define FE_PRIORITY_DIVIDER 16     // a divider value of 16 -> run 6% of the time only. Use a power of 2 for performance reasons!
+#define GCODE_FETCH_COUNT   1      // maximum number of gcodes to fetch from TFT media and to copy into command queue
 #define ACK_TIMEOUT         15000  // 15 seconds (1 sec is 1000)
 #define MAX_MENU_DEPTH      10     // max sub menu depth
 
@@ -53,6 +54,7 @@ typedef struct
   uint8_t target_tx_slots;  // keep track of target gcode tx slots (e.g. if ADVANCED_OK feature is enabled on both mainboard and TFT)
   uint8_t tx_slots;         // keep track of available gcode tx slots (e.g. if ADVANCED_OK feature is enabled on both mainboard and TFT)
   uint8_t tx_count;         // keep track of pending gcode tx count
+  uint32_t tx_delay;        // Keep track of minimum delay (in ms) to apply between last sent message and next one to be sent
   uint32_t rx_timestamp;    // keep track of last received ACK message timestamp
   bool connected;           // TFT is connected to Marlin
   bool listening_mode;      // TFT is in listening mode from Marlin
