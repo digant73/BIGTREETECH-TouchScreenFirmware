@@ -8,7 +8,6 @@ extern "C" {
 #include "variants.h"  // for DEBUG_MONITORING
 
 #ifdef DEBUG_MONITORING
-
   #include <stdbool.h>
 
   typedef struct
@@ -55,7 +54,8 @@ extern "C" {
       infoMonitoring.scan_rate_counter = 0;                                   \
     }
 
-  // called by menuTuning()
+  // called by menuTuning() and menuNotification() available only
+  // if DEBUG_MONITORING is enabled in Configuration.h)
   void monitoringSetMenu(bool stressTest);
 
   void menuMonitoring(void);

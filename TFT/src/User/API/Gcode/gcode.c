@@ -61,7 +61,7 @@ static void resetRequestCommandInfo(
   if (string_error2)
     requestCommandInfo.error_num = 3;
 
-  TASK_LOOP_WHILE(!isIdleCmd());  // wait for the communication to be clean
+  TASK_LOOP_WHILE(!isIdleCmdQueue());  // wait for the communication to be clean
 
   requestCommandInfo.stream_handler = NULL;
   requestCommandInfo.inWaitResponse = true;
@@ -79,7 +79,7 @@ void detectAdvancedOk(void)
   // per time and the mainboard to reply with an ADVANCED_OK response with the maximum available buffers
   SET_BIT_OFF(infoSettings.general_settings, INDEX_ADVANCED_OK);
 
-  TASK_LOOP_WHILE(!isIdleCmd());  // wait for the communication to be clean
+  TASK_LOOP_WHILE(!isIdleCmdQueue());  // wait for the communication to be clean
 
   resetRequestCommandInfo("ok",   // the magic to identify the start
                           "ok",   // the magic to identify the stop
@@ -305,7 +305,7 @@ void request_M98(const char * filename)
   mustStoreCmd(command);
 
   // prevent a race condition when rrfStatusQuery returns !busy before executing the macro
-  TASK_LOOP_WHILE(isEnqueued(command));
+  TASK_LOOP_WHILE(isCmdEnqueued(command));
 
   rrfStatusQueryFast();
 

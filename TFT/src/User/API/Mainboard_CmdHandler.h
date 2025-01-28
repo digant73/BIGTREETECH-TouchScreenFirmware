@@ -9,8 +9,7 @@ extern "C" {
 #include <stdint.h>
 #include "SerialConnection.h"
 
-#define CMD_QUEUE_SIZE 20
-#define CMD_MAX_SIZE   100  // including ending character '\0'
+#define CMD_MAX_SIZE 100  // including ending character '\0'
 
 #define handleCmd(...)               _handleCmd(__VA_ARGS__, PORT_1)
 #define _handleCmd(a, b, ...)        handleCmd(a, b)
@@ -19,12 +18,15 @@ extern "C" {
 
 typedef char CMD[CMD_MAX_SIZE];
 
-bool isPendingCmd(void);         // if no pending gcode
-bool isIdleCmd(void);            // if no pending gcode and empty command queue
-uint8_t getQueueCount(void);     // used by Monitoring menu (available only if DEBUG_MONITORING is enabled in Configuration.h)
+// called by loopPrintFromTFT() and menuMonitoring() (available in menuNotification() only
+// if DEBUG_MONITORING is enabled in Configuration.h)
+uint8_t getCmdQueueCount(void);
+
+bool isPendingCmd(void);            // if pending gcode
 bool isFullCmdQueue(void);
-bool isNotEmptyCmdQueue(void);   // if not empty command queue or no available gcode tx slot
-bool isEnqueued(const CMD cmd);  // if gcode is already enqueued on command queue
+bool isIdleCmdQueue(void);          // if empty command queue and no pending gcode
+bool isNotEmptyCmdQueue(void);      // if not empty command queue or no available gcode tx slot
+bool isCmdEnqueued(const CMD cmd);  // if gcode is already enqueued on command queue
 bool isWritingMode(void);
 
 bool storeCmd(const char * format, ...);

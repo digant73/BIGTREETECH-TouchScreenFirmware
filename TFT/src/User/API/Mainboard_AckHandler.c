@@ -17,22 +17,22 @@ typedef struct
 
 // notify or ignore messages starting with following text
 static const ECHO knownEcho[] = {
-  {ECHO_NOTIFY_NONE, "busy: paused for user"},
-  {ECHO_NOTIFY_NONE, "busy: processing"},
-  {ECHO_NOTIFY_NONE, "Now fresh file:"},
-  {ECHO_NOTIFY_NONE, "Now doing file:"},
-  {ECHO_NOTIFY_NONE, "echo:;"},                   // M503
-  {ECHO_NOTIFY_NONE, "echo:  G"},                 // M503
-  {ECHO_NOTIFY_NONE, "echo:  M"},                 // M503
-  {ECHO_NOTIFY_TOAST, "echo:Active Mesh"},        // M503
-  {ECHO_NOTIFY_TOAST, "echo:EEPROM can"},         // M503
-  {ECHO_NOTIFY_NONE, "Cap:"},                     // M115
-  {ECHO_NOTIFY_NONE, "Config:"},                  // M360
-  {ECHO_NOTIFY_TOAST, "Settings Stored"},         // M500
-  {ECHO_NOTIFY_TOAST, "echo:Bed"},                // M420
-  {ECHO_NOTIFY_TOAST, "echo:Fade"},               // M420
-  {ECHO_NOTIFY_TOAST, "echo:Active Extruder"},    // Tool Change
-  {ECHO_NOTIFY_NONE, "Unknown command: \"M150"},  // M150
+  {ECHO_NOTIFY_NONE,  "busy: paused for user"},
+  {ECHO_NOTIFY_NONE,  "busy: processing"},
+  {ECHO_NOTIFY_NONE,  "Now fresh file:"},
+  {ECHO_NOTIFY_NONE,  "Now doing file:"},
+  {ECHO_NOTIFY_NONE,  "echo:;"},                   // M503
+  {ECHO_NOTIFY_NONE,  "echo:  G"},                 // M503
+  {ECHO_NOTIFY_NONE,  "echo:  M"},                 // M503
+  {ECHO_NOTIFY_TOAST, "echo:Active Mesh"},         // M503
+  {ECHO_NOTIFY_TOAST, "echo:EEPROM can"},          // M503
+  {ECHO_NOTIFY_NONE,  "Cap:"},                     // M115
+  {ECHO_NOTIFY_NONE,  "Config:"},                  // M360
+  {ECHO_NOTIFY_TOAST, "Settings Stored"},          // M500
+  {ECHO_NOTIFY_TOAST, "echo:Bed"},                 // M420
+  {ECHO_NOTIFY_TOAST, "echo:Fade"},                // M420
+  {ECHO_NOTIFY_TOAST, "echo:Active Extruder"},     // Tool Change
+  {ECHO_NOTIFY_NONE,  "Unknown command: \"M150"},  // M150
 };
 
 static const char magic_error[]   = "Error:";
@@ -580,7 +580,7 @@ void parseAck(void)
     // "wait" response handling
     //----------------------------------------
 
-    // it is checked second (and not later on) because it is the most frequent response during printer idle
+    // it is checked second (and not later on) because it is the most frequent response during printing
     if (ack_starts_with("wait"))
     {
       avoid_terminal = !infoSettings.terminal_ack;  // suppress "wait" from terminal

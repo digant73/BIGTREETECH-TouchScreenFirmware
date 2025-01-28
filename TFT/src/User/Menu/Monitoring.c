@@ -5,6 +5,19 @@
 
 MONITORING infoMonitoring;
 
+// NOTE: if COMMAND_CHECKSUM feature is enabled then the total size of each command below is given by
+//       the size of the plain command plus the command checksum overhead
+static const char * const cmd[] = {
+  "M220\n",                                                                                                // 6 chars including '\0'
+  "M221\n",                                                                                                // 6 chars including '\0'
+  "M114 E\n",                                                                                              // 8 chars including '\0'
+  "M118 P0 A1 test with short text\n",                                                                     // 33 chars including '\0'
+  "M118 P0 A1 test with medium text text text text text\n",                                                // 54 chars including '\0'
+  "M118 P0 A1 test with long text text text text text text text text text text\n",                         // 77 chars including '\0'
+  //"M118 P0 A1 test with very long text text text text text text text text text text text text text te\n",  // 100 chars including '\0'
+  "M43\n",                                                                                                 // 5 chars including '\0'
+};
+
 static bool stressTestMenu = false;
 
 void monitoringSetMenu(bool stressTest)
@@ -15,7 +28,8 @@ void monitoringSetMenu(bool stressTest)
 void menuMonitoring(void)
 {
   const GUI_RECT fullRect = {0, 0, LCD_WIDTH - 1, LCD_HEIGHT - 1};
-  uint8_t origCmdChecksum = GET_BIT(infoSettings.general_settings, INDEX_COMMAND_CHECKSUM);  // save original command checksum feature status
+  uint8_t origCmdChecksum = GET_BIT(infoSettings.general_settings, INDEX_COMMAND_CHECKSUM);  // save original COMMAND_CHECKSUM feature status
+  uint16_t curCmdIndex = 0;
   char str[30];
 
   // clear screen
@@ -49,7 +63,7 @@ void menuMonitoring(void)
       // draw info
       GUI_SetColor(infoSettings.status_color);
 
-      sprintf(str, "%d   ", getQueueCount());
+      sprintf(str, "%d   ", getCmdQueueCount());
       GUI_DispString(18 * BYTE_WIDTH, ICON_START_Y,                         (uint8_t *)str);
 
       sprintf(str, "%d   ", infoHost.tx_count);
@@ -70,26 +84,19 @@ void menuMonitoring(void)
       GUI_RestoreColorDefault();
     }
 
-    if (stressTestMenu && !isFullCmdQueue() /*&& getQueueCount() < CMD_QUEUE_SIZE - 2*/)
+    if (stressTestMenu && !isFullCmdQueue())
     {
-      // NOTE: the total size of each command below is given by the size of the plain command plus the command checksum overhead
+      mustStoreCmd(cmd[curCmdIndex++]);  // send command and increment command index
 
-      mustStoreCmd("M220\n");                                                                                                // 6 chars including '\0'
-      mustStoreCmd("M118 P0 A1 test with short text\n");                                                                     // 33 chars including '\0'
-      //mustStoreCmd("M118 P0 A1 test with medium text text text text text\n");                                                // 54 chars including '\0'
-      //mustStoreCmd("M118 P0 A1 test with medium-long text text text text text text text text text text\n");                  // 84 chars including '\0'
-      //mustStoreCmd("M118 P0 A1 test with long text text text text text text text text text text text text text text te\n");  // 100 chars including '\0'
-      //mustStoreCmd("M43\n");                                                                                                 // 5 chars including '\0'
+      if (curCmdIndex >= COUNT(cmd))
+        curCmdIndex = 0;
     }
 
     loopProcess();
   }
 
   if (stressTestMenu)
-  {
     SET_BIT_VALUE(infoSettings.general_settings, INDEX_COMMAND_CHECKSUM, origCmdChecksum);  // restore original command checksum feature status
-    stressTestMenu = false;                                                                 // always reset menu status to Monitoring menu
-  }
 }
 
 #endif  // DEBUG_MONITORING

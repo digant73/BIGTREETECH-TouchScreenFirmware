@@ -800,7 +800,7 @@ void loopPrintFromTFT(void)
   if (infoFile.source >= FS_ONBOARD_MEDIA) return;      // if not printing from TFT media
   if (infoPrinting.paused || heatHasWaiting()) return;
 //  if (isNotEmptyCmdQueue()) return;
-  if (getQueueCount() >= GCODE_FETCH_COUNT) return;     // if maximum number of gcode commands to fetch from TFT media is reached
+  if (getCmdQueueCount() >= GCODE_FETCH_COUNT) return;     // if maximum number of gcode commands to fetch from TFT media is reached
 
   // if here, the command queue is also empty and we proceed with only one of the following scenarios, in the provided order:
   //   - initialize print restore, if any, storing a set of commands on command queue

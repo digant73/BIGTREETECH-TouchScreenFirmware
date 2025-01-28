@@ -2,6 +2,7 @@
 #include "includes.h"
 #include "RRFStatusControl.h"
 
+#define CMD_QUEUE_SIZE  20
 #define CMD_RETRY_COUNT 3
 
 typedef struct
@@ -46,19 +47,14 @@ static WRITING_MODE writing_mode = NO_WRITING;  // writing mode. Used by M28 and
   static FIL file;                              // used with writing mode
 #endif
 
+uint8_t getCmdQueueCount(void)
+{
+  return cmdQueue.count;
+}
+
 bool isPendingCmd(void)
 {
   return (infoHost.tx_count != 0);
-}
-
-bool isIdleCmd(void)
-{
-  return (infoHost.tx_count == 0 && cmdQueue.count == 0);  // if no pending gcode and empty command queue
-}
-
-uint8_t getQueueCount(void)
-{
-  return cmdQueue.count;
 }
 
 bool isFullCmdQueue(void)
@@ -66,12 +62,17 @@ bool isFullCmdQueue(void)
   return (cmdQueue.count >= CMD_QUEUE_SIZE);
 }
 
-bool isNotEmptyCmdQueue(void)
+bool isIdleCmdQueue(void)
 {
-  return (cmdQueue.count != 0 || infoHost.tx_slots == 0);  // if not empty command queue or no available gcode tx slot
+  return (cmdQueue.count == 0 && infoHost.tx_count == 0);  // if empty command queue and no pending command
 }
 
-bool isEnqueued(const CMD cmd)
+bool isNotEmptyCmdQueue(void)
+{
+  return (cmdQueue.count != 0 || infoHost.tx_slots == 0);  // if not empty command queue or no available command tx slot
+}
+
+bool isCmdEnqueued(const CMD cmd)
 {
   for (int i = 0; i < cmdQueue.count; i++)
   {
@@ -87,7 +88,7 @@ bool isWritingMode(void)
   return (writing_mode != NO_WRITING);
 }
 
-// common store cmd
+// common store gcode cmd on cmdQueue queue
 static void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va)
 {
   vsnprintf(pQueue->queue[pQueue->index_w].gcode, CMD_MAX_SIZE, format, va);
@@ -97,7 +98,7 @@ static void commonStoreCmd(GCODE_QUEUE * pQueue, const char * format, va_list va
   pQueue->count++;
 }
 
-// store gcode cmd to cmdQueue queue.
+// store gcode cmd on cmdQueue queue.
 // This command will be sent to the printer by sendQueueCmd().
 // If the cmdQueue queue is full, a reminder message is displayed and the command is discarded
 bool storeCmd(const char * format, ...)
@@ -118,7 +119,7 @@ bool storeCmd(const char * format, ...)
   return true;
 }
 
-// store gcode cmd to cmdQueue queue.
+// store gcode cmd on cmdQueue queue.
 // This command will be sent to the printer by sendQueueCmd().
 // If the cmdQueue queue is full, a reminder message is displayed
 // and it will wait for the queue to be able to store the command
@@ -138,7 +139,7 @@ void mustStoreCmd(const char * format, ...)
   va_end(va);
 }
 
-// store Script cmd to cmdQueue queue.
+// store script cmd on cmdQueue queue.
 // For example: "M502\nM500\n" will be split into two commands "M502\n", "M500\n"
 void mustStoreScript(const char * format, ...)
 {
@@ -169,7 +170,7 @@ void mustStoreScript(const char * format, ...)
   }
 }
 
-// store gcode cmd received from UART (e.g. ESP3D, OctoPrint, other TouchScreen etc.) to cmdQueue queue.
+// store gcode cmd received from UART (e.g. ESP3D, OctoPrint, other TouchScreen etc.) on cmdQueue queue.
 // This command will be sent to the printer by sendQueueCmd().
 // If the cmdQueue queue is full, a reminder message is displayed and the command is discarded
 bool storeCmdFromUART(const CMD cmd, const SERIAL_PORT_INDEX portIndex)
@@ -215,7 +216,7 @@ static char * stripCmd(char * cmdPtr)
   return cmdPtr;
 }
 
-// get the data of the next to be sent command in cmdQueue
+// get the data of the next command in command queue to be sent
 // and return "true" if sent from TFT, otherwise "false"
 static inline bool getCmd(void)
 {
@@ -271,8 +272,8 @@ static bool sendCmd(bool purge, bool avoidTerminal)
 
   if (!purge)  // if command is not purged, send it to printer
   {
-    // if the message under processing is from command queue and COMMAND_CHECKSUM feature is enabled,
-    // apply line number and checksum and store the new gcode in the retry buffer
+    // if the command under processing is from command queue and COMMAND_CHECKSUM feature is enabled,
+    // apply line number and checksum and store the new gcode on the retry buffer
     if (!cmdRetryInfo.retry && GET_BIT(infoSettings.general_settings, INDEX_COMMAND_CHECKSUM) == 1)
       setCmdRetryInfo(addCmdLineNumberAndChecksum(cmd_ptr, cmd_base_index, &cmd_len));  // cmd_ptr and cmd_len are updated
 
@@ -293,7 +294,7 @@ static bool sendCmd(bool purge, bool avoidTerminal)
     Serial_Put(SERIAL_DEBUG_PORT, cmd_ptr);
   #endif
 
-  if (!cmdRetryInfo.retry)  // if the message under processing is from command queue, dequeue the command
+  if (!cmdRetryInfo.retry)  // if the command under processing is from command queue, dequeue the command
   {
     cmdQueue.count--;
     cmdQueue.index_r = (cmdQueue.index_r + 1) % CMD_QUEUE_SIZE;
@@ -315,7 +316,7 @@ static bool sendCmd(bool purge, bool avoidTerminal)
   return !purge;  // return "true" if command was sent. Otherwise, return "false"
 }
 
-// check the presence of the specified "keyword" string in the current gcode command
+// check the presence of the specified "keyword" string in the current command
 // starting the search from index "index"
 static bool cmd_seen_from(uint8_t index, const char * keyword)
 {
@@ -338,7 +339,7 @@ static bool cmd_seen_from(uint8_t index, const char * keyword)
   return false;
 }
 
-// check the presence of the specified "code" character in the current gcode command
+// check the presence of the specified "code" character in the current command
 static bool cmd_seen(const char code)
 {
   cmd_index = cmd_base_index;
@@ -625,7 +626,8 @@ void sendEmergencyCmd(const CMD emergencyCmd, const SERIAL_PORT_INDEX portIndex)
 // parse and send gcode cmd in cmdQueue queue
 void sendQueueCmd(void)
 {
-  // if no gcode tx slot available, or no command in queue and no pending command retry, or no minimum delay for next sending is reached, nothing to do
+  // if no gcode tx slot available, or no gcode in command queue and no pending command retry,
+  // or no minimum delay for next sending is reached, nothing to do
   if (infoHost.tx_slots == 0 || (cmdQueue.count == 0 && !cmdRetryInfo.retry) ||
       (OS_GetTimeMs() - Serial_GetTimestampTX(SERIAL_PORT) < infoHost.tx_delay))
     return;

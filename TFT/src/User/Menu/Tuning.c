@@ -96,7 +96,7 @@ void menuTuning(void)
 
       #ifdef DEBUG_MONITORING
         case KEY_ICON_5:
-          monitoringSetMenu(true);
+          monitoringSetMenu(true);  // use Stress Test Monitoring menu
           OPEN_MENU(menuMonitoring);
           break;
       #endif
