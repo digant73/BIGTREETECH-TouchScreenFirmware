@@ -181,7 +181,7 @@ void InfoHost_Init(bool isConnected)
   infoHost.tx_slots = 1;  // set to 1 just to allow a soft start
   infoHost.tx_count = 0;
   infoHost.tx_delay = 2;
-  infoHost.rx_timestamp = OS_GetTimeMs();
+  infoHost.rx_timestamp = infoHost.rx_ok_timestamp = OS_GetTimeMs();
   infoHost.connected = isConnected;
   infoHost.listening_mode = false;  // temporary disable listening mode. It will be later set by InfoHost_UpdateListeningMode()
   infoHost.status = HOST_STATUS_IDLE;
@@ -203,6 +203,8 @@ void InfoHost_SetTargetTxSlots(uint8_t target_tx_slots)
 
 void InfoHost_HandleAckOk(int16_t target_tx_slots)
 {
+  infoHost.rx_ok_timestamp = OS_GetTimeMs();  // update timestamp
+
   // the following check should always be matched unless:
   // - an ACK message not related to a gcode originated by the TFT is received
   // - an ACK message for an out of band gcode (e.g. emergency gcode) is received
@@ -267,18 +269,18 @@ bool InfoHost_HandleAckTimeout(void)
   if (OS_GetTimeMs() - infoHost.rx_timestamp < ACK_TIMEOUT || infoHost.tx_count == 0)  // if no timeout or no pending gcode
     return false;
 
-  infoHost.rx_timestamp = OS_GetTimeMs();  // update timestamp
+  infoHost.rx_timestamp = infoHost.rx_ok_timestamp = OS_GetTimeMs();  // update timestamp
 
   InfoHost_HandleAckOk(HOST_SLOTS_GENERIC_OK);  // release pending gcode
 
-  //addNotification(DIALOG_TYPE_ERROR, "ACK timed out", "Pending gcode released", true);
+  addNotification(DIALOG_TYPE_ERROR, "ACK timed out", "Pending gcode released", true);
 
   return true;
 }
 
 void InfoHost_UpdateAckTimestamp(void)
 {
-  infoHost.rx_timestamp = OS_GetTimeMs();
+  infoHost.rx_timestamp = OS_GetTimeMs();  // update timestamp
 }
 
 void InfoHost_UpdateListeningMode(void)

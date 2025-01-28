@@ -6,7 +6,7 @@
 #include "uart.h"      // for _UART_CNT etc.
 
 // comment out this line to use TX interrupt based serial writing instead of TX DMA based serial writing
-#define TX_DMA_WRITE
+//#define TX_DMA_WRITE
 
 typedef struct
 {

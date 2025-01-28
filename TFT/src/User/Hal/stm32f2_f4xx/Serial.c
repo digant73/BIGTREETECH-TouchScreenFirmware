@@ -262,7 +262,7 @@ void Serial_Put(uint8_t port, const char * msg)
     dmaL1DataTX[port].wIndex = (dmaL1DataTX[port].wIndex + 1) % dmaL1DataTX[port].cacheSize;  // update wIndex
 
     if ((*msg == '\n') && ((Serial[port].uart->CR1 & USART_CR1_TCIE) == 0))
-      Serial_Send_TX(port);  // start DMA process if command is complete and DMA is not in progress already
+      Serial_Send_TX(port);  // start DMA process if message is complete and DMA is not in progress already
 
     msg++;  // let the compiler optimize this, no need to do it manually!
   }
@@ -272,6 +272,8 @@ void Serial_Put(uint8_t port, const char * msg)
 
 void Serial_Put(uint8_t port, const char * msg)
 {
+  dmaL1DataTX[port].timestamp = OS_GetTimeMs();  // keep track of last submitted message timestamp
+
   while (*msg)
   {
     // blocking! wait for buffer to become available
@@ -309,6 +311,7 @@ void USART_IRQHandler(uint8_t port)
       //
       if (Serial[port].dma_streamTX->NDTR == 0)                    // sending is complete
       {
+        // NOTE: it marks message timestamp twice if transfer was split into 2 parts
         dmaL1DataTX[port].timestamp = OS_GetTimeMs();              // keep track of last sent message timestamp
 
         dmaL1DataTX[port].rIndex = (dmaL1DataTX[port].rIndex + dmaL1DataTX[port].flag) % dmaL1DataTX[port].cacheSize;
@@ -326,6 +329,9 @@ void USART_IRQHandler(uint8_t port)
     {
       if (dmaL1DataTX[port].rIndex != dmaL1DataTX[port].wIndex)                                   // is more data available?
       {
+        if (dmaL1DataTX[port].cache[dmaL1DataTX[port].rIndex] == '\n')                            // is message complete?
+          dmaL1DataTX[port].timestamp = OS_GetTimeMs();                                           // keep track of last sent message timestamp
+
         Serial[port].uart->DR = (uint8_t)dmaL1DataTX[port].cache[dmaL1DataTX[port].rIndex];       // write next available character
 
         dmaL1DataTX[port].rIndex = (dmaL1DataTX[port].rIndex + 1) % dmaL1DataTX[port].cacheSize;  // increase reading index

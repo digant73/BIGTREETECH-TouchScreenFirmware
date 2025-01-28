@@ -51,14 +51,15 @@ typedef enum
 
 typedef struct
 {
-  uint8_t target_tx_slots;  // keep track of target gcode tx slots (e.g. if ADVANCED_OK feature is enabled on both mainboard and TFT)
-  uint8_t tx_slots;         // keep track of available gcode tx slots (e.g. if ADVANCED_OK feature is enabled on both mainboard and TFT)
-  uint8_t tx_count;         // keep track of pending gcode tx count
-  uint32_t tx_delay;        // Keep track of minimum delay (in ms) to apply between last sent message and next one to be sent
-  uint32_t rx_timestamp;    // keep track of last received ACK message timestamp
-  bool connected;           // TFT is connected to Marlin
-  bool listening_mode;      // TFT is in listening mode from Marlin
-  HOST_STATUS status;       // host is busy in printing execution. (USB serial printing and gcode print from onboard)
+  uint8_t target_tx_slots;   // keep track of target gcode tx slots (e.g. if ADVANCED_OK feature is enabled on both mainboard and TFT)
+  uint8_t tx_slots;          // keep track of available gcode tx slots (e.g. if ADVANCED_OK feature is enabled on both mainboard and TFT)
+  uint8_t tx_count;          // keep track of pending gcode tx count
+  uint32_t tx_delay;         // Keep track of minimum delay (in ms) to apply between last sent message and next one to be sent
+  uint32_t rx_timestamp;     // keep track of last received ACK message timestamp
+  uint32_t rx_ok_timestamp;  // keep track of last received ACK message OK response timestamp
+  bool connected;            // TFT is connected to Marlin
+  bool listening_mode;       // TFT is in listening mode from Marlin
+  HOST_STATUS status;        // host is busy in printing execution. (USB serial printing and gcode print from onboard)
 } HOST;
 
 typedef void (* FP_MENU)(void);
@@ -86,7 +87,7 @@ void InfoHost_Init(bool isConnected);
 void InfoHost_SetTargetTxSlots(uint8_t target_tx_slots);
 
 // handle ACK message OK response:
-//   - target_tx_slots (used/effective only in case "advanced_ok" configuration setting is also enabled in TFT):
+//   - target_tx_slots (used/effective only in case ADVANCED_OK feature is also enabled in TFT):
 //     - < 0 (HOST_SLOTS_GENERIC_OK): to increase infoHost.tx_slots up to current target and decrease infoHost.tx_count by 1
 //     - >= 0: to handle static ADVANCED_OK and Marlin ADVANCED_OK
 void InfoHost_HandleAckOk(int16_t target_tx_slots);

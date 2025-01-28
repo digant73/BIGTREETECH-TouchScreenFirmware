@@ -9,13 +9,13 @@ MONITORING infoMonitoring;
 //       the size of the plain command plus the command checksum overhead
 static const char * const cmd[] = {
   "M220\n",                                                                                                // 6 chars including '\0'
-  "M221\n",                                                                                                // 6 chars including '\0'
-  "M114 E\n",                                                                                              // 8 chars including '\0'
+  //"M221\n",                                                                                                // 6 chars including '\0'
+  //"M114 E\n",                                                                                              // 8 chars including '\0'
   "M118 P0 A1 test with short text\n",                                                                     // 33 chars including '\0'
   "M118 P0 A1 test with medium text text text text text\n",                                                // 54 chars including '\0'
-  "M118 P0 A1 test with long text text text text text text text text text text\n",                         // 77 chars including '\0'
+  //"M118 P0 A1 test with long text text text text text text text text text text\n",                         // 77 chars including '\0'
   //"M118 P0 A1 test with very long text text text text text text text text text text text text text te\n",  // 100 chars including '\0'
-  "M43\n",                                                                                                 // 5 chars including '\0'
+  //"M43\n",                                                                                                 // 5 chars including '\0'
 };
 
 static bool stressTestMenu = false;

@@ -628,8 +628,13 @@ void sendQueueCmd(void)
 {
   // if no gcode tx slot available, or no gcode in command queue and no pending command retry,
   // or no minimum delay for next sending is reached, nothing to do
-  if (infoHost.tx_slots == 0 || (cmdQueue.count == 0 && !cmdRetryInfo.retry) ||
-      (OS_GetTimeMs() - Serial_GetTimestampTX(SERIAL_PORT) < infoHost.tx_delay))
+  //
+  // NOTE: minimum delay for next sending depends on ADVANCED_OK feature status in TFT:
+  //       - if enabled: last sent command timestamp is used
+  //       - if disabled: last ACK message OK response timestamp is used
+  //
+  if (infoHost.tx_slots == 0 || (cmdQueue.count == 0 && !cmdRetryInfo.retry) || (OS_GetTimeMs() -
+      (GET_BIT(infoSettings.general_settings, INDEX_ADVANCED_OK) == 1 ? Serial_GetTimestampTX(SERIAL_PORT) : infoHost.rx_ok_timestamp) < infoHost.tx_delay))
     return;
 
   bool avoid_terminal = false;
