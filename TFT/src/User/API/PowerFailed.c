@@ -198,7 +198,7 @@ void powerFailedCreate(char * path)
       // if PLR file not loaded, initilaize data. Otherwise use loaded data
       // so also powerFailedInitRestore() function can be used
       if (!load_ok)
-        memset(&infoBreakPoint, 0, sizeof(BREAK_POINT));
+        memset(&infoBreakPoint, 0, sizeof(infoBreakPoint));
 
       if (f_write(&fpPowerFailed, &infoBreakPoint, sizeof(infoBreakPoint), &br) == FR_OK)
       {
