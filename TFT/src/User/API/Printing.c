@@ -615,7 +615,13 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
     case FS_TFT_SD:
     case FS_TFT_USB:
       if (isPause == true && pauseType == PAUSE_M0)
+      {
+        // update pause status just to block command queue feeding with gcodes from TFT media avoiding
+        // a possible deadlock in loop condition TASK_LOOP_WHILE(isNotEmptyCmdQueue())
+        infoPrinting.paused = true;
+
         TASK_LOOP_WHILE(isNotEmptyCmdQueue());  // wait for the communication to be clean
+      }
 
       static COORDINATE tmp;
 
