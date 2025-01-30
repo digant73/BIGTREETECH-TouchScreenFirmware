@@ -22,6 +22,7 @@ void initSettings(void)
 // General Settings
   infoSettings.tx_slots               = TX_SLOTS;
   infoSettings.general_settings       = ((0 << INDEX_LISTENING_MODE) |
+                                         (TX_PREFETCH << INDEX_TX_PREFETCH) |
                                          (ADVANCED_OK << INDEX_ADVANCED_OK) |
                                          (COMMAND_CHECKSUM << INDEX_COMMAND_CHECKSUM) |
                                          (EMULATED_M600 << INDEX_EMULATED_M600) |

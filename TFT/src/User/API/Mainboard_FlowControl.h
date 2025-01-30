@@ -11,7 +11,7 @@ extern "C" {
 
 #define BE_PRIORITY_DIVIDER 16     // a divider value of 16 -> run 6% of the time only. Use a power of 2 for performance reasons!
 #define FE_PRIORITY_DIVIDER 16     // a divider value of 16 -> run 6% of the time only. Use a power of 2 for performance reasons!
-#define GCODE_FETCH_COUNT   1      // maximum number of gcodes to fetch from TFT media and to copy into command queue
+#define CMD_PREFETCH_COUNT  1      // maximum number of gcodes to prefetch from TFT media and to copy into command queue
 #define ACK_TIMEOUT         15000  // 15 seconds (1 sec is 1000)
 #define MAX_MENU_DEPTH      10     // max sub menu depth
 
@@ -85,6 +85,16 @@ void InfoHost_Init(bool isConnected);
 
 // set infoHost.target_tx_slots and infoSettings.tx_slots to the value detected by TFT
 void InfoHost_SetTargetTxSlots(uint8_t target_tx_slots);
+
+// test if minimum delay for next command sending is elapsed
+//
+// minimum delay for next command sending depends on ADVANCED_OK feature status in TFT:
+//   - if disabled: last ACK message OK response timestamp is used
+//   - if enabled: last sent command timestamp is used
+bool InfoHost_IsCmdDelayElapsed(void);
+
+// test if gcode command from TFT media is sendable
+bool InfoHost_IsCmdFromTFTSendable(void);
 
 // handle ACK message OK response:
 //   - target_tx_slots (used/effective only in case ADVANCED_OK feature is also enabled in TFT):

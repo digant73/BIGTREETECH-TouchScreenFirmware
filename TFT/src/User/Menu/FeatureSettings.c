@@ -4,7 +4,8 @@
 // add key number index of the items
 typedef enum
 {
-  SKEY_ADVANCED_OK = 0,
+  SKEY_TX_PREFETCH = 0,
+  SKEY_ADVANCED_OK,
   SKEY_COMMAND_CHECKSUM,
   SKEY_EMULATED_M600,
   SKEY_EMULATED_M109_M190,
@@ -68,13 +69,14 @@ static inline void updateFeatureSettings(uint8_t item_index)
 {
   switch (item_index)
   {
+    case SKEY_TX_PREFETCH:
     case SKEY_ADVANCED_OK:
     case SKEY_COMMAND_CHECKSUM:
     case SKEY_EMULATED_M600:
     case SKEY_EMULATED_M109_M190:
     case SKEY_EVENT_LED:
     case SKEY_FILE_COMMENT_PARSING:
-      TOGGLE_BIT(infoSettings.general_settings, ((item_index - SKEY_ADVANCED_OK) + INDEX_ADVANCED_OK));
+      TOGGLE_BIT(infoSettings.general_settings, ((item_index - SKEY_TX_PREFETCH) + INDEX_TX_PREFETCH));
       break;
 
     case SKEY_SERIAL_ALWAYS_ON:
@@ -143,13 +145,14 @@ static void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t it
   {
     switch (item_index)
     {
+      case SKEY_TX_PREFETCH:
       case SKEY_ADVANCED_OK:
       case SKEY_COMMAND_CHECKSUM:
       case SKEY_EMULATED_M600:
       case SKEY_EMULATED_M109_M190:
       case SKEY_EVENT_LED:
       case SKEY_FILE_COMMENT_PARSING:
-        item->icon = iconToggle[GET_BIT(infoSettings.general_settings, ((item_index - SKEY_ADVANCED_OK) + INDEX_ADVANCED_OK))];
+        item->icon = iconToggle[GET_BIT(infoSettings.general_settings, ((item_index - SKEY_TX_PREFETCH) + INDEX_TX_PREFETCH))];
         break;
 
       case SKEY_SERIAL_ALWAYS_ON:

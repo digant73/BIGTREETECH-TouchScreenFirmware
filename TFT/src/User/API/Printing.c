@@ -799,14 +799,12 @@ void setPrintResume(HOST_STATUS hostStatus)
     infoHost.status = hostStatus;  // if printing from (remote) onboard media
 }
 
-// get gcode command from TFT media (e.g. TFT SD card or TFT USB disk)
 void loopPrintFromTFT(void)
 {
   if (!infoPrinting.printing) return;
   if (infoFile.source >= FS_ONBOARD_MEDIA) return;      // if not printing from TFT media
   if (infoPrinting.paused || heatHasWaiting()) return;
-//  if (isNotEmptyCmdQueue()) return;
-  if (getCmdQueueCount() >= GCODE_FETCH_COUNT) return;     // if maximum number of gcode commands to fetch from TFT media is reached
+  if (!InfoHost_IsCmdFromTFTSendable()) return;         // if gcode command from TFT media is not sendable
 
   // if here, the command queue is also empty and we proceed with only one of the following scenarios, in the provided order:
   //   - initialize print restore, if any, storing a set of commands on command queue

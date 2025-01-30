@@ -201,6 +201,30 @@ void InfoHost_SetTargetTxSlots(uint8_t target_tx_slots)
   infoHost.target_tx_slots = infoSettings.tx_slots = target_tx_slots;
 }
 
+bool InfoHost_IsCmdDelayElapsed(void)
+{
+  return (OS_GetTimeMs() - (GET_BIT(infoSettings.general_settings, INDEX_ADVANCED_OK) == 0 ?
+          infoHost.rx_ok_timestamp : Serial_GetTimestampTX(SERIAL_PORT)) < infoHost.tx_delay);
+}
+
+bool InfoHost_IsCmdFromTFTSendable(void)
+{
+/*  if (GET_BIT(infoSettings.general_settings, INDEX_ADVANCED_OK) == 0)  // if ADVANCED_OK is disabled in TFT
+  {
+    if ((isNotEmptyCmdQueue()))  // if communication is not clean
+      return false;
+  }
+  else if (getCmdQueueCount() >= CMD_PREFETCH_COUNT)  // if ADVANCED_OK is enabled and prefecth count is reached
+  {
+    return false;
+  }
+
+  return true;*/
+
+  return (GET_BIT(infoSettings.general_settings, INDEX_TX_PREFETCH) == 0 ?
+          !isNotEmptyCmdQueue() : getCmdQueueCount() < CMD_PREFETCH_COUNT);
+}
+
 void InfoHost_HandleAckOk(int16_t target_tx_slots)
 {
   infoHost.rx_ok_timestamp = OS_GetTimeMs();  // update timestamp

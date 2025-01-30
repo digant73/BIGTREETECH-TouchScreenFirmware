@@ -6,6 +6,7 @@
 //-----------------------------General Settings
 #define CONFIG_SERIAL_PORT           "serial_port:"
 #define CONFIG_TX_SLOTS              "tx_slots:"
+#define CONFIG_TX_PREFETCH           "tx_prefetch:"
 #define CONFIG_ADVANCED_OK           "advanced_ok:"
 #define CONFIG_COMMAND_CHECKSUM      "command_checksum:"
 #define CONFIG_EMULATED_M600         "emulated_m600:"
@@ -446,13 +447,14 @@ static void parseConfigKey(uint16_t index)
       SET_VALID_INT_VALUE(infoSettings.tx_slots, MIN_TX_SLOTS, MAX_TX_SLOTS);
       break;
 
+    case C_INDEX_TX_PREFETCH:
     case C_INDEX_ADVANCED_OK:
     case C_INDEX_COMMAND_CHECKSUM:
     case C_INDEX_EMULATED_M600:
     case C_INDEX_EMULATED_M109_M190:
     case C_INDEX_EVENT_LED:
     case C_INDEX_FILE_COMMENT_PARSING:
-      SET_BIT_VALUE(infoSettings.general_settings, ((index - C_INDEX_ADVANCED_OK) + INDEX_ADVANCED_OK), getOnOff());
+      SET_BIT_VALUE(infoSettings.general_settings, ((index - C_INDEX_TX_PREFETCH) + INDEX_TX_PREFETCH), getOnOff());
       break;
 
     //----------------------------UI Settings

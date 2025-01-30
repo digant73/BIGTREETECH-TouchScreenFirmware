@@ -1,7 +1,7 @@
 #ifndef _CONFIGURATION_H_
 #define _CONFIGURATION_H_
 
-#define CONFIG_VERSION 20240203
+#define CONFIG_VERSION 20250130
 
 //====================================================================================================
 //=============================== Settings Configurable On config.ini ================================
@@ -63,6 +63,22 @@
  *   Value range: [min: 2, max: 16]
  */
 #define TX_SLOTS 2  // Default: 1
+
+/**
+ * TX Prefetch
+ * Used/effective only when printing from TFT SD card / TFT USB disk.
+ * The TFT prefetches from TFT SD card / TFT USB disk the next G-code to be sent to the mainboard
+ * so it will be immediately ready to be sent to the mainboard (no extra latency to read, parse
+ * and enqueue from TFT media) when the G-code is scheduled to be sent.
+ *
+ * NOTE: Disable it in case the mainboard notifies frequent error ACK messages (e.g. unknown command
+ *       or command chacksum missmatch (if COMMAND_CHECKSUM feature (see description of next setting
+ *       "COMMAND_CHECKSUM") is enabled)), to the TFT during printing in particular when the reported
+ *       command is slightly misswritten at the beginning (e.g. "M14 E" instead of "M114 E" etc.).
+ *
+ *   Options: [disable: 0, enable: 1]
+ */
+#define TX_PREFETCH 0  // Default: 0
 
 /**
  * Advanced OK
