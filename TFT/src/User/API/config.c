@@ -444,6 +444,11 @@ static void parseConfigKey(uint16_t index)
       if (key_seen("P4:")) SET_VALID_INT_VALUE(infoSettings.serial_port[3], 0, BAUDRATE_COUNT - 1);
       break;
 
+    case C_INDEX_COMMAND_CHECKSUM:
+    case C_INDEX_ADVANCED_OK:
+      SET_BIT_VALUE(infoSettings.general_settings, ((index - C_INDEX_COMMAND_CHECKSUM) + INDEX_COMMAND_CHECKSUM), getOnOff());
+      break;
+
     case C_INDEX_TX_SLOTS:
       SET_VALID_INT_VALUE(infoSettings.tx_slots, MIN_TX_SLOTS, MAX_TX_SLOTS);
       break;
@@ -453,8 +458,6 @@ static void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_TX_PREFETCH:
-    case C_INDEX_ADVANCED_OK:
-    case C_INDEX_COMMAND_CHECKSUM:
     case C_INDEX_EMULATED_M600:
     case C_INDEX_EMULATED_M109_M190:
     case C_INDEX_EVENT_LED:

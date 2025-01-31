@@ -23,9 +23,9 @@ void initSettings(void)
   infoSettings.tx_slots               = TX_SLOTS;
   infoSettings.tx_delay               = TX_DELAY;
   infoSettings.general_settings       = ((0 << INDEX_LISTENING_MODE) |
-                                         (TX_PREFETCH << INDEX_TX_PREFETCH) |
-                                         (ADVANCED_OK << INDEX_ADVANCED_OK) |
                                          (COMMAND_CHECKSUM << INDEX_COMMAND_CHECKSUM) |
+                                         (ADVANCED_OK << INDEX_ADVANCED_OK) |
+                                         (TX_PREFETCH << INDEX_TX_PREFETCH) |
                                          (EMULATED_M600 << INDEX_EMULATED_M600) |
                                          (EMULATED_M109_M190 << INDEX_EMULATED_M109_M190) |
                                          (EVENT_LED << INDEX_EVENT_LED) |

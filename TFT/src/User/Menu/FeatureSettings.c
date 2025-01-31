@@ -4,10 +4,10 @@
 // add key number index of the items
 typedef enum
 {
-  SKEY_TX_DELAY = 0,
-  SKEY_TX_PREFETCH,
+  SKEY_COMMAND_CHECKSUM = 0,
   SKEY_ADVANCED_OK,
-  SKEY_COMMAND_CHECKSUM,
+  SKEY_TX_DELAY,
+  SKEY_TX_PREFETCH,
   SKEY_EMULATED_M600,
   SKEY_EMULATED_M109_M190,
   SKEY_EVENT_LED,
@@ -38,7 +38,7 @@ typedef enum
 
 // parameter values
 
-#define ITEM_TX_DELAY_NUM 11
+#define ITEM_TX_DELAY_NUM (MAX_TX_DELAY - MIN_TX_DELAY + 1)
 static const char * const labelTxDelay[ITEM_TX_DELAY_NUM] = {
   // item value text(only for custom value)
   "0",
@@ -86,13 +86,16 @@ static inline void updateFeatureSettings(uint8_t item_index)
 {
   switch (item_index)
   {
+    case SKEY_COMMAND_CHECKSUM:
+    case SKEY_ADVANCED_OK:
+      TOGGLE_BIT(infoSettings.general_settings, ((item_index - SKEY_COMMAND_CHECKSUM) + INDEX_COMMAND_CHECKSUM));
+      break;
+
     case SKEY_TX_DELAY:
       infoSettings.tx_delay = (infoSettings.tx_delay + 1) % ITEM_TX_DELAY_NUM;
       break;
 
     case SKEY_TX_PREFETCH:
-    case SKEY_ADVANCED_OK:
-    case SKEY_COMMAND_CHECKSUM:
     case SKEY_EMULATED_M600:
     case SKEY_EMULATED_M109_M190:
     case SKEY_EVENT_LED:
@@ -166,13 +169,16 @@ static void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t it
   {
     switch (item_index)
     {
+      case SKEY_COMMAND_CHECKSUM:
+      case SKEY_ADVANCED_OK:
+        item->icon = iconToggle[GET_BIT(infoSettings.general_settings, ((item_index - SKEY_COMMAND_CHECKSUM) + INDEX_COMMAND_CHECKSUM))];
+        break;
+
       case SKEY_TX_DELAY:
         setDynamicTextValue(SKEY_TX_DELAY, (char *)labelTxDelay[infoSettings.tx_delay]);
         break;
 
       case SKEY_TX_PREFETCH:
-      case SKEY_ADVANCED_OK:
-      case SKEY_COMMAND_CHECKSUM:
       case SKEY_EMULATED_M600:
       case SKEY_EMULATED_M109_M190:
       case SKEY_EVENT_LED:
@@ -249,10 +255,10 @@ void menuFeatureSettings(void)
 
   // set item types
   LISTITEM settingPage[SKEY_COUNT] = {
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_COMMAND_CHECKSUM,       LABEL_NULL},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_ADVANCED_OK,            LABEL_NULL},
     {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_TX_DELAY,               LABEL_DYNAMIC},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_TX_PREFETCH,            LABEL_NULL},
-    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_ADVANCED_OK,            LABEL_NULL},
-    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_COMMAND_CHECKSUM,       LABEL_NULL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EMULATED_M600,          LABEL_NULL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EMULATED_M109_M190,     LABEL_NULL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EVENT_LED,              LABEL_NULL},
