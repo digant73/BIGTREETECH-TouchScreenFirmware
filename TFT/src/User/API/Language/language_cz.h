@@ -3,6 +3,8 @@
 
 // config.ini Parameter Settings - Screen Settings and Feature Settings
 #define STRING_LANGUAGE               "Čeština"
+#define STRING_TX_DELAY               "TX delay"
+#define STRING_TX_PREFETCH            "TX prefetch"
 #define STRING_ADVANCED_OK            "Advanced OK"
 #define STRING_COMMAND_CHECKSUM       "Kontrolní součet"
 #define STRING_EMULATED_M600          "Emulace M600"

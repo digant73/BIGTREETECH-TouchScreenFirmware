@@ -4,7 +4,8 @@
 // add key number index of the items
 typedef enum
 {
-  SKEY_TX_PREFETCH = 0,
+  SKEY_TX_DELAY = 0,
+  SKEY_TX_PREFETCH,
   SKEY_ADVANCED_OK,
   SKEY_COMMAND_CHECKSUM,
   SKEY_EMULATED_M600,
@@ -36,6 +37,22 @@ typedef enum
 } SKEY_LIST;
 
 // parameter values
+
+#define ITEM_TX_DELAY_NUM 11
+static const char * const labelTxDelay[ITEM_TX_DELAY_NUM] = {
+  // item value text(only for custom value)
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10"
+};
 
 #ifdef FIL_RUNOUT_PIN
   #define ITEM_TOGGLE_AUTO_NUM 3
@@ -69,6 +86,10 @@ static inline void updateFeatureSettings(uint8_t item_index)
 {
   switch (item_index)
   {
+    case SKEY_TX_DELAY:
+      infoSettings.tx_delay = (infoSettings.tx_delay + 1) % ITEM_TX_DELAY_NUM;
+      break;
+
     case SKEY_TX_PREFETCH:
     case SKEY_ADVANCED_OK:
     case SKEY_COMMAND_CHECKSUM:
@@ -145,6 +166,10 @@ static void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t it
   {
     switch (item_index)
     {
+      case SKEY_TX_DELAY:
+        setDynamicTextValue(SKEY_TX_DELAY, (char *)labelTxDelay[infoSettings.tx_delay]);
+        break;
+
       case SKEY_TX_PREFETCH:
       case SKEY_ADVANCED_OK:
       case SKEY_COMMAND_CHECKSUM:
@@ -224,6 +249,8 @@ void menuFeatureSettings(void)
 
   // set item types
   LISTITEM settingPage[SKEY_COUNT] = {
+    {CHARICON_BLANK,       LIST_CUSTOMVALUE,   LABEL_TX_DELAY,               LABEL_DYNAMIC},
+    {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_TX_PREFETCH,            LABEL_NULL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_ADVANCED_OK,            LABEL_NULL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_COMMAND_CHECKSUM,       LABEL_NULL},
     {CHARICON_TOGGLE_ON,   LIST_TOGGLE,        LABEL_EMULATED_M600,          LABEL_NULL},

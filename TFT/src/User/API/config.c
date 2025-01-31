@@ -6,6 +6,7 @@
 //-----------------------------General Settings
 #define CONFIG_SERIAL_PORT           "serial_port:"
 #define CONFIG_TX_SLOTS              "tx_slots:"
+#define CONFIG_TX_DELAY              "tx_delay:"
 #define CONFIG_TX_PREFETCH           "tx_prefetch:"
 #define CONFIG_ADVANCED_OK           "advanced_ok:"
 #define CONFIG_COMMAND_CHECKSUM      "command_checksum:"
@@ -445,6 +446,10 @@ static void parseConfigKey(uint16_t index)
 
     case C_INDEX_TX_SLOTS:
       SET_VALID_INT_VALUE(infoSettings.tx_slots, MIN_TX_SLOTS, MAX_TX_SLOTS);
+      break;
+
+    case C_INDEX_TX_DELAY:
+      SET_VALID_INT_VALUE(infoSettings.tx_delay, MIN_TX_DELAY, MAX_TX_DELAY);
       break;
 
     case C_INDEX_TX_PREFETCH:

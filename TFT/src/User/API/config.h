@@ -12,6 +12,7 @@ extern "C" {
 
 //-----------------------------Limits
 #define MAX_TX_SLOTS           16  // tx slots over this will not be parsed
+#define MAX_TX_DELAY           10  // tx delay over this will not be parsed
 #define MAX_SIZE_LIMIT       2000  // machine size over this will not be parsed
 #define MAX_EXT_SPEED_LIMIT  5000  // extruder speed over this will not be parsed
 #define MAX_TOOL_TEMP        1000  // extruder temp over this will not be parsed
@@ -27,6 +28,7 @@ extern "C" {
 #define MAX_NEOPIXEL_PIXELS   200  // neopixel pixels over this will not be parsed
 
 #define MIN_TX_SLOTS            2  // tx slots less than this will not be parsed
+#define MIN_TX_DELAY            0  // tx delay less than this will not be parsed
 #define MIN_SIZE_LIMIT      -2000  // machine size less than this will not be parsed
 #define NAME_MIN_LENGTH         3  // minimum name length
 #define GCODE_MIN_LENGTH        3  // gcode length less than this will not be parsed

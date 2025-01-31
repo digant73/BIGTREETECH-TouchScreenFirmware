@@ -54,12 +54,12 @@ typedef struct
   uint8_t target_tx_slots;   // keep track of target gcode tx slots (e.g. if ADVANCED_OK feature is enabled on both mainboard and TFT)
   uint8_t tx_slots;          // keep track of available gcode tx slots (e.g. if ADVANCED_OK feature is enabled on both mainboard and TFT)
   uint8_t tx_count;          // keep track of pending gcode tx count
-  uint32_t tx_delay;         // Keep track of minimum delay (in ms) to apply between last sent message and next one to be sent
+  uint32_t tx_delay;         // Keep track of minimum delay (in ms) to apply between last sent gcode and next one to be sent to mainboard
   uint32_t rx_timestamp;     // keep track of last received ACK message timestamp
   uint32_t rx_ok_timestamp;  // keep track of last received ACK message OK response timestamp
   bool connected;            // TFT is connected to Marlin
   bool listening_mode;       // TFT is in listening mode from Marlin
-  HOST_STATUS status;        // host is busy in printing execution. (USB serial printing and gcode print from onboard)
+  HOST_STATUS status;        // host is busy in printing execution (printing from USB serial or from onboard)
 } HOST;
 
 typedef void (* FP_MENU)(void);
@@ -86,14 +86,14 @@ void InfoHost_Init(bool isConnected);
 // set infoHost.target_tx_slots and infoSettings.tx_slots to the value detected by TFT
 void InfoHost_SetTargetTxSlots(uint8_t target_tx_slots);
 
-// test if minimum delay for next command sending is elapsed
+// test if minimum delay for next gcode sending is elapsed
 //
-// minimum delay for next command sending depends on ADVANCED_OK feature status in TFT:
-//   - if disabled: last ACK message OK response timestamp is used
-//   - if enabled: last sent command timestamp is used
+// minimum delay for next gcode sending depends on ADVANCED_OK feature status in TFT:
+//   - if disabled: the delay is applied to the last received ACK message OK response timestamp
+//   - if enabled: the delay is applied to the last sent G-code timestamp
 bool InfoHost_IsCmdDelayElapsed(void);
 
-// test if gcode command from TFT media is sendable
+// test if next gcode from TFT media is sendable
 bool InfoHost_IsCmdFromTFTSendable(void);
 
 // handle ACK message OK response:

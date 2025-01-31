@@ -40,7 +40,7 @@ void loopBackEnd(void)
   // handle a print from TFT media, if any
   loopPrintFromTFT();
 
-  // parse and send gcode commands in the queue
+  // parse and send gcodes in command queue
   sendQueueCmd();
 
   // parse the received slave response information
@@ -180,7 +180,7 @@ void InfoHost_Init(bool isConnected)
   infoHost.target_tx_slots = infoSettings.tx_slots;
   infoHost.tx_slots = 1;  // set to 1 just to allow a soft start
   infoHost.tx_count = 0;
-  infoHost.tx_delay = 2;
+  infoHost.tx_delay = infoSettings.tx_delay;
   infoHost.rx_timestamp = infoHost.rx_ok_timestamp = OS_GetTimeMs();
   infoHost.connected = isConnected;
   infoHost.listening_mode = false;  // temporary disable listening mode. It will be later set by InfoHost_UpdateListeningMode()
@@ -209,18 +209,6 @@ bool InfoHost_IsCmdDelayElapsed(void)
 
 bool InfoHost_IsCmdFromTFTSendable(void)
 {
-/*  if (GET_BIT(infoSettings.general_settings, INDEX_ADVANCED_OK) == 0)  // if ADVANCED_OK is disabled in TFT
-  {
-    if ((isNotEmptyCmdQueue()))  // if communication is not clean
-      return false;
-  }
-  else if (getCmdQueueCount() >= CMD_PREFETCH_COUNT)  // if ADVANCED_OK is enabled and prefecth count is reached
-  {
-    return false;
-  }
-
-  return true;*/
-
   return (GET_BIT(infoSettings.general_settings, INDEX_TX_PREFETCH) == 0 ?
           !isNotEmptyCmdQueue() : getCmdQueueCount() < CMD_PREFETCH_COUNT);
 }

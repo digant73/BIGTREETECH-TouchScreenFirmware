@@ -65,6 +65,28 @@
 #define TX_SLOTS 2  // Default: 1
 
 /**
+ * TX Delay
+ * Minimum delay (in ms) to apply between the last sent G-code and the next one to be sent to the
+ * mainboard.
+ * Minimum delay for the next G-code sending depends on ADVANCED_OK feature status (see description
+ * of next setting "ADVANCED_OK"):
+ * - if disabled: the delay is applied to the last received ACK message OK response timestamp.
+ * - if enabled: the delay is applied to the last sent G-code timestamp.
+ *
+ * NOTE: Increase it in case the mainboard notifies frequent error ACK messages (e.g. unknown command
+ *       or command checksum missmatch (if COMMAND_CHECKSUM feature (see description of next setting
+ *       "COMMAND_CHECKSUM") is enabled)) to the TFT during printing in particular when the reported
+ *       command is slightly misswritten at the beginning (e.g. "M14 E" instead of "M114 E" etc.).
+ *       Typically, to avoid those error messages:
+ *       - a value of 1-2 is emough if ADVANCED_OK feature is disabled.
+ *       - a value of 3-4 is emough if ADVANCED_OK feature is enabled.
+ *
+ *   Unit: [time in milliseconds]
+ *   Value range: [min: 0, max: 10]
+ */
+#define TX_DELAY 1  // Default: 0
+
+/**
  * TX Prefetch
  * Used/effective only when printing from TFT SD card / TFT USB disk.
  * The TFT prefetches from TFT SD card / TFT USB disk the next G-code to be sent to the mainboard
@@ -72,8 +94,8 @@
  * and enqueue from TFT media) when the G-code is scheduled to be sent.
  *
  * NOTE: Disable it in case the mainboard notifies frequent error ACK messages (e.g. unknown command
- *       or command chacksum missmatch (if COMMAND_CHECKSUM feature (see description of next setting
- *       "COMMAND_CHECKSUM") is enabled)), to the TFT during printing in particular when the reported
+ *       or command checksum missmatch (if COMMAND_CHECKSUM feature (see description of next setting
+ *       "COMMAND_CHECKSUM") is enabled)) to the TFT during printing in particular when the reported
  *       command is slightly misswritten at the beginning (e.g. "M14 E" instead of "M114 E" etc.).
  *
  *   Options: [disable: 0, enable: 1]
@@ -93,9 +115,9 @@
  * NOTE: Disable it in case:
  *       - no ADVANCED_OK feature is requested/needed by the user.
  *       - ADVANCED_OK feature is not providing good printing results or if the mainboard notifies
- *         frequent error ACK messages (e.g. unknown command) to the TFT during printing.
- *       - COMMAND_CHECKSUM feature (see description of next setting "COMMAND_CHECKSUM") is
- *         requested/needed by the user.
+ *         frequent error ACK messages (e.g. unknown command or command checksum missmatch (if
+ *         COMMAND_CHECKSUM feature (see description of next setting "COMMAND_CHECKSUM") is enabled))
+ *         to the TFT during printing even using high values (e.g. 5 or more) for "TX_DELAY" setting.
  *
  *   Options: [disable: 0, enable: 1]
  */
@@ -125,10 +147,13 @@
  *         feature is enabled and managed by the remote host. Otherwise (COMMAND_CHECKSUM feature also
  *         enabled in TFT), the TFT's COMMAND_CHECKSUM feature will always replace the one provided by
  *         the remote host causing conflicts in case data mismatch will be notified by the mainboard.
- *       - ADVANCED_OK feature is enabled in TFT. Otherwise, any out of synch command already sent to
- *         the mainboard will be discarded by the mainboard and not resent by the TFT due the current
- *         implementation of COMMAND_CHECKSUM feature on the TFT buffers only the last sent command
- *         and not all the pending commands.
+ *       - ADVANCED_OK feature is enabled in TFT but the mainboard notifies frequent error ACK messages
+ *         (e.g. unknown command or command checksum missmatch) to the TFT during printing even using
+ *         high values (e.g. 5 or more) for "TX_DELAY" setting.
+ *         In that circumstance, any out of synch command already sent to the mainboard will be
+ *         discarded by the mainboard and not resent by the TFT due the current implementation of
+ *         COMMAND_CHECKSUM feature on the TFT buffers only the last sent command and not all the
+ *         pending commands.
  *
  *   Options: [disable: 0, enable: 1]
  */

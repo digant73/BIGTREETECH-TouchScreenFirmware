@@ -21,6 +21,7 @@ void initSettings(void)
 {
 // General Settings
   infoSettings.tx_slots               = TX_SLOTS;
+  infoSettings.tx_delay               = TX_DELAY;
   infoSettings.general_settings       = ((0 << INDEX_LISTENING_MODE) |
                                          (TX_PREFETCH << INDEX_TX_PREFETCH) |
                                          (ADVANCED_OK << INDEX_ADVANCED_OK) |
