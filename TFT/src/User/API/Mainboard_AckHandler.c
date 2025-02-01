@@ -438,7 +438,7 @@ void parseAck(void)
 
       detectAdvancedOk();
 
-      InfoHost_UpdateListeningMode();
+      InfoHost_UpdateListeningMode();  // update listening mode to infoSettings.general_settings
     }
 
     //----------------------------------------

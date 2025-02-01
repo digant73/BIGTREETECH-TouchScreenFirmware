@@ -72,7 +72,7 @@ bool isNotEmptyCmdQueue(void)
   return (cmdQueue.count != 0 || infoHost.tx_slots == 0);  // if not empty command queue or no available command tx slot
 }
 
-bool isCmdEnqueued(const CMD cmd)
+bool isEnqueuedCmd(const CMD cmd)
 {
   for (int i = 0; i < cmdQueue.count; i++)
   {
@@ -83,7 +83,7 @@ bool isCmdEnqueued(const CMD cmd)
   return false;
 }
 
-bool isWritingMode(void)
+bool isCmdWritingMode(void)
 {
   return (writing_mode != NO_WRITING);
 }

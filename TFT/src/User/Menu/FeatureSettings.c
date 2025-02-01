@@ -94,7 +94,7 @@ static inline void updateFeatureSettings(uint8_t item_index)
     case SKEY_TX_DELAY:
       infoSettings.tx_delay = (infoSettings.tx_delay + 1) % ITEM_TX_DELAY_NUM;
 
-      InfoHost_UpdateTxDelay();  // update infoHost.tx_delay to infoSettings.tx_delay
+      InfoHost_UpdateTxDelay();  // update tx delay to infoSettings.tx_delay
       break;
 
     case SKEY_TX_PREFETCH:

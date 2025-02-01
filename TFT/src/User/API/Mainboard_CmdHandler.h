@@ -26,8 +26,8 @@ bool isPendingCmd(void);            // if pending gcode
 bool isFullCmdQueue(void);
 bool isIdleCmdQueue(void);          // if empty command queue and no pending gcode
 bool isNotEmptyCmdQueue(void);      // if not empty command queue or no available gcode tx slot
-bool isCmdEnqueued(const CMD cmd);  // if gcode is already enqueued on command queue
-bool isWritingMode(void);
+bool isEnqueuedCmd(const CMD cmd);  // if gcode is already enqueued on command queue
+bool isCmdWritingMode(void);
 
 bool storeCmd(const char * format, ...);
 void mustStoreCmd(const char * format, ...);
