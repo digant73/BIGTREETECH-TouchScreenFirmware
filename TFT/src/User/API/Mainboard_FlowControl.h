@@ -59,7 +59,7 @@ typedef struct
   uint32_t rx_ok_timestamp;  // keep track of last received ACK message OK response timestamp
   bool connected;            // TFT is connected to Marlin
   bool listening_mode;       // TFT is in listening mode from Marlin
-  HOST_STATUS status;        // host is busy in printing execution (printing from USB serial or from onboard)
+  HOST_STATUS status;        // host is busy in printing execution (printing from USB serial, (remote) onboard media or remote host)
 } HOST;
 
 typedef void (* FP_MENU)(void);
@@ -83,17 +83,23 @@ void loopProcessAndGUI(void);
 
 void InfoHost_Init(bool isConnected);
 
-// set infoHost.target_tx_slots and infoSettings.tx_slots to the value detected by TFT
-void InfoHost_SetTargetTxSlots(uint8_t target_tx_slots);
+void InfoHost_UpdateTargetTxSlots(uint8_t target_tx_slots);  // update infoHost.target_tx_slots and infoSettings.tx_slots to the value detected by TFT
+void InfoHost_UpdateTxDelay(void);                           // update infoHost.tx_delay to infoSettings.tx_delay
+void InfoHost_UpdateListeningMode(void);                     // update infoHost.listening_mode to infoSettings.general_settings
 
-// test if minimum delay for next gcode sending is elapsed
+// test if minimum delay for next gcode to send is elapsed
 //
-// minimum delay for next gcode sending depends on ADVANCED_OK feature status in TFT:
+// minimum delay for the next gcode to send depends on ADVANCED_OK feature status:
 //   - if disabled: the delay is applied to the last received ACK message OK response timestamp
-//   - if enabled: the delay is applied to the last sent G-code timestamp
+//   - if enabled: the delay is applied to the last sent gcode timestamp (timestamp taken when the
+//     gcode transmission on serial line is completed)
 bool InfoHost_IsCmdDelayElapsed(void);
 
 // test if next gcode from TFT media is sendable
+//
+// sendability of the next gcode from TFT media depends on TX_PREFETCH feature status:
+//   - if disabled: the gcode is sendable if the command queue is empty and there is at least one free tx slot
+//   - if enabled: the gcode is sendable if the count of commands in the command queue has not reached CMD_PREFETCH_COUNT
 bool InfoHost_IsCmdFromTFTSendable(void);
 
 // handle ACK message OK response:
@@ -102,9 +108,8 @@ bool InfoHost_IsCmdFromTFTSendable(void);
 //     - >= 0: to handle static ADVANCED_OK and Marlin ADVANCED_OK
 void InfoHost_HandleAckOk(int16_t target_tx_slots);
 
-bool InfoHost_HandleAckTimeout(void);     // handle ACK message timeout, if any. Return "true" if ACK message timed out
-void InfoHost_UpdateAckTimestamp(void);   // update last received ACK message timestamp
-void InfoHost_UpdateListeningMode(void);  // update listening mode
+bool InfoHost_HandleAckTimeout(void);    // handle ACK message timeout, if any. Return "true" if ACK message timed out
+void InfoHost_UpdateAckTimestamp(void);  // update last received ACK message timestamp
 
 #ifdef __cplusplus
 }

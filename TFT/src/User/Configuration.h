@@ -126,15 +126,17 @@
  * TX Delay
  * Minimum delay (in ms) to apply between the last sent G-code and the next one to be sent to the
  * mainboard.
- * Minimum delay for the next G-code sending depends on ADVANCED_OK feature status:
+ * Minimum delay for the next G-code to send depends on ADVANCED_OK feature status:
  * - If disabled: the delay is applied to the last received ACK message OK response timestamp.
- * - If enabled: the delay is applied to the last sent G-code timestamp.
+ * - If enabled: the delay is applied to the last sent G-code timestamp (timestamp taken when the
+ *   G-code transmission on serial line is completed).
  *
  * NOTE: Increase it in case:
  *       - The mainboard notifies frequent error ACK messages (e.g. unknown command or command checksum
  *         missmatch (if COMMAND_CHECKSUM feature is enabled)) to the TFT during printing in particular
  *         when the reported command is slightly misswritten at the beginning (e.g. "M14 E" instead of
- *         "M114 E" etc.).
+ *         "M114 E", "20" instead of "M220", "221" instead of "M221", "GX108.607 Y96.632 E0.02052"
+ *         instead of "G1 X108.607 Y96.632 E0.02052" etc.).
  *         Typically, to avoid those error messages:
  *         - A value of 1-2 is emough if ADVANCED_OK feature is disabled.
  *         - A value of 3-4 is emough if ADVANCED_OK feature is enabled.
@@ -155,7 +157,8 @@
  *       - The mainboard notifies frequent error ACK messages (e.g. unknown command or command checksum
  *         missmatch (if COMMAND_CHECKSUM feature is enabled)) to the TFT during printing in particular
  *         when the reported command is slightly misswritten at the beginning (e.g. "M14 E" instead of
- *         "M114 E" etc.).
+ *         "M114 E", "20" instead of "M220", "221" instead of "M221", "GX108.607 Y96.632 E0.02052"
+ *         instead of "G1 X108.607 Y96.632 E0.02052" etc.).
  *
  *   Options: [disable: 0, enable: 1]
  */

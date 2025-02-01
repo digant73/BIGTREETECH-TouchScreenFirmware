@@ -196,9 +196,22 @@ void InfoHost_Init(bool isConnected)
   }
 }
 
-void InfoHost_SetTargetTxSlots(uint8_t target_tx_slots)
+void InfoHost_UpdateTargetTxSlots(uint8_t target_tx_slots)
 {
   infoHost.target_tx_slots = infoSettings.tx_slots = target_tx_slots;
+}
+
+void InfoHost_UpdateTxDelay(void)
+{
+  infoHost.tx_delay = infoSettings.tx_delay;
+}
+
+void InfoHost_UpdateListeningMode(void)
+{
+  infoHost.listening_mode = (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1);
+
+  if (infoHost.listening_mode)
+    setReminderMsg(LABEL_LISTENING, SYS_STATUS_LISTENING);  // if TFT in listening mode, display a reminder message
 }
 
 bool InfoHost_IsCmdDelayElapsed(void)
@@ -293,12 +306,4 @@ bool InfoHost_HandleAckTimeout(void)
 void InfoHost_UpdateAckTimestamp(void)
 {
   infoHost.rx_timestamp = OS_GetTimeMs();  // update timestamp
-}
-
-void InfoHost_UpdateListeningMode(void)
-{
-  infoHost.listening_mode = (GET_BIT(infoSettings.general_settings, INDEX_LISTENING_MODE) == 1);
-
-  if (infoHost.listening_mode)
-    setReminderMsg(LABEL_LISTENING, SYS_STATUS_LISTENING);  // if TFT in listening mode, display a reminder message
 }

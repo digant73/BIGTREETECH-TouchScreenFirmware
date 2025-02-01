@@ -104,6 +104,9 @@ static void waitForAbort(void)
   uint16_t rIndex_old = -1;  // out of band value -1 will guarantee the beginning of M108 transmission loop
   uint16_t rIndex;
 
+  popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
+  loopPopup();  // trigger the immediate draw of the above popup
+
   TASK_LOOP_WHILE(!infoPrinting.aborted,
                   if ((rIndex = Serial_GetReadingIndexRX(SERIAL_PORT)) != rIndex_old)
                   {
@@ -112,8 +115,8 @@ static void waitForAbort(void)
                   }
                  );
 
-  // remove any enqueued command that could come from a supplementary serial port or TFT media
-  // (if printing from remote host or TFT media) during the loop above
+  // remove any enqueued command that could come from TFT media or a supplementary serial port
+  // (if printing from TFT media or remote host) during the loop above
   clearQueueAndMore();
 }
 
@@ -564,9 +567,6 @@ void abortPrint(void)
 
     case FS_ONBOARD_MEDIA:
     case FS_ONBOARD_MEDIA_REMOTE:
-      popupSplash(DIALOG_TYPE_INFO, LABEL_SCREEN_INFO, LABEL_BUSY);
-      loopPopup();  // trigger the immediate draw of the above popup
-
       abortAndTerminate();  // send a print abort command before calling the following waitForAbort() function
       break;
 

@@ -54,8 +54,8 @@ static const char * const labelTxDelay[ITEM_TX_DELAY_NUM] = {
   "10"
 };
 
-#ifdef FIL_RUNOUT_PIN
-  #define ITEM_TOGGLE_AUTO_NUM 3
+#ifdef PS_ON_PIN
+  #define ITEM_TOGGLE_AUTO_NUM (MAX_AUTO_SHUTDOWN - MIN_AUTO_SHUTDOWN + 1)
   static const LABEL itemToggleAuto[ITEM_TOGGLE_AUTO_NUM] = {
     LABEL_OFF,
     LABEL_ON,
@@ -63,7 +63,7 @@ static const char * const labelTxDelay[ITEM_TX_DELAY_NUM] = {
   };
 #endif
 
-#ifdef PS_ON_PIN
+#ifdef FIL_RUNOUT_PIN
   #define ITEM_TOGGLE_SMART_NUM 2
   static const LABEL itemToggleSmart[ITEM_TOGGLE_SMART_NUM] = {
     LABEL_ON,
@@ -93,6 +93,8 @@ static inline void updateFeatureSettings(uint8_t item_index)
 
     case SKEY_TX_DELAY:
       infoSettings.tx_delay = (infoSettings.tx_delay + 1) % ITEM_TX_DELAY_NUM;
+
+      InfoHost_UpdateTxDelay();  // update infoHost.tx_delay to infoSettings.tx_delay
       break;
 
     case SKEY_TX_PREFETCH:
@@ -217,7 +219,7 @@ static void loadFeatureSettings(LISTITEM * item, uint16_t item_index, uint8_t it
         {
           LABEL sensorLabel = itemToggleSmart[GET_BIT(infoSettings.runout, 1)];
 
-          item->valueLabel.index = (GET_BIT(infoSettings.runout, 0)) ? sensorLabel.index : LABEL_OFF;
+          item->valueLabel.index = GET_BIT(infoSettings.runout, 0) ? sensorLabel.index : LABEL_OFF;
           break;
         }
       #endif

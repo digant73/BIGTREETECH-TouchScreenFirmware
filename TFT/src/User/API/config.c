@@ -524,11 +524,11 @@ static void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_TERMINAL_COLOR_SCHEME:
-      SET_VALID_INT_VALUE(infoSettings.terminal_color_scheme, 0, 2);
+      SET_VALID_INT_VALUE(infoSettings.terminal_color_scheme, MIN_COLOR_SCHEME, MAX_COLOR_SCHEME);
       break;
 
     case C_INDEX_ACK_NOTIFICATION:
-      SET_VALID_INT_VALUE(infoSettings.ack_notification, 0, 2);
+      SET_VALID_INT_VALUE(infoSettings.ack_notification, MIN_ACK_NOTIF, MAX_ACK_NOTIF);
       break;
 
     case C_INDEX_FILES_SORT_BY:
@@ -560,15 +560,15 @@ static void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_PROG_SOURCE:
-      SET_VALID_INT_VALUE(infoSettings.prog_source, 0, 1);
+      SET_VALID_INT_VALUE(infoSettings.prog_source, MIN_PROG_SOURCE, MAX_PROG_SOURCE);
       break;
 
     case C_INDEX_PROG_DISP_TYPE:
-      SET_VALID_INT_VALUE(infoSettings.prog_disp_type, 0, 2);
+      SET_VALID_INT_VALUE(infoSettings.prog_disp_type, MIN_PROG_DISP_TYPE, MAX_PROG_DISP_TYPE);
       break;
 
     case C_INDEX_LAYER_DISP_TYPE:
-      SET_VALID_INT_VALUE(infoSettings.layer_disp_type, 0, 2);
+      SET_VALID_INT_VALUE(infoSettings.layer_disp_type, MIN_LAYER_DISP_TYPE, MAX_LAYER_DISP_TYPE);
       break;
 
     //----------------------------Marlin Mode Settings (only for TFT24 V1.1 & TFT28/TFT35/TFT43/TFT50/TFT70 V3.0)
@@ -605,7 +605,7 @@ static void parseConfigKey(uint16_t index)
         int utf8len = getUTF8Length((uint8_t *)pchr);
         int bytelen = strlen(pchr) + 1;
 
-        if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_GCODE_LENGTH))
+        if (inLimit(utf8len, MIN_NAME_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, MIN_NAME_LENGTH, MAX_GCODE_LENGTH))
           strcpy(configStringsStore->marlin_title, pchr);
         break;
       }
@@ -703,7 +703,7 @@ static void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_ONBOARD_SD:
-      SET_VALID_INT_VALUE(infoSettings.onboard_sd, 0, 2);
+      SET_VALID_INT_VALUE(infoSettings.onboard_sd, MIN_ONBOARD_SD, MAX_ONBOARD_SD);
       break;
 
     case C_INDEX_M27_REFRESH_TIME:
@@ -715,7 +715,7 @@ static void parseConfigKey(uint16_t index)
       break;
 
     case C_INDEX_LONG_FILENAME:
-      SET_VALID_INT_VALUE(infoSettings.long_filename, 0, 2);
+      SET_VALID_INT_VALUE(infoSettings.long_filename, MIN_LONG_FILENAME, MAX_LONG_FILENAME);
       break;
 
     case C_INDEX_PAUSE_RETRACT:
@@ -794,7 +794,7 @@ static void parseConfigKey(uint16_t index)
       int utf8len = getUTF8Length((uint8_t *)pchr);
       int bytelen = strlen(pchr) + 1;
 
-      if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_STRING_LENGTH))
+      if (inLimit(utf8len, MIN_NAME_LENGTH, MAX_STRING_LENGTH) && inLimit(bytelen, MIN_NAME_LENGTH, MAX_STRING_LENGTH))
         strcpy(configPreheatStore->preheat_name[index - C_INDEX_PREHEAT_NAME_1], pchr);
       break;
     }
@@ -821,7 +821,7 @@ static void parseConfigKey(uint16_t index)
         break;
 
       case C_INDEX_PS_AUTO_SHUTDOWN:
-        SET_VALID_INT_VALUE(infoSettings.auto_shutdown, 0, 2);
+        SET_VALID_INT_VALUE(infoSettings.auto_shutdown, MIN_AUTO_SHUTDOWN, MAX_AUTO_SHUTDOWN);
         break;
 
       case C_INDEX_PS_AUTO_SHUTDOWN_TEMP:
@@ -833,7 +833,7 @@ static void parseConfigKey(uint16_t index)
 
     #ifdef FIL_RUNOUT_PIN
       case C_INDEX_FIL_RUNOUT:
-        if (inLimit(config_int(), 0, 3))
+        if (inLimit(config_int(), MIN_FIL_RUNOUT, MAX_FIL_RUNOUT))
         {
           SET_BIT_VALUE(infoSettings.runout, RUNOUT_ENABLED, GET_BIT(config_int(), RUNOUT_ENABLED));
           SET_BIT_VALUE(infoSettings.runout, RUNOUT_SENSOR_TYPE, GET_BIT(config_int(), RUNOUT_SENSOR_TYPE));
@@ -961,7 +961,7 @@ static void parseConfigKey(uint16_t index)
       int utf8len = getUTF8Length((uint8_t *)pchr);
       int bytelen = strlen(pchr) + 1;
 
-      if (inLimit(utf8len, NAME_MIN_LENGTH, MAX_GCODE_NAME_LENGTH) && inLimit(bytelen, NAME_MIN_LENGTH, MAX_GCODE_LENGTH))
+      if (inLimit(utf8len, MIN_NAME_LENGTH, MAX_GCODE_NAME_LENGTH) && inLimit(bytelen, MIN_NAME_LENGTH, MAX_GCODE_LENGTH))
       {
         strcpy(configCustomGcodes->name[customcode_index++], pchr);
         customcode_good[index - C_INDEX_CUSTOM_LABEL_1] = 1;  // set name was found ok
@@ -996,7 +996,7 @@ static void parseConfigKey(uint16_t index)
       int len = strlen(pchr) + 1;
 
       // check if gcode length is ok and the name was ok
-      if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH) && (customcode_good[lineIndex] == 1))
+      if (inLimit(len, MIN_GCODE_LENGTH, MAX_GCODE_LENGTH) && (customcode_good[lineIndex] == 1))
         strcpy(configCustomGcodes->gcode[customcode_index - 1], pchr);
       else if (customcode_good[lineIndex] == 1)  // if name was ok but gcode is not ok then reduce count
         customcode_index--;
@@ -1016,7 +1016,7 @@ static void parseConfigKey(uint16_t index)
       char * pchr = strchr(cur_line, ':') + 1;
       int len = strlen(pchr);
 
-      if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH))
+      if (inLimit(len, MIN_GCODE_LENGTH, MAX_GCODE_LENGTH))
       {
         strcpy(configPrintGcodes->start_gcode, pchr);
         #ifdef CONFIG_DEBUG
@@ -1034,7 +1034,7 @@ static void parseConfigKey(uint16_t index)
       char * pchr = strchr(cur_line, ':') + 1;
       int len = strlen(pchr);
 
-      if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH))
+      if (inLimit(len, MIN_GCODE_LENGTH, MAX_GCODE_LENGTH))
       {
         strcpy(configPrintGcodes->end_gcode, pchr);
         #ifdef CONFIG_DEBUG
@@ -1052,7 +1052,7 @@ static void parseConfigKey(uint16_t index)
       char * pchr = strchr(cur_line, ':') + 1;
       int len = strlen(pchr);
 
-      if (inLimit(len, GCODE_MIN_LENGTH, MAX_GCODE_LENGTH))
+      if (inLimit(len, MIN_GCODE_LENGTH, MAX_GCODE_LENGTH))
       {
         strcpy(configPrintGcodes->cancel_gcode, pchr);
         #ifdef CONFIG_DEBUG

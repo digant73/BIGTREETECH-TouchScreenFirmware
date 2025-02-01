@@ -99,7 +99,7 @@ void detectAdvancedOk(void)
       if (strtol(&requestCommandInfo.cmd_rev_buf[cmd_index], NULL, 10) != 0)  // if different than 0
       {
         // set infoHost.target_tx_slots and infoSettings.tx_slots to the value detected by TFT
-        InfoHost_SetTargetTxSlots((uint8_t) strtol(&requestCommandInfo.cmd_rev_buf[cmd_index], NULL, 10));
+        InfoHost_UpdateTargetTxSlots((uint8_t) strtol(&requestCommandInfo.cmd_rev_buf[cmd_index], NULL, 10));
       }
     }
   }
