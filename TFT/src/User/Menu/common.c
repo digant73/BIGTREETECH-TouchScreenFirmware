@@ -218,9 +218,9 @@ void fanReDraw(uint8_t fanIndex, bool drawHeader)
     displayExhibitHeader(fanID[fanIndex], (infoSettings.fan_percentage == 1) ? " % " : "PWM");
 
   if (infoSettings.fan_percentage == 1)
-    sprintf(tempstr, DUAL_VAL_FORMAT, fanGetCurPercent(fanIndex), fanGetSetPercent(fanIndex));
+    sprintf(tempstr, DUAL_VAL_FORMAT, fanGetCurrentPercent(fanIndex), fanGetTargetPercent(fanIndex));
   else
-    sprintf(tempstr, DUAL_VAL_FORMAT, fanGetCurSpeed(fanIndex), fanGetSetSpeed(fanIndex));
+    sprintf(tempstr, DUAL_VAL_FORMAT, fanGetCurrentSpeed(fanIndex), fanGetTargetSpeed(fanIndex));
 
   displayExhibitValue(tempstr);
 }

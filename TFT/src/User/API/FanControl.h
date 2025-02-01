@@ -19,14 +19,14 @@ extern const char * fanCmd[MAX_FAN_COUNT];
 
 void fanResetSpeed(void);
 bool fanIsValid(const uint8_t index);                           // check whether the index is a valid fan index
-void fanSetSpeed(const uint8_t i, const uint8_t speed);
-uint8_t fanGetSetSpeed(const uint8_t i);
-void fanSetPercent(const uint8_t i, const uint8_t percent);
-uint8_t fanGetSetPercent(const uint8_t i);
-void fanSetCurSpeed(const uint8_t i, const uint8_t speed);
-uint8_t fanGetCurSpeed(const uint8_t i);
-void fanSetCurPercent(const uint8_t i, const uint8_t percent);  // set current fan percent
-uint8_t fanGetCurPercent(const uint8_t i);                      // get current fan percent
+void fanSetTargetSpeed(const uint8_t i, const uint8_t speed);   // set target fan speed
+uint8_t fanGetTargetSpeed(const uint8_t i);                     // get target fan speed
+void fanSetTargetPercent(const uint8_t i, const uint8_t percent);
+uint8_t fanGetTargetPercent(const uint8_t i);
+void fanSetCurrentSpeed(const uint8_t i, const uint8_t speed);
+uint8_t fanGetCurrentSpeed(const uint8_t i);
+void fanSetCurrentPercent(const uint8_t i, const uint8_t percent);  // set current fan percent
+uint8_t fanGetCurrentPercent(const uint8_t i);                      // get current fan percent
 
 void loopCheckFan(void);                     // called in loopBackEnd(). Loop for check on fan
 void ctrlFanQueryClearSendingWaiting(void);  // called in sendQueueCmd(). Clear sending waiting for controller fan query

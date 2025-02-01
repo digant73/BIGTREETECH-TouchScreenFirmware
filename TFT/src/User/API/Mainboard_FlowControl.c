@@ -29,7 +29,7 @@ void resetPendingQueries(void)
     FIL_PosE_ClearSendingWaiting();      // clear sending waiting for position query
   #endif
 
-  //heatClearIsWaiting();                // dangerous! it could unlock loopPrintFromTFT() prematurely
+  //heatClearWaiting();                  // dangerous! it could unlock loopPrintFromTFT() prematurely
 }
 
 // non-UI background loop tasks

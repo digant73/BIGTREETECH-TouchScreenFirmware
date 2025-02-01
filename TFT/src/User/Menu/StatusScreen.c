@@ -175,9 +175,9 @@ static void statusDraw(void)
   lvIcon.lines[0].text = (uint8_t *)fanID[currentFan];
 
   if (infoSettings.fan_percentage == 1)
-    sprintf(tempstr, "%3d%%", fanGetCurPercent(currentFan));
+    sprintf(tempstr, "%3d%%", fanGetCurrentPercent(currentFan));
   else
-    sprintf(tempstr, "%3d", fanGetCurSpeed(currentFan));
+    sprintf(tempstr, "%3d", fanGetCurrentSpeed(currentFan));
 
   lvIcon.lines[1].text = (uint8_t *)tempstr;
 

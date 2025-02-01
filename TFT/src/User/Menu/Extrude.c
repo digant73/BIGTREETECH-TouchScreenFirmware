@@ -173,6 +173,6 @@ void menuExtrude(void)
   }
 
   // set slow update time if not waiting for target temperature
-  if (heatHasWaiting() == false)
+  if (heatIsWaiting() == false)
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }

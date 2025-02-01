@@ -136,7 +136,7 @@ void updatePrintTime(void)
   {
     infoPrinting.elapsedTime++;
 
-    if (infoPrinting.remainingTime > 0 && !heatHasWaiting())
+    if (infoPrinting.remainingTime > 0 && !heatIsWaiting())
       infoPrinting.remainingTime--;
   }
 }
@@ -392,7 +392,7 @@ static void completePrint(void)
       break;
   }
 
-  heatClearIsWaiting();
+  heatClearWaiting();
 }
 
 bool startPrintFromRemoteHost(const char * filename)
@@ -803,7 +803,7 @@ void loopPrintFromTFT(void)
 {
   if (!infoPrinting.printing) return;
   if (infoFile.source >= FS_ONBOARD_MEDIA) return;      // if not printing from TFT media
-  if (infoPrinting.paused || heatHasWaiting()) return;
+  if (infoPrinting.paused || heatIsWaiting()) return;
   if (!InfoHost_IsCmdFromTFTSendable()) return;         // if gcode command from TFT media is not sendable
 
   // if here, the command queue is also empty and we proceed with only one of the following scenarios, in the provided order:

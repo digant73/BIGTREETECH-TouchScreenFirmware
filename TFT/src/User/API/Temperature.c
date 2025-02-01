@@ -111,22 +111,6 @@ void heatCoolDown(void)
   }
 }
 
-bool heatGetIsWaiting(const uint8_t index)
-{
-  return (heater.T[index].waiting == true);
-}
-
-bool heatHasWaiting(void)
-{
-  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
-  {
-    if (heater.T[i].waiting == true)
-      return true;
-  }
-
-  return false;
-}
-
 void heatSetIsWaiting(uint8_t index, const bool isWaiting)
 {
   index = heaterIndexFix(index);
@@ -138,11 +122,27 @@ void heatSetIsWaiting(uint8_t index, const bool isWaiting)
 
   if (isWaiting == true)  // wait heating now, query more frequently
     heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
-  else if (heatHasWaiting() == false)
+  else if (heatIsWaiting() == false)
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }
 
-void heatClearIsWaiting(void)
+bool heatGetIsWaiting(const uint8_t index)
+{
+  return (heater.T[index].waiting == true);
+}
+
+bool heatIsWaiting(void)
+{
+  for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
+  {
+    if (heater.T[i].waiting == true)
+      return true;
+  }
+
+  return false;
+}
+
+void heatClearWaiting(void)
 {
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
   {
@@ -281,6 +281,6 @@ void loopCheckHeater(void)
     }
   }
 
-  if (MENU_IS_NOT(menuHeat) && !heatHasWaiting())
+  if (MENU_IS_NOT(menuHeat) && !heatIsWaiting())
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }

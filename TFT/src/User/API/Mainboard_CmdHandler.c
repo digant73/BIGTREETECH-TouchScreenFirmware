@@ -501,7 +501,7 @@ static inline void writeRemoteTFT(void)
 
 #endif  // SERIAL_PORT_2
 
-static void setWaitHeating(uint8_t index)
+static void setHeatingWaiting(uint8_t index)
 {
   if (cmd_seen('R'))
   {
@@ -1003,11 +1003,11 @@ void sendQueueCmd(void)
           break;
 
         case 106:  // M106
-          fanSetCurSpeed(cmd_seen('P') ? cmd_value() : 0, cmd_seen('S') ? cmd_value() : 100);
+          fanSetCurrentSpeed(cmd_seen('P') ? cmd_value() : 0, cmd_seen('S') ? cmd_value() : 100);
           break;
 
         case 107:  // M107
-          fanSetCurSpeed(cmd_seen('P') ? cmd_value() : 0, 0);
+          fanSetCurrentSpeed(cmd_seen('P') ? cmd_value() : 0, 0);
           break;
 
         case 109:  // M109
@@ -1017,7 +1017,7 @@ void sendQueueCmd(void)
               break;
 
             cmd_ptr[cmd_base_index + 3] = '4';  // avoid to send M109 to Marlin, send M104
-            setWaitHeating(cmd_seen('T') ? cmd_value() : heatGetCurrentHotend());
+            setHeatingWaiting(cmd_seen('T') ? cmd_value() : heatGetCurrentHotend());
           }
         // no break here. The data processing of M109 is the same as that of M104 below
         case 104:  // M104
@@ -1087,7 +1087,7 @@ void sendQueueCmd(void)
               break;
 
             cmd_ptr[cmd_base_index + 2] = '4';  // avoid to send M190 to Marlin, send M140
-            setWaitHeating(BED);
+            setHeatingWaiting(BED);
           }
         // no break here. The data processing of M190 is the same as that of M140 below
         case 140:  // M140
@@ -1101,7 +1101,7 @@ void sendQueueCmd(void)
           if (fromTFT)
           {
             cmd_ptr[cmd_base_index + 2] = '4';  // avoid to send M191 to Marlin, send M141
-            setWaitHeating(CHAMBER);
+            setHeatingWaiting(CHAMBER);
           }
         // no break here. The data processing of M191 is the same as that of M141 below
         case 141:  // M141
@@ -1396,10 +1396,10 @@ void sendQueueCmd(void)
 
         case 710:  // M710 controller fan
           if (cmd_seen('S'))
-            fanSetCurSpeed(MAX_COOLING_FAN_COUNT, cmd_value());
+            fanSetCurrentSpeed(MAX_COOLING_FAN_COUNT, cmd_value());
 
           if (cmd_seen('I'))
-            fanSetCurSpeed(MAX_COOLING_FAN_COUNT + 1, cmd_value());
+            fanSetCurrentSpeed(MAX_COOLING_FAN_COUNT + 1, cmd_value());
 
           if (fromTFT)
             ctrlFanQueryClearSendingWaiting();

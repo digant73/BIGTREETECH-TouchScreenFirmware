@@ -248,7 +248,7 @@ void powerFailedCache(uint32_t offset)
 
     for (uint8_t i = 0; i < infoSettings.fan_count; i++)
     {
-      infoBreakPoint.fan[i] = fanGetCurSpeed(i);
+      infoBreakPoint.fan[i] = fanGetCurrentSpeed(i);
     }
 
     infoBreakPoint.relative = coorGetRelative();

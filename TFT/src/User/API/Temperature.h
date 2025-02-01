@@ -79,10 +79,10 @@ void heatSetCurrentTemp(uint8_t index, const int16_t temp);  // set current temp
 int16_t heatGetCurrentTemp(uint8_t index);                   // get current temperature
 void heatCoolDown(void);                                     // disable all heaters/hotends
 
-bool heatGetIsWaiting(const uint8_t index);                  // is heating waiting to heat up
-bool heatHasWaiting(void);                                   // called in loopPrintFromTFT. Check for at least an heater waiting for heat up
 void heatSetIsWaiting(uint8_t index, const bool isWaiting);  // called in sendQueueCmd(). Set heater waiting status
-void heatClearIsWaiting(void);                               // called in completePrint()
+bool heatGetIsWaiting(const uint8_t index);                  // check if heater is waiting for target temperature
+bool heatIsWaiting(void);                                    // called in loopPrintFromTFT. Check for at least an heater waiting for target temperature
+void heatClearWaiting(void);                                 // called in completePrint()
 
 bool heatSetTool(const uint8_t tool);               // set current tool (extruder). Used when tool change command is from TFT
 void heatSetToolIndex(const uint8_t toolIndex);     // set current Tool (extruder)

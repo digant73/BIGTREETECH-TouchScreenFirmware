@@ -654,7 +654,7 @@ void parseAck(void)
     // parse and store M106, fan speed
     else if (ack_starts_with("M106"))
     {
-      fanSetCurSpeed(ack_continue_seen("P") ? ack_value() : 0, ack_seen("S") ? ack_value() : 100);
+      fanSetCurrentSpeed(ack_continue_seen("P") ? ack_value() : 0, ack_seen("S") ? ack_value() : 100);
     }
     #ifdef BUZZER_PIN
       // parse M300 sound coming from mainboard, play on TFT
@@ -676,10 +676,10 @@ void parseAck(void)
     else if (ack_starts_with("M710"))
     {
       if (ack_seen("S"))
-        fanSetCurSpeed(MAX_COOLING_FAN_COUNT, ack_value());
+        fanSetCurrentSpeed(MAX_COOLING_FAN_COUNT, ack_value());
 
       if (ack_seen("I"))
-        fanSetCurSpeed(MAX_COOLING_FAN_COUNT + 1, ack_value());
+        fanSetCurrentSpeed(MAX_COOLING_FAN_COUNT + 1, ack_value());
     }
     // parse pause message
     else if (!infoMachineSettings.promptSupport && ack_seen("paused for user"))
