@@ -51,15 +51,16 @@ typedef enum
 
 typedef struct
 {
-  uint8_t target_tx_slots;   // keep track of target gcode tx slots (e.g. if ADVANCED_OK feature is enabled on both mainboard and TFT)
-  uint8_t tx_slots;          // keep track of available gcode tx slots (e.g. if ADVANCED_OK feature is enabled on both mainboard and TFT)
-  uint8_t tx_count;          // keep track of pending gcode tx count
-  uint32_t tx_delay;         // Keep track of minimum delay (in ms) to apply between last sent gcode and next one to be sent to mainboard
-  uint32_t rx_timestamp;     // keep track of last received ACK message timestamp
-  uint32_t rx_ok_timestamp;  // keep track of last received ACK message OK response timestamp
-  bool connected;            // TFT is connected to Marlin
-  bool listening_mode;       // TFT is in listening mode from Marlin
-  HOST_STATUS status;        // host is busy in printing execution (printing from USB serial, (remote) onboard media or remote host)
+  uint8_t target_tx_slots;      // keep track of target gcode tx slots (e.g. if ADVANCED_OK feature is enabled on both mainboard and TFT)
+  uint8_t cur_target_tx_slots;  // keep track of current target gcode tx slots (e.g. if ADVANCED_OK feature is enabled on both mainboard and TFT)
+  uint8_t tx_slots;             // keep track of available gcode tx slots (e.g. if ADVANCED_OK feature is enabled on both mainboard and TFT)
+  uint8_t tx_count;             // keep track of pending gcode tx count
+  uint32_t tx_delay;            // Keep track of minimum delay (in ms) to apply between last sent gcode and next one to be sent to mainboard
+  uint32_t rx_timestamp;        // keep track of last received ACK message timestamp
+  uint32_t rx_ok_timestamp;     // keep track of last received ACK message OK response timestamp
+  bool connected;               // TFT is connected to Marlin
+  bool listening_mode;          // TFT is in listening mode from Marlin
+  HOST_STATUS status;           // host is busy in printing execution (printing from USB serial, (remote) onboard media or remote host)
 } HOST;
 
 typedef void (* FP_MENU)(void);
@@ -83,9 +84,9 @@ void loopProcessAndGUI(void);
 
 void InfoHost_Init(bool isConnected);
 
-void InfoHost_UpdateTargetTxSlots(uint8_t target_tx_slots);  // update infoHost.target_tx_slots and infoSettings.tx_slots to the value detected by TFT
-void InfoHost_UpdateTxDelay(void);                           // update infoHost.tx_delay to infoSettings.tx_delay
-void InfoHost_UpdateListeningMode(void);                     // update infoHost.listening_mode to infoSettings.general_settings
+void InfoHost_UpdateTargetTxSlots(uint8_t target_tx_slots);  // update target tx slots to the value detected by TFT
+void InfoHost_UpdateTxDelay(void);                           // update tx delay to infoSettings.tx_delay
+void InfoHost_UpdateListeningMode(void);                     // update listening mode to infoSettings.general_settings
 
 // test if minimum delay for next gcode to send is elapsed
 //

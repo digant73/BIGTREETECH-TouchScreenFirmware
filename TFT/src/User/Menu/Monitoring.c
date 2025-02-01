@@ -8,14 +8,14 @@ MONITORING infoMonitoring;
 // NOTE: if COMMAND_CHECKSUM feature is enabled then the total size of each command below is given by
 //       the size of the plain command plus the command checksum overhead
 static const char * const cmd[] = {
-  "M220\n",                                                                                             // 6 chars including '\0'
-  //"M221\n",                                                                                             // 6 chars including '\0'
-  //"M114 E\n",                                                                                           // 8 chars including '\0'
-  "M118 P0 test with short text\n",                                                                     // 33 chars including '\0'
-  "M118 P0 test with medium text text text text text\n",                                                // 54 chars including '\0'
-  //"M118 P0 test with long text text text text text text text text text text\n",                         // 77 chars including '\0'
-  //"M118 P0 test with very long text text text text text text text text text text text text text te\n",  // 100 chars including '\0'
-  //"M43\n",                                                                                              // 5 chars including '\0'
+  "M220\n",                                                                                                // 6 chars including '\0'
+  //"M221\n",                                                                                                // 6 chars including '\0'
+  //"M114 E\n",                                                                                              // 8 chars including '\0'
+  "M118 P0 test with short text\n",                                                                        // 30 chars including '\0'
+  "M118 P0 test with medium text text text text text\n",                                                   // 51 chars including '\0'
+  //"M118 P0 test with long text text text text text text text text text text\n",                            // 74 chars including '\0'
+  //"M118 P0 test with very long text text text text text text text text text text text text text text \n",  // 100 chars including '\0'
+  //"M43\n",                                                                                                 // 5 chars including '\0'
 };
 
 static bool stressTestMenu = false;
@@ -28,7 +28,7 @@ void monitoringSetMenu(bool stressTest)
 void menuMonitoring(void)
 {
   const GUI_RECT fullRect = {0, 0, LCD_WIDTH - 1, LCD_HEIGHT - 1};
-  uint8_t origCmdChecksum = GET_BIT(infoSettings.general_settings, INDEX_COMMAND_CHECKSUM);  // save original COMMAND_CHECKSUM feature status
+  uint8_t cmdChecksum = GET_BIT(infoSettings.general_settings, INDEX_COMMAND_CHECKSUM);  // save the configured COMMAND_CHECKSUM feature status
   uint16_t curCmdIndex = 0;
   char str[30];
 
@@ -50,8 +50,8 @@ void menuMonitoring(void)
   GUI_HLine(0, LCD_HEIGHT - (BYTE_HEIGHT*2), LCD_WIDTH);
   GUI_DispStringInRect(20, LCD_HEIGHT - (BYTE_HEIGHT * 2), LCD_WIDTH - 20, LCD_HEIGHT, textSelect(LABEL_TOUCH_TO_EXIT));
 
-  //if (stressTestMenu)
-  //  SET_BIT_ON(infoSettings.general_settings, INDEX_COMMAND_CHECKSUM);  // temporary enable command checksum feature, if not already enabled
+  if (stressTestMenu)
+    SET_BIT_ON(infoSettings.general_settings, INDEX_COMMAND_CHECKSUM);  // temporary enable COMMAND_CHECKSUM feature, if not already enabled
 
   while (MENU_IS(menuMonitoring))
   {
@@ -96,7 +96,7 @@ void menuMonitoring(void)
   }
 
   if (stressTestMenu)
-    SET_BIT_VALUE(infoSettings.general_settings, INDEX_COMMAND_CHECKSUM, origCmdChecksum);  // restore original command checksum feature status
+    SET_BIT_VALUE(infoSettings.general_settings, INDEX_COMMAND_CHECKSUM, cmdChecksum);  // restore the configured COMMAND_CHECKSUM feature status
 }
 
 #endif  // DEBUG_MONITORING

@@ -177,13 +177,13 @@ void loopProcessAndGUI(void)
 
 void InfoHost_Init(bool isConnected)
 {
-  infoHost.target_tx_slots = infoSettings.tx_slots;
+  infoHost.target_tx_slots = infoHost.cur_target_tx_slots = infoSettings.tx_slots;
   infoHost.tx_slots = 1;  // set to 1 just to allow a soft start
   infoHost.tx_count = 0;
   infoHost.tx_delay = infoSettings.tx_delay;
   infoHost.rx_timestamp = infoHost.rx_ok_timestamp = OS_GetTimeMs();
   infoHost.connected = isConnected;
-  infoHost.listening_mode = false;  // temporary disable listening mode. It will be later set by InfoHost_UpdateListeningMode()
+  infoHost.listening_mode = false;  // temporary disable listening mode. Its configured status will be restored later by InfoHost_UpdateListeningMode()
   infoHost.status = HOST_STATUS_IDLE;
 
   if (!isConnected)
@@ -198,7 +198,7 @@ void InfoHost_Init(bool isConnected)
 
 void InfoHost_UpdateTargetTxSlots(uint8_t target_tx_slots)
 {
-  infoHost.target_tx_slots = infoSettings.tx_slots = target_tx_slots;
+  infoHost.target_tx_slots = infoHost.cur_target_tx_slots = target_tx_slots;
 }
 
 void InfoHost_UpdateTxDelay(void)
@@ -256,12 +256,12 @@ void InfoHost_HandleAckOk(int16_t target_tx_slots)
     // UPPER LIMITER
     //
     // the following check is matched in case:
-    // - ADVANCED_OK is enabled in TFT. infoSettings.tx_slots for static ADVANCED_OK configured in TFT is used
+    // - ADVANCED_OK is enabled in TFT. infoHost.target_tx_slots for static ADVANCED_OK configured in TFT (infoSettings.tx_slots) is used
     // - ADVANCED_OK is enabled in Marlin but the mainboard reply (target_tx_slots) is out of sync (above) with the current
-    //   pending gcodes (it happens sometimes). infoSettings.tx_slots for Marlin ADVANCED_OK detected at TFT boot is used
+    //   pending gcodes (it happens sometimes). infoHost.target_tx_slots for Marlin ADVANCED_OK detected at TFT boot is used
     //
-    if (target_tx_slots + infoHost.tx_count >= infoSettings.tx_slots)
-      infoHost.tx_slots = infoSettings.tx_slots - infoHost.tx_count;
+    if (target_tx_slots + infoHost.tx_count >= infoHost.target_tx_slots)
+      infoHost.tx_slots = infoHost.target_tx_slots - infoHost.tx_count;
     //
     // LOWER LIMITER (only for Marlin ADVANCED_OK)
     //
@@ -273,7 +273,7 @@ void InfoHost_HandleAckOk(int16_t target_tx_slots)
     else                                                      // if printing from onboard media
       infoHost.tx_slots = 1;
 
-    infoHost.target_tx_slots = infoHost.tx_slots;  // set new current target
+    infoHost.cur_target_tx_slots = infoHost.tx_slots;  // set new current target
   }
   //
   // if generic OK response handling (e.g. temperature response), increment the current value up to current target
@@ -284,7 +284,7 @@ void InfoHost_HandleAckOk(int16_t target_tx_slots)
     //
     // limit the current value up to current target or to 1 if current target was set to 0 and there are no more pending gcodes
     //
-    if (infoHost.tx_slots < infoHost.target_tx_slots || (infoHost.tx_slots == 0 && infoHost.tx_count == 0))
+    if (infoHost.tx_slots < infoHost.cur_target_tx_slots || (infoHost.tx_slots == 0 && infoHost.tx_count == 0))
       infoHost.tx_slots++;
   }
 }
