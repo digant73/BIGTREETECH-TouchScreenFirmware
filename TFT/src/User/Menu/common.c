@@ -246,7 +246,7 @@ void percentageReDraw(uint8_t itemIndex, bool drawHeader)
   if (drawHeader)
     displayExhibitHeader((char *)textSelect((itemIndex == 0) ? LABEL_PERCENTAGE_SPEED : LABEL_PERCENTAGE_FLOW), "%");
 
-  sprintf(tempstr, DUAL_VAL_FORMAT, speedGetCurPercent(itemIndex), speedGetSetPercent(itemIndex));
+  sprintf(tempstr, DUAL_VAL_FORMAT, speedGetCurrentPercent(itemIndex), speedGetTargetPercent(itemIndex));
 
   displayExhibitValue(tempstr);
 }

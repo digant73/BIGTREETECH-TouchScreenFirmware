@@ -644,12 +644,12 @@ void parseAck(void)
     // parse and store feed rate percentage
     else if (ack_seen("FR:") || (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE && ack_seen("Speed factor at ")))
     {
-      speedSetCurPercent(0, ack_value());
+      speedSetCurrentPercent(0, ack_value());
     }
     // parse and store flow rate percentage
     else if (ack_seen("Flow:") || (infoMachineSettings.firmwareType == FW_SMOOTHIEWARE && ack_seen("Flow rate at ")))
     {
-      speedSetCurPercent(1, ack_value());
+      speedSetCurrentPercent(1, ack_value());
     }
     // parse and store M106, fan speed
     else if (ack_starts_with("M106"))

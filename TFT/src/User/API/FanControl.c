@@ -6,17 +6,17 @@
 const char * fanID[MAX_FAN_COUNT]  = FAN_DISPLAY_ID;
 const char * fanCmd[MAX_FAN_COUNT] = FAN_CMD;
 
-static uint8_t fanTargetSpeed[MAX_FAN_COUNT] = {0};
-static uint8_t fanCurrentSpeed[MAX_FAN_COUNT] = {0};
-static uint8_t fanNeedingTargetSpeed = 0;
+static uint8_t targetSpeed[MAX_FAN_COUNT] = {0};
+static uint8_t currentSpeed[MAX_FAN_COUNT] = {0};
+static uint8_t needingTargetSpeed = 0;
 
 static bool ctrlFanSendingWaiting = false;
 
 void fanResetSpeed(void)
 {
-  memset(fanTargetSpeed, 0, sizeof(fanTargetSpeed));
-  memset(fanCurrentSpeed, 0, sizeof(fanCurrentSpeed));
-  fanNeedingTargetSpeed = 0;
+  memset(targetSpeed, 0, sizeof(targetSpeed));
+  memset(currentSpeed, 0, sizeof(currentSpeed));
+  needingTargetSpeed = 0;
 }
 
 bool fanIsValid(const uint8_t index)
@@ -33,13 +33,13 @@ bool fanIsValid(const uint8_t index)
 
 void fanSetTargetSpeed(const uint8_t i, const uint8_t speed)
 {
-  SET_BIT_VALUE(fanNeedingTargetSpeed, i, fanGetCurrentSpeed(i) != speed);
-  fanTargetSpeed[i] = speed;
+  SET_BIT_VALUE(needingTargetSpeed, i, fanGetCurrentSpeed(i) != speed);
+  targetSpeed[i] = speed;
 }
 
 uint8_t fanGetTargetSpeed(const uint8_t i)
 {
-  return fanTargetSpeed[i];
+  return targetSpeed[i];
 }
 
 void fanSetTargetPercent(const uint8_t i, const uint8_t percent)
@@ -49,27 +49,27 @@ void fanSetTargetPercent(const uint8_t i, const uint8_t percent)
 
 uint8_t fanGetTargetPercent(const uint8_t i)
 {
-  return (fanTargetSpeed[i] * 100.0f) / infoSettings.fan_max[i] + 0.5f;
+  return (targetSpeed[i] * 100.0f) / infoSettings.fan_max[i] + 0.5f;
 }
 
 void fanSetCurrentSpeed(const uint8_t i, const uint8_t speed)
 {
-  fanCurrentSpeed[i] = speed;
+  currentSpeed[i] = speed;
 }
 
 uint8_t fanGetCurrentSpeed(const uint8_t i)
 {
-  return fanCurrentSpeed[i];
+  return currentSpeed[i];
 }
 
 void fanSetCurrentPercent(const uint8_t i, const uint8_t percent)
 {
-  fanCurrentSpeed[i] = (NOBEYOND(0, percent, 100) * infoSettings.fan_max[i]) / 100;
+  currentSpeed[i] = (NOBEYOND(0, percent, 100) * infoSettings.fan_max[i]) / 100;
 }
 
 uint8_t fanGetCurrentPercent(const uint8_t i)
 {
-  return (fanCurrentSpeed[i] * 100.0f) / infoSettings.fan_max[i] + 0.5f;
+  return (currentSpeed[i] * 100.0f) / infoSettings.fan_max[i] + 0.5f;
 }
 
 void loopCheckFan(void)
@@ -83,10 +83,10 @@ void loopCheckFan(void)
 
   for (uint8_t i = 0; i < MAX_FAN_COUNT; i++)
   {
-    if (GET_BIT(fanNeedingTargetSpeed, i))
+    if (GET_BIT(needingTargetSpeed, i))
     {
-      if (storeCmd(fanCmd[i], fanTargetSpeed[i]))
-        SET_BIT_OFF(fanNeedingTargetSpeed, i);
+      if (storeCmd(fanCmd[i], targetSpeed[i]))
+        SET_BIT_OFF(needingTargetSpeed, i);
     }
   }
 }

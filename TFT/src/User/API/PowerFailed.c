@@ -231,8 +231,8 @@ void powerFailedCache(uint32_t offset)
     }
 
     infoBreakPoint.feedrate = coordinateGetFeedRate();
-    infoBreakPoint.speed = speedGetCurPercent(0);  // speed percent
-    infoBreakPoint.flow = speedGetCurPercent(1);   // flow percent
+    infoBreakPoint.speed = speedGetCurrentPercent(0);  // speed percent
+    infoBreakPoint.flow = speedGetCurrentPercent(1);   // flow percent
 
     for (uint8_t i = 0; i < infoSettings.hotend_count; i++)  // tool nozzle
     {

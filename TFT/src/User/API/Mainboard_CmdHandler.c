@@ -1205,7 +1205,7 @@ void sendQueueCmd(void)
 
         case 220:  // M220
           if (cmd_seen('S'))
-            speedSetCurPercent(0, cmd_value());
+            speedSetCurrentPercent(0, cmd_value());
 
           if (fromTFT)
             speedQueryClearSendingWaiting();
@@ -1213,7 +1213,7 @@ void sendQueueCmd(void)
 
         case 221:  // M221
           if (cmd_seen('S'))
-            speedSetCurPercent(1, cmd_value());
+            speedSetCurrentPercent(1, cmd_value());
 
           if (fromTFT)
             speedQueryClearSendingWaiting();

@@ -1,8 +1,8 @@
 #include "coordinate.h"
 #include "includes.h"
 
-static COORDINATE targetPosition = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
-static COORDINATE curPosition    = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
+static COORDINATE targetPosition  = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
+static COORDINATE currentPosition = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
 
 const char axis_id[TOTAL_AXIS] = {'X', 'Y', 'Z', 'E'};
 E_AXIS_BACKUP eAxisBackup      = {0, 0, false, false};
@@ -91,22 +91,22 @@ float coordinateGetExtruderActual(void)
 
 void coordinateSetExtruderActualSteps(float steps)
 {
-  curPosition.axis[E_AXIS] = extruderPostion = steps / getParameter(P_STEPS_PER_MM, E_AXIS);
+  currentPosition.axis[E_AXIS] = extruderPostion = steps / getParameter(P_STEPS_PER_MM, E_AXIS);
 }
 
 float coordinateGetAxisActual(AXIS axis)
 {
-  return curPosition.axis[axis];
+  return currentPosition.axis[axis];
 }
 
 void coordinateSetAxisActual(AXIS axis, float position)
 {
-  curPosition.axis[axis] = position;
+  currentPosition.axis[axis] = position;
 }
 
 void coordinateGetAllActual(COORDINATE * tmp)
 {
-  memcpy(tmp, &curPosition, sizeof(curPosition));
+  memcpy(tmp, &currentPosition, sizeof(currentPosition));
 }
 
 float coordinateGetAxis(AXIS axis)

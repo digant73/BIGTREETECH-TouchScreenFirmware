@@ -303,7 +303,7 @@ static void reDrawPrintingValue(uint8_t icon_pos, uint8_t draw_type)
         break;
 
       case ICON_POS_SPD:
-        sprintf(tempstrBottom, "%3d%%", speedGetCurPercent(currentSpeedID));
+        sprintf(tempstrBottom, "%3d%%", speedGetCurrentPercent(currentSpeedID));
         break;
 
       default:
@@ -631,9 +631,9 @@ void menuPrinting(void)
     }
 
     // check change in speed or flow
-    if (curspeed[currentSpeedID] != speedGetCurPercent(currentSpeedID))
+    if (curspeed[currentSpeedID] != speedGetCurrentPercent(currentSpeedID))
     {
-      curspeed[currentSpeedID] = speedGetCurPercent(currentSpeedID);
+      curspeed[currentSpeedID] = speedGetCurrentPercent(currentSpeedID);
 
       reDrawPrintingValue(ICON_POS_SPD, LIVE_INFO_BOTTOM_ROW);
     }

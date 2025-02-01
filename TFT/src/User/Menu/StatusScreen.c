@@ -187,7 +187,7 @@ static void statusDraw(void)
     // SPEED
     lvIcon.iconIndex = ICON_STATUS_SPEED;
     lvIcon.lines[0].text = (uint8_t *)speedID[0];
-    sprintf(tempstr, "%3d%%", speedGetCurPercent(0));
+    sprintf(tempstr, "%3d%%", speedGetCurrentPercent(0));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
 
     showLiveInfo(3, &lvIcon, false);
@@ -195,7 +195,7 @@ static void statusDraw(void)
     // FLOW
     lvIcon.iconIndex = ICON_STATUS_FLOW;
     lvIcon.lines[0].text = (uint8_t *)speedID[1];
-    sprintf(tempstr, "%3d%%", speedGetCurPercent(1));
+    sprintf(tempstr, "%3d%%", speedGetCurrentPercent(1));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
 
     showLiveInfo(4, &lvIcon, false);
@@ -203,7 +203,7 @@ static void statusDraw(void)
     // SPEED / FLOW
     lvIcon.iconIndex = speedIcons[currentSpeedID];
     lvIcon.lines[0].text = (uint8_t *)speedID[currentSpeedID];
-    sprintf(tempstr, "%3d%%", speedGetCurPercent(currentSpeedID));
+    sprintf(tempstr, "%3d%%", speedGetCurrentPercent(currentSpeedID));
     lvIcon.lines[1].text = (uint8_t *)tempstr;
 
     showLiveInfo(3, &lvIcon, true);

@@ -148,7 +148,7 @@ uint32_t getPrintTime(void)
 
 void setPrintRemainingTime(int32_t remainingTime)
 {
-  float speedFactor = (float) (speedGetCurPercent(0)) / 100;  // speed (feed rate) factor (e.g. 50% -> 0.5)
+  float speedFactor = (float) (speedGetCurrentPercent(0)) / 100;  // speed (feed rate) factor (e.g. 50% -> 0.5)
 
   // Cura slicer put a negative value at the end instead of zero
   if (remainingTime < 0 || speedFactor <= 0.0f)
@@ -314,11 +314,11 @@ static void preparePrintSummary(void)
 {
   infoPrintSummary.time = infoPrinting.elapsedTime;
 
-  if (speedGetCurPercent(1) != 100)
+  if (speedGetCurrentPercent(1) != 100)
   {
-    infoPrintSummary.length = (infoPrintSummary.length * speedGetCurPercent(1)) / 100;  // multiply by flow percentage
-    infoPrintSummary.weight = (infoPrintSummary.weight * speedGetCurPercent(1)) / 100;  // multiply by flow percentage
-    infoPrintSummary.cost   = (infoPrintSummary.cost   * speedGetCurPercent(1)) / 100;  // multiply by flow percentage
+    infoPrintSummary.length = (infoPrintSummary.length * speedGetCurrentPercent(1)) / 100;  // multiply by flow percentage
+    infoPrintSummary.weight = (infoPrintSummary.weight * speedGetCurrentPercent(1)) / 100;  // multiply by flow percentage
+    infoPrintSummary.cost   = (infoPrintSummary.cost   * speedGetCurrentPercent(1)) / 100;  // multiply by flow percentage
   }
 }
 

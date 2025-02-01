@@ -156,12 +156,12 @@ void ParseACKJsonParser::value(const char * value)
       break;
 
     case sfactor:
-      speedSetCurPercent(0, strtod((char *)value, NULL));
+      speedSetCurrentPercent(0, strtod((char *)value, NULL));
       break;
 
     case efactor:
       if (index == heatGetToolIndex())
-        speedSetCurPercent(1, strtod((char *)value, NULL));
+        speedSetCurrentPercent(1, strtod((char *)value, NULL));
       break;
 
     case baby_step:
