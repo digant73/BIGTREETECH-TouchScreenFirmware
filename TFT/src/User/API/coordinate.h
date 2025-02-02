@@ -31,7 +31,7 @@ typedef struct
   bool handled;
 } E_AXIS_BACKUP;
 
-extern const char axis_id[TOTAL_AXIS];
+extern const char axisID[TOTAL_AXIS];
 extern E_AXIS_BACKUP eAxisBackup;
 
 bool coorGetRelative(void);

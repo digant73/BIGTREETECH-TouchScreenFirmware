@@ -3,15 +3,14 @@
 
 static COORDINATE targetPosition  = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
 static COORDINATE currentPosition = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
-
-const char axis_id[TOTAL_AXIS] = {'X', 'Y', 'Z', 'E'};
-E_AXIS_BACKUP eAxisBackup      = {0, 0, false, false};
-
 /**
  * Obtained from "M114 E" instead of "M114", Because the coordinates of "M114" are not real-time coordinates.
  * It may be replaced by "M114 R"
  */
 static float extruderPostion = 0.0f;
+
+const char axisID[TOTAL_AXIS] = {'X', 'Y', 'Z', 'E'};
+E_AXIS_BACKUP eAxisBackup     = {0, 0, false, false};
 
 static bool relative_mode = false;
 static bool relative_e = false;

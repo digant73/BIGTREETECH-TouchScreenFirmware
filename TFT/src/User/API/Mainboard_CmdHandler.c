@@ -1470,7 +1470,7 @@ void sendQueueCmd(void)
         {
           for (AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
           {
-            if (cmd_seen(axis_id[i]))
+            if (cmd_seen(axisID[i]))
               coordinateSetAxisTarget(i, cmd_float());
           }
 
@@ -1548,7 +1548,7 @@ void sendQueueCmd(void)
 
           for (AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
           {
-            if (cmd_seen(axis_id[i]))
+            if (cmd_seen(axisID[i]))
             {
               coordinateSetAxisTarget(i, cmd_float());
 
