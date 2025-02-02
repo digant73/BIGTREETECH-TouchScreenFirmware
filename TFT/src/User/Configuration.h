@@ -144,7 +144,7 @@
  *   Unit: [time in milliseconds]
  *   Value range: [min: 0, max: 10]
  */
-#define TX_DELAY 1  // Default: 0
+#define TX_DELAY 0  // Default: 0
 
 /**
  * TX Prefetch

@@ -6,9 +6,9 @@
 const char * fanID[MAX_FAN_COUNT]  = FAN_DISPLAY_ID;
 const char * fanCmd[MAX_FAN_COUNT] = FAN_CMD;
 
-static uint8_t targetSpeed[MAX_FAN_COUNT] = {0};
+static uint8_t targetSpeed[MAX_FAN_COUNT]  = {0};
 static uint8_t currentSpeed[MAX_FAN_COUNT] = {0};
-static uint8_t needingTargetSpeed = 0;
+static uint8_t targetSpeedNeeded           = 0;
 
 static bool ctrlFanSendingWaiting = false;
 
@@ -16,7 +16,7 @@ void fanResetSpeed(void)
 {
   memset(targetSpeed, 0, sizeof(targetSpeed));
   memset(currentSpeed, 0, sizeof(currentSpeed));
-  needingTargetSpeed = 0;
+  targetSpeedNeeded = 0;
 }
 
 bool fanIsValid(const uint8_t index)
@@ -33,7 +33,7 @@ bool fanIsValid(const uint8_t index)
 
 void fanSetTargetSpeed(const uint8_t i, const uint8_t speed)
 {
-  SET_BIT_VALUE(needingTargetSpeed, i, fanGetCurrentSpeed(i) != speed);
+  SET_BIT_VALUE(targetSpeedNeeded, i, fanGetCurrentSpeed(i) != speed);
   targetSpeed[i] = speed;
 }
 
@@ -83,10 +83,10 @@ void loopCheckFan(void)
 
   for (uint8_t i = 0; i < MAX_FAN_COUNT; i++)
   {
-    if (GET_BIT(needingTargetSpeed, i))
+    if (GET_BIT(targetSpeedNeeded, i))
     {
       if (storeCmd(fanCmd[i], targetSpeed[i]))
-        SET_BIT_OFF(needingTargetSpeed, i);
+        SET_BIT_OFF(targetSpeedNeeded, i);
     }
   }
 }

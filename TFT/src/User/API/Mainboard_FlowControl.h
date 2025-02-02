@@ -109,7 +109,6 @@ bool InfoHost_IsCmdFromTFTSendable(void);
 //     - >= 0: to handle static ADVANCED_OK and Marlin ADVANCED_OK
 void InfoHost_HandleAckOk(int16_t target_tx_slots);
 
-bool InfoHost_HandleAckTimeout(void);    // handle ACK message timeout, if any. Return "true" if ACK message timed out
 void InfoHost_UpdateAckTimestamp(void);  // update last received ACK message timestamp
 
 #ifdef __cplusplus

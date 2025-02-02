@@ -7,6 +7,8 @@ PRIORITY_COUNTER priorityCounter;
 HOST infoHost;
 MENU infoMenu;
 
+static bool InfoHost_HandleAckTimeout(void);  // forward declaration
+
 static inline void resetInfoQueries(void)
 {
   fanResetSpeed();
@@ -175,6 +177,21 @@ void loopProcessAndGUI(void)
   }
 }
 
+// handle ACK message timeout, if any. Return "true" if ACK message timed out
+static bool InfoHost_HandleAckTimeout(void)
+{
+  if (OS_GetTimeMs() - infoHost.rx_timestamp < ACK_TIMEOUT || infoHost.tx_count == 0)  // if no timeout or no pending gcode
+    return false;
+
+  infoHost.rx_timestamp = infoHost.rx_ok_timestamp = OS_GetTimeMs();  // update timestamp
+
+  InfoHost_HandleAckOk(HOST_SLOTS_GENERIC_OK);  // release pending gcode
+
+  addNotification(DIALOG_TYPE_ERROR, "ACK timed out", "Pending gcode released", true);
+
+  return true;
+}
+
 void InfoHost_Init(bool isConnected)
 {
   infoHost.target_tx_slots = infoHost.cur_target_tx_slots = infoSettings.tx_slots;
@@ -287,20 +304,6 @@ void InfoHost_HandleAckOk(int16_t target_tx_slots)
     if (infoHost.tx_slots < infoHost.cur_target_tx_slots || (infoHost.tx_slots == 0 && infoHost.tx_count == 0))
       infoHost.tx_slots++;
   }
-}
-
-bool InfoHost_HandleAckTimeout(void)
-{
-  if (OS_GetTimeMs() - infoHost.rx_timestamp < ACK_TIMEOUT || infoHost.tx_count == 0)  // if no timeout or no pending gcode
-    return false;
-
-  infoHost.rx_timestamp = infoHost.rx_ok_timestamp = OS_GetTimeMs();  // update timestamp
-
-  InfoHost_HandleAckOk(HOST_SLOTS_GENERIC_OK);  // release pending gcode
-
-  addNotification(DIALOG_TYPE_ERROR, "ACK timed out", "Pending gcode released", true);
-
-  return true;
 }
 
 void InfoHost_UpdateAckTimestamp(void)
