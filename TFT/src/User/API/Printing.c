@@ -625,8 +625,8 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
 
       static COORDINATE tmp;
 
-      bool isCoorRelative = coorGetRelative();
-      bool isExtrudeRelative = eGetRelative();
+      bool isRelative = coordinateGetRelative();
+      bool isRelativeE = coordinateGetRelativeExtruder();
 
       if (isPause)  // pause
       {
@@ -638,8 +638,8 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
         {
           coordinateGetAll(&tmp);
 
-          if (isCoorRelative == true)    mustStoreCmd("G90\n");
-          if (isExtrudeRelative == true) mustStoreCmd("M82\n");
+          if (isRelative == true)  mustStoreCmd("G90\n");
+          if (isRelativeE == true) mustStoreCmd("M82\n");
 
           if (heatGetCurrentTemp(heatGetCurrentHotend()) > infoSettings.min_ext_temp)
           {
@@ -654,8 +654,8 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
                          infoSettings.pause_feedrate[FEEDRATE_XY]);
           }
 
-          if (isCoorRelative == true)    mustStoreCmd("G91\n");
-          if (isExtrudeRelative == true) mustStoreCmd("M83\n");
+          if (isRelative == true)  mustStoreCmd("G91\n");
+          if (isRelativeE == true) mustStoreCmd("M83\n");
         }
 
         // store pause type only on pause
@@ -669,8 +669,8 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
         }
         else if (pauseType == PAUSE_NORMAL)  // send command only for pause originated from TFT
         {
-          if (isCoorRelative == true)    mustStoreCmd("G90\n");
-          if (isExtrudeRelative == true) mustStoreCmd("M82\n");
+          if (isRelative == true)  mustStoreCmd("G90\n");
+          if (isRelativeE == true) mustStoreCmd("M82\n");
 
           if (extrusionDuringPause == true)  // check if extrusion done during Print -> Pause
           { // no purge
@@ -691,8 +691,8 @@ bool pausePrint(bool isPause, PAUSE_TYPE pauseType)
           mustStoreCmd("G92 E%.5f\n", tmp.axis[E_AXIS]);
           mustStoreCmd("G1 F%d\n", tmp.feedrate);
 
-          if (isCoorRelative == true)    mustStoreCmd("G91\n");
-          if (isExtrudeRelative == true) mustStoreCmd("M83\n");
+          if (isRelative == true)  mustStoreCmd("G91\n");
+          if (isRelativeE == true) mustStoreCmd("M83\n");
         }
       }
       break;

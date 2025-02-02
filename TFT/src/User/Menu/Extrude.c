@@ -44,7 +44,7 @@ void menuExtrude(void)
 
     eAxisBackup.coordinate = coordinateGetAxis(E_AXIS);
     eAxisBackup.feedrate = coordinateGetFeedRate();
-    eAxisBackup.relative = eGetRelative();
+    eAxisBackup.relative = coordinateGetRelativeExtruder();
     eAxisBackup.handled = true;
   }
   else

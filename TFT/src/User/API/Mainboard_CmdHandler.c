@@ -971,11 +971,11 @@ void sendQueueCmd(void)
         #endif
 
         case 82:  // M82
-          eSetRelative(false);
+          coordinateSetRelativeExtruder(false);
           break;
 
         case 83:  // M83
-          eSetRelative(true);
+          coordinateSetRelativeExtruder(true);
           break;
 
         case 105:  // M105
@@ -1524,27 +1524,27 @@ void sendQueueCmd(void)
         #endif
 
         case 90:  // G90, set absolute position mode, in Marlin this includes the extruder position unless overridden by M83
-          coorSetRelative(false);
+          coordinateSetRelative(false);
 
           if (infoMachineSettings.firmwareType == FW_MARLIN)
-            eSetRelative(false);
+            coordinateSetRelativeExtruder(false);
           break;
 
         case 91:  // G91, set relative position mode, in Marlin this includes the extruder position unless overridden by M82
-          coorSetRelative(true);
+          coordinateSetRelative(true);
 
           if (infoMachineSettings.firmwareType == FW_MARLIN)
-            eSetRelative(true);
+            coordinateSetRelativeExtruder(true);
           break;
 
         case 92:  // G92
         {
-          bool coorRelative = coorGetRelative();
-          bool eRelative = eGetRelative();
+          bool relative = coordinateGetRelative();
+          bool relativeE = coordinateGetRelativeExtruder();
 
           // set to absolute mode
-          coorSetRelative(false);
-          eSetRelative(false);
+          coordinateSetRelative(false);
+          coordinateSetRelativeExtruder(false);
 
           for (AXIS i = X_AXIS; i < TOTAL_AXIS; i++)
           {
@@ -1560,8 +1560,8 @@ void sendQueueCmd(void)
           }
 
           // restore mode
-          coorSetRelative(coorRelative);
-          eSetRelative(eRelative);
+          coordinateSetRelative(relative);
+          coordinateSetRelativeExtruder(relativeE);
           break;
         }
       }

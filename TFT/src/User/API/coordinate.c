@@ -21,22 +21,22 @@ static bool position_known = false;
 static uint8_t coordUpdateSeconds = 0;
 static bool coordSendingWaiting = false;
 
-bool coorGetRelative(void)
+bool coordinateGetRelative(void)
 {
   return relative_mode;
 }
 
-void coorSetRelative(bool mode)
+void coordinateSetRelative(bool mode)
 {
   relative_mode = mode;
 }
 
-bool eGetRelative(void)
+bool coordinateGetRelativeExtruder(void)
 {
   return relative_e;
 }
 
-void eSetRelative(bool mode)
+void coordinateSetRelativeExtruder(bool mode)
 {
   relative_e = mode;
 }

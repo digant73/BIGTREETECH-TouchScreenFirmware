@@ -251,8 +251,8 @@ void powerFailedCache(uint32_t offset)
       infoBreakPoint.fan[i] = fanGetCurrentSpeed(i);
     }
 
-    infoBreakPoint.relative = coorGetRelative();
-    infoBreakPoint.relative_e = eGetRelative();
+    infoBreakPoint.relative = coordinateGetRelative();
+    infoBreakPoint.relative_e = coordinateGetRelativeExtruder();
   }
   else if (infoBreakPoint.pause)  // if paused and the pause state has been saved, nothing to do
   {
