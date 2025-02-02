@@ -1,6 +1,8 @@
 #include "Temperature.h"
 #include "includes.h"
 
+#define AUTOREPORT_TIMEOUT 3000  // 3 second grace period
+
 const char * const heaterID[MAX_HEATER_COUNT]      = HEAT_SIGN_ID;
 const char * const heatDisplayID[MAX_HEATER_COUNT] = HEAT_DISPLAY_ID;
 const char * const heatShortID[MAX_HEATER_COUNT]   = HEAT_SHORT_ID;
@@ -16,8 +18,6 @@ static uint8_t heat_feedback_waiting = 0;
 static uint8_t heat_update_seconds = TEMPERATURE_QUERY_SLOW_SECONDS;
 static uint32_t heat_next_update_time = 0;
 static bool  heat_sending_waiting = false;
-
-#define AUTOREPORT_TIMEOUT 3000  // 3 second grace period
 
 // verify that the heater index is valid, and fix the index of multiple in and 1 out tool nozzles
 static uint8_t heaterIndexFix(uint8_t index)
@@ -46,10 +46,18 @@ void heatSetTargetTemp(uint8_t index, const int16_t temp, const TEMP_SOURCE temp
 
   switch (tempSource)
   {
+    case FROM_CMD:
+      if (!GET_BIT(heat_feedback_waiting, index))  // if not waiting for feedback, set new temp and flag
+      {
+        heater.T[index].target = temp;
+        SET_BIT_ON(heat_feedback_waiting, index);
+      }
+      break;
+
     case FROM_HOST:
-      if (GET_BIT(heat_feedback_waiting, index))
+      if (GET_BIT(heat_feedback_waiting, index))    // if waiting for feedback, clear flag
         SET_BIT_OFF(heat_feedback_waiting, index);
-      else if (!GET_BIT(heat_send_waiting, index))
+      else if (!GET_BIT(heat_send_waiting, index))  // if not waiting for sending, set new target temp
         heater.T[index].target = temp;
       break;
 
@@ -61,14 +69,6 @@ void heatSetTargetTemp(uint8_t index, const int16_t temp, const TEMP_SOURCE temp
         heater.T[index].status = SETTLED;
       else
         heater.T[index].status = heater.T[index].target > heater.T[index].current ? HEATING : COOLING;
-      break;
-
-    case FROM_CMD:
-      if (GET_BIT(heat_feedback_waiting, index) == false)
-      {
-        heater.T[index].target = temp;
-        SET_BIT_ON(heat_feedback_waiting, index);
-      }
       break;
   }
 }

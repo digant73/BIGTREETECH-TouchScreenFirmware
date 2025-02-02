@@ -1,6 +1,34 @@
 #include "MachineParameters.h"
 #include "includes.h"
 
+#define ONOFF_DISPLAY_ID "1=ON 0=OFF"
+
+// param attributes multi purpose hard coded labels
+char * const axisDisplayID[AXIS_INDEX_COUNT] = AXIS_DISPLAY_ID;
+char * const stepperDisplayID[STEPPER_INDEX_COUNT] = STEPPER_DISPLAY_ID;
+
+// param attributes hard coded labels
+char * const filamentDiaDisplayID[]        = {"S " ONOFF_DISPLAY_ID, "T0 Ø Filament", "T1 Ø Filament", "T2 Ø Filament"};
+char * const autoRetractDisplayID[]        = {"S " ONOFF_DISPLAY_ID};
+char * const hotendPidDisplayID[]          = {"Kp", "Ki", "Kd"};
+char * const bedPidDisplayID[]             = {"Kp", "Ki", "Kd"};
+char * const ablStateDisplayID[]           = {"S "  ONOFF_DISPLAY_ID, "Z fade height"};
+char * const stealthChopDisplayID[]        = {"X "  ONOFF_DISPLAY_ID, "X2 " ONOFF_DISPLAY_ID, "Y "  ONOFF_DISPLAY_ID, "Y2 " ONOFF_DISPLAY_ID,
+                                              "Z "  ONOFF_DISPLAY_ID, "Z2 " ONOFF_DISPLAY_ID, "Z3 " ONOFF_DISPLAY_ID, "Z4 " ONOFF_DISPLAY_ID,
+                                              "E0 " ONOFF_DISPLAY_ID, "E1 " ONOFF_DISPLAY_ID, "E2 " ONOFF_DISPLAY_ID};
+char * const inputShapingDisplayID[]       = {"X -> F:", "X -> D:", "Y -> F:", "Y -> D:"};
+char * const deltaConfigurationDisplayID[] = {"Height", "Segment/sec.", "Radius", "Diagonal Rod"};
+char * const deltaTowerAngleDisplayID[]    = {"Tx", "Ty", "Tz"};
+char * const deltaDiagonalRodDisplayID[]   = {"Dx", "Dy", "Dz"};
+char * const deltaEndstopDisplayID[]       = {"Ex", "Ey", "Ez"};
+char * const linAdvDisplayID[]             = {"K-Factor E0", "K-Factor E1", "K-Factor E2"};
+
+// param attributes configurable labels
+const LABEL accelDisplayID[]             = {LABEL_PRINT_ACCELERATION, LABEL_RETRACT_ACCELERATION, LABEL_TRAVEL_ACCELERATION};
+const LABEL junctionDeviationDisplayID[] = {LABEL_JUNCTION_DEVIATION};
+const LABEL retractDisplayID[]           = {LABEL_RETRACT_LENGTH, LABEL_RETRACT_SWAP_LENGTH, LABEL_RETRACT_FEEDRATE, LABEL_RETRACT_Z_LIFT};
+const LABEL recoverDisplayID[]           = {LABEL_RECOVER_LENGTH, LABEL_SWAP_RECOVER_LENGTH, LABEL_RECOVER_FEEDRATE, LABEL_SWAP_RECOVER_FEEDRATE};
+
 typedef struct
 {
   const char * const suffix;
@@ -170,7 +198,7 @@ static const suffix_t G29_suffix[] = {
   {"S4 Z%.2f\nG29 S0\n", VAL_TYPE_NEG_FLOAT},
 };
 
-parameter_member_t parameter_list[] = {
+static parameter_member_t parameter_list[] = {
   // Steps/mm
   {"M92",  M92_suffix,            COUNT(M92_suffix)},
   // Filament Diameter
@@ -260,36 +288,7 @@ typedef struct
 
 static uint32_t parametersEnabled = 0;
 static PARAMETERS infoParametersBackup;
-
-PARAMETERS infoParameters;
-
-// param attributes multi purpose hard coded labels
-char * const axisDisplayID[AXIS_INDEX_COUNT] = AXIS_DISPLAY_ID;
-char * const stepperDisplayID[STEPPER_INDEX_COUNT] = STEPPER_DISPLAY_ID;
-
-#define ONOFF_DISPLAY_ID "1=ON 0=OFF"
-
-// param attributes hard coded labels
-char * const filamentDiaDisplayID[]        = {"S " ONOFF_DISPLAY_ID, "T0 Ø Filament", "T1 Ø Filament", "T2 Ø Filament"};
-char * const autoRetractDisplayID[]        = {"S " ONOFF_DISPLAY_ID};
-char * const hotendPidDisplayID[]          = {"Kp", "Ki", "Kd"};
-char * const bedPidDisplayID[]             = {"Kp", "Ki", "Kd"};
-char * const ablStateDisplayID[]           = {"S "  ONOFF_DISPLAY_ID, "Z fade height"};
-char * const stealthChopDisplayID[]        = {"X "  ONOFF_DISPLAY_ID, "X2 " ONOFF_DISPLAY_ID, "Y "  ONOFF_DISPLAY_ID, "Y2 " ONOFF_DISPLAY_ID,
-                                              "Z "  ONOFF_DISPLAY_ID, "Z2 " ONOFF_DISPLAY_ID, "Z3 " ONOFF_DISPLAY_ID, "Z4 " ONOFF_DISPLAY_ID,
-                                              "E0 " ONOFF_DISPLAY_ID, "E1 " ONOFF_DISPLAY_ID, "E2 " ONOFF_DISPLAY_ID};
-char * const inputShapingDisplayID[]       = {"X -> F:", "X -> D:", "Y -> F:", "Y -> D:"};
-char * const deltaConfigurationDisplayID[] = {"Height", "Segment/sec.", "Radius", "Diagonal Rod"};
-char * const deltaTowerAngleDisplayID[]    = {"Tx", "Ty", "Tz"};
-char * const deltaDiagonalRodDisplayID[]   = {"Dx", "Dy", "Dz"};
-char * const deltaEndstopDisplayID[]       = {"Ex", "Ey", "Ez"};
-char * const linAdvDisplayID[]             = {"K-Factor E0", "K-Factor E1", "K-Factor E2"};
-
-// param attributes configurable labels
-const LABEL accelDisplayID[]             = {LABEL_PRINT_ACCELERATION, LABEL_RETRACT_ACCELERATION, LABEL_TRAVEL_ACCELERATION};
-const LABEL junctionDeviationDisplayID[] = {LABEL_JUNCTION_DEVIATION};
-const LABEL retractDisplayID[]           = {LABEL_RETRACT_LENGTH, LABEL_RETRACT_SWAP_LENGTH, LABEL_RETRACT_FEEDRATE, LABEL_RETRACT_Z_LIFT};
-const LABEL recoverDisplayID[]           = {LABEL_RECOVER_LENGTH, LABEL_SWAP_RECOVER_LENGTH, LABEL_RECOVER_FEEDRATE, LABEL_SWAP_RECOVER_FEEDRATE};
+static PARAMETERS infoParameters;
 
 void infoParametersRefreshBackup(void)
 {

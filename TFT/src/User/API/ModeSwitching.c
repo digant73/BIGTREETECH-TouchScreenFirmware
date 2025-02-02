@@ -2,8 +2,7 @@
 #include "includes.h"
 
 static bool modeFreshBoot = true;
-
-bool modeSwitching = false;
+static bool modeSwitching = false;
 
 // change UI mode
 void Mode_Switch(void)
@@ -53,6 +52,11 @@ void Mode_Switch(void)
       #endif
       break;
   }
+}
+
+void Mode_EnableSwitching(bool isEnabled)
+{
+  modeSwitching = isEnabled;
 }
 
 void Mode_CheckSwitching(void)

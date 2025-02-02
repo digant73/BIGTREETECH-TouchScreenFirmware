@@ -1,19 +1,19 @@
 #include "coordinate.h"
 #include "includes.h"
 
-static COORDINATE targetPosition  = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
-static COORDINATE currentPosition = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
-/**
- * Obtained from "M114 E" instead of "M114", Because the coordinates of "M114" are not real-time coordinates.
- * It may be replaced by "M114 R"
- */
-static float extruderPostion = 0.0f;
-
 const char axisID[TOTAL_AXIS] = {'X', 'Y', 'Z', 'E'};
 E_AXIS_BACKUP eAxisBackup     = {0, 0, false, false};
 
+static COORDINATE targetPosition  = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
+static COORDINATE currentPosition = {{0.0f, 0.0f, 0.0f, 0.0f}, 3000};
+
+// obtained from "M114 E" instead of "M114", Because the coordinates of "M114" are not real-time coordinates.
+// It may be replaced by "M114 R"
+static float extruderPostion = 0.0f;
+
 static bool relative_mode = false;
 static bool relative_e = false;
+
 // false means current position is unknown
 // false after M18/M84 disable stepper or power up, true after G28
 static bool position_known = false;

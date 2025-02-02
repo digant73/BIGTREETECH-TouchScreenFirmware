@@ -1,6 +1,8 @@
 #include "Printing.h"
 #include "includes.h"
 
+PRINT_SUMMARY infoPrintSummary = {.name[0] = '\0', 0, 0, 0, 0, false};
+
 typedef struct
 {
   FIL        file;
@@ -28,8 +30,6 @@ static float lastEPos = 0;                 // used only to update stats in infoP
 
 static uint32_t nextUpdateTime = 0;
 static bool sendingWaiting = false;
-
-PRINT_SUMMARY infoPrintSummary = {.name[0] = '\0', 0, 0, 0, 0, false};
 
 void setExtrusionDuringPause(bool extruded)
 {
