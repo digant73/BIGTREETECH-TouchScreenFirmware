@@ -173,8 +173,8 @@ typedef struct
   uint8_t  serial_port[MAX_SERIAL_PORT_COUNT];
   uint8_t  tx_slots;
   uint8_t  tx_delay;
-  uint8_t  general_settings;  // listening mode / advanced ok / emulated M600 /
-                              // emulated M109-M190 / event led / file comment parsing toggles (Bit Values)
+  uint8_t  general_settings;  // (Bit Values)
+
   // UI Settings
   uint8_t  rotated_ui;
   uint8_t  language;
