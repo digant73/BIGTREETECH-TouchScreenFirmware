@@ -1,7 +1,8 @@
 #include "Temperature.h"
 #include "includes.h"
 
-#define AUTOREPORT_TIMEOUT 3000  // 3 second grace period
+#define HEATING_TIMEOUT    300000  // 5 minutes (1 sec is 1000)
+#define AUTOREPORT_TIMEOUT 3000    // 3 second grace period
 
 const char * const heaterID[MAX_HEATER_COUNT]      = HEAT_SIGN_ID;
 const char * const heatDisplayID[MAX_HEATER_COUNT] = HEAT_DISPLAY_ID;
@@ -12,6 +13,8 @@ const char * const extruderDisplayID[]             = EXTRUDER_ID;
 const char * const toolChange[]                    = TOOL_CHANGE;
 
 static HEATER heater = {{}, NOZZLE0};
+static bool heat_waiting = false;             // "false" if no heater waiting for target temperature. "true" otherwise
+static uint32_t heat_timestamp = 0;           // keep track of last sent heating command
 static uint8_t heat_feedback_waiting = 0;
 static uint8_t heat_gui_sending_waiting = 0;  // command submitted by GUI waiting for sending
 
@@ -48,6 +51,8 @@ void heatSetTargetTemp(uint8_t index, const int16_t temp, const TEMP_SOURCE temp
   {
     // temperature retrieved from command queue (from gcode, external source connected to TFT or TFT's GUI) and ready to be sent to mainboard
     case FROM_CMD:
+      heat_timestamp = OS_GetTimeMs();  // update timestamp
+
       // always set target temperature, just to avoid a potential deadlock on
       // waiting for target temperature (if waiting for heating flag is set)
       heater.T[index].target = temp;
@@ -128,20 +133,41 @@ void heatSetWaiting(uint8_t index, const bool isWaiting)
   heater.T[index].waiting = isWaiting;
 
   if (isWaiting == true)  // wait heating now, query more frequently
+  {
+    heat_waiting = true;  // always set to "true" when waiting for heating
+
     heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
+  }
   else if (heatIsWaiting() == false)
+  {
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
+  }
 }
 
 bool heatIsWaiting(void)
 {
+  if (!heat_waiting)  // if no heater waiting for target temperature
+    return false;
+
   for (uint8_t i = 0; i < MAX_HEATER_COUNT; i++)
   {
     if (heater.T[i].waiting == true)
       return true;
   }
 
+  heat_waiting = false;  // set to "false" when no more heaters waiting for target temperature
+
   return false;
+}
+
+bool heatIsWaitingTimedout(void)
+{
+  if (!heatIsWaiting() || OS_GetTimeMs() - heat_timestamp < HEATING_TIMEOUT)  // if no heater waiting for target temperature or no timeout
+    return false;
+
+  heat_timestamp = OS_GetTimeMs();  // update timestamp
+
+  return true;
 }
 
 void heatClearWaiting(void)
@@ -150,6 +176,8 @@ void heatClearWaiting(void)
   {
     heater.T[i].waiting = false;
   }
+
+  heat_waiting = false;  // set to "false" when no more heaters waiting for target temperature
 
   heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
 }

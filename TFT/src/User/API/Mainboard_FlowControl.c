@@ -63,7 +63,24 @@ void loopBackEnd(void)
 
   // handle ACK message timeout
   if (InfoHost_HandleAckTimeout())  // if ACK message timeout, unlock any pending query waiting for an update
+  {
+    addNotification(DIALOG_TYPE_ERROR, "ACK timed out", "Pending gcode released", true);
+
     resetPendingQueries();
+  }
+
+  // handle heating timeout
+  if (heatIsWaitingTimedout())
+  {
+    char tempMsg[200];
+
+    sprintf(tempMsg, (char *) textSelect(LABEL_DESIRED_TEMPLOW), heatGetTargetTemp(heatGetToolIndex()));
+    strcat(tempMsg, "\n");
+    strcat(tempMsg, (char *) textSelect(LABEL_WAIT_HEAT_UP));
+    strcat(tempMsg, "?");
+
+    popupDialog(DIALOG_TYPE_ERROR, LABEL_TIMEOUT_REACHED, (uint8_t *) tempMsg, LABEL_CONFIRM, LABEL_RESUME, NULL, heatClearWaiting, NULL);
+  }
 
   // fan speed monitor
   loopCheckFan();
@@ -186,8 +203,6 @@ static bool InfoHost_HandleAckTimeout(void)
   infoHost.rx_timestamp = infoHost.rx_ok_timestamp = OS_GetTimeMs();  // update timestamp
 
   InfoHost_HandleAckOk(HOST_SLOTS_GENERIC_OK);  // release pending gcode
-
-  addNotification(DIALOG_TYPE_ERROR, "ACK timed out", "Pending gcode released", true);
 
   return true;
 }
