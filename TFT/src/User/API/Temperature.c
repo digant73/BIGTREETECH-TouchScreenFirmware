@@ -12,12 +12,12 @@ const char * const extruderDisplayID[]             = EXTRUDER_ID;
 const char * const toolChange[]                    = TOOL_CHANGE;
 
 static HEATER heater = {{}, NOZZLE0};
-static uint8_t heat_send_waiting = 0;
 static uint8_t heat_feedback_waiting = 0;
+static uint8_t heat_gui_sending_waiting = 0;  // command submitted by GUI waiting for sending
 
 static uint8_t heat_update_seconds = TEMPERATURE_QUERY_SLOW_SECONDS;
 static uint32_t heat_next_update_time = 0;
-static bool  heat_sending_waiting = false;
+static bool heat_sending_waiting = false;
 
 // verify that the heater index is valid, and fix the index of multiple in and 1 out tool nozzles
 static uint8_t heaterIndexFix(uint8_t index)
@@ -46,29 +46,36 @@ void heatSetTargetTemp(uint8_t index, const int16_t temp, const TEMP_SOURCE temp
 
   switch (tempSource)
   {
+    // temperature retrieved from command queue (from gcode, external source connected to TFT or TFT's GUI) and ready to be sent to mainboard
     case FROM_CMD:
-      if (!GET_BIT(heat_feedback_waiting, index))  // if not waiting for feedback, set new temp and flag
-      {
-        heater.T[index].target = temp;
-        SET_BIT_ON(heat_feedback_waiting, index);
-      }
+      // always set target temperature, just to avoid a potential deadlock on
+      // waiting for target temperature (if waiting for heating flag is set)
+      heater.T[index].target = temp;
+
+      SET_BIT_ON(heat_feedback_waiting, index);
       break;
 
+    // temperature status (actual/requested) from host (Marlin, RepRap, etc.)
     case FROM_HOST:
+      // set target temperature if not waiting for feedback (it avoids to set old target temperature in case of multiple
+      // commands issued from GUI) and if not waiting for heating, just to avoid a potential deadlock on waiting for
+      // target temperature (if waiting for heating flag is set) in case a wrong target temperature is reported
       if (GET_BIT(heat_feedback_waiting, index))    // if waiting for feedback, clear flag
         SET_BIT_OFF(heat_feedback_waiting, index);
-      else if (!GET_BIT(heat_send_waiting, index))  // if not waiting for sending, set new target temp
+      else if (!heater.T[index].waiting)            // if not waiting for heating, set target temperature
         heater.T[index].target = temp;
       break;
 
+    // temperature requested from TFT's GUI
     case FROM_GUI:
       heater.T[index].target = NOBEYOND(0, temp, infoSettings.max_temp[index]);
-      SET_BIT_ON(heat_send_waiting, index);
 
       if (inRange(heater.T[index].current, heater.T[index].target, TEMPERATURE_RANGE))
         heater.T[index].status = SETTLED;
       else
         heater.T[index].status = heater.T[index].target > heater.T[index].current ? HEATING : COOLING;
+
+      SET_BIT_ON(heat_gui_sending_waiting, index);
       break;
   }
 }
@@ -111,7 +118,7 @@ void heatCoolDown(void)
   }
 }
 
-void heatSetIsWaiting(uint8_t index, const bool isWaiting)
+void heatSetWaiting(uint8_t index, const bool isWaiting)
 {
   index = heaterIndexFix(index);
 
@@ -124,11 +131,6 @@ void heatSetIsWaiting(uint8_t index, const bool isWaiting)
     heatSetUpdateSeconds(TEMPERATURE_QUERY_FAST_SECONDS);
   else if (heatIsWaiting() == false)
     heatSetUpdateSeconds(TEMPERATURE_QUERY_SLOW_SECONDS);
-}
-
-bool heatGetIsWaiting(const uint8_t index)
-{
-  return (heater.T[index].waiting == true);
 }
 
 bool heatIsWaiting(void)
@@ -271,11 +273,12 @@ void loopCheckHeater(void)
       heater.T[i].status = SETTLED;
     }
 
-    if (GET_BIT(heat_send_waiting, i) && !GET_BIT(heat_feedback_waiting, i))
+    // send a pending command submitted by GUI only if there is no pending feedback
+    if (GET_BIT(heat_gui_sending_waiting, i) && !GET_BIT(heat_feedback_waiting, i))
     {
       if (storeCmd("%s S%u\n", heatCmd[i], heatGetTargetTemp(i)))
       {
-        SET_BIT_OFF(heat_send_waiting, i);
+        SET_BIT_OFF(heat_gui_sending_waiting, i);
         SET_BIT_ON(heat_feedback_waiting, i);
       }
     }

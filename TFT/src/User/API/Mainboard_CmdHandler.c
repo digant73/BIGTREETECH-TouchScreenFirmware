@@ -506,11 +506,11 @@ static void setHeatingWaiting(uint8_t index)
   if (cmd_seen('R'))
   {
     cmd_ptr[cmd_index - 1] = 'S';
-    heatSetIsWaiting(index, true);
+    heatSetWaiting(index, true);
   }
   else if (cmd_seen('S'))
   {
-    heatSetIsWaiting(index, (cmd_value() > heatGetCurrentTemp(index) - TEMPERATURE_RANGE));
+    heatSetWaiting(index, (cmd_value() > heatGetCurrentTemp(index) - TEMPERATURE_RANGE));
   }
 }
 
