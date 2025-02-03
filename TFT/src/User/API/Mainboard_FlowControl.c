@@ -30,8 +30,6 @@ void resetPendingQueries(void)
   #ifdef FIL_RUNOUT_PIN
     FIL_PosE_ClearSendingWaiting();      // clear sending waiting for position query
   #endif
-
-  //heatClearWaiting();                  // dangerous! it could unlock loopPrintFromTFT() prematurely
 }
 
 // non-UI background loop tasks

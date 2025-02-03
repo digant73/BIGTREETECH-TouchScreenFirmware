@@ -49,22 +49,12 @@ void heatSetTargetTemp(uint8_t index, const int16_t temp, const TEMP_SOURCE temp
 
   switch (tempSource)
   {
-    // temperature retrieved from command queue (from gcode, external source connected to TFT or TFT's GUI) and ready to be sent to mainboard
-    case FROM_CMD:
-      heat_timestamp = OS_GetTimeMs();  // update timestamp
-
-      // always set target temperature, just to avoid a potential deadlock on
-      // waiting for target temperature (if waiting for heating flag is set)
-      heater.T[index].target = temp;
-
-      SET_BIT_ON(heat_feedback_waiting, index);
-      break;
-
     // temperature status (actual/requested) from host (Marlin, RepRap, etc.)
     case FROM_HOST:
       // set target temperature if not waiting for feedback (it avoids to set old target temperature in case of multiple
       // commands issued from GUI) and if not waiting for heating, just to avoid a potential deadlock on waiting for
       // target temperature (if waiting for heating flag is set) in case a wrong target temperature is reported
+      //
       if (GET_BIT(heat_feedback_waiting, index))    // if waiting for feedback, clear flag
         SET_BIT_OFF(heat_feedback_waiting, index);
       else if (!heater.T[index].waiting)            // if not waiting for heating, set target temperature
@@ -81,6 +71,17 @@ void heatSetTargetTemp(uint8_t index, const int16_t temp, const TEMP_SOURCE temp
         heater.T[index].status = heater.T[index].target > heater.T[index].current ? HEATING : COOLING;
 
       SET_BIT_ON(heat_gui_sending_waiting, index);
+      break;
+
+    // temperature requested in command queue (from gcode, external source connected to TFT or TFT's GUI) and ready to be sent to mainboard
+    case FROM_CMD:
+      heat_timestamp = OS_GetTimeMs();  // update timestamp
+
+      // always set target temperature, just to avoid a potential deadlock on
+      // waiting for target temperature (if waiting for heating flag is set)
+      heater.T[index].target = temp;
+
+      SET_BIT_ON(heat_feedback_waiting, index);
       break;
   }
 }
