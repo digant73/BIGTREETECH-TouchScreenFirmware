@@ -1109,7 +1109,7 @@ static void parseLangLine(void)
         char check[MAX_LANG_LABEL_LENGTH];
 
         W25Qxx_WritePage(pchr, key_addr, MAX_LANG_LABEL_LENGTH);
-        W25Qxx_ReadBuffer((uint8_t *) check, key_addr, MAX_LANG_LABEL_LENGTH);
+        W25Qxx_ReadBuffer((uint8_t *) &check, key_addr, MAX_LANG_LABEL_LENGTH);
 
         if (strcmp(strchr(cur_line, ':') + 1, check) != 0)
           showError(CSTAT_SPI_WRITE_FAIL);

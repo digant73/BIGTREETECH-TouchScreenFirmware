@@ -28,11 +28,6 @@ void _setDialogMsgLabel(int16_t index);
 void _setDialogOkTextLabel(int16_t index);
 void _setDialogCancelTextLabel(int16_t index);
 
-void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const char * title, const char * context, const char * yes, const char * no);
-void menuDialog(void);
-void showDialog(DIALOG_TYPE type, void (* ok_action)(void), void (* cancel_action)(void), void (* loop_action)(void));
-void loopPopup(void);
-
 #define setDialogTitle(x)      _Generic(((x + 0)), const char *: _setDialogTitleStr, \
                                                          char *: _setDialogTitleStr, \
                                                         default: _setDialogTitleLabel)(x)
@@ -54,6 +49,11 @@ void loopPopup(void);
     setDialogOkText(oktext);                          \
     setDialogCancelText(canceltext);                  \
   }
+
+void popupDrawPage(DIALOG_TYPE type, BUTTON * btn, const char * title, const char * context, const char * yes, const char * no);
+void menuDialog(void);
+void showDialog(DIALOG_TYPE type, void (* ok_action)(void), void (* cancel_action)(void), void (* loop_action)(void));
+void loopPopup(void);
 
 /**
  * @brief Displays a popup for a dialog, it needs user interaction to close it

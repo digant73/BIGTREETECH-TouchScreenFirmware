@@ -1069,7 +1069,7 @@ void displayExhibitHeader(const char * titleStr, const char * unitStr)
   {
     char tempstr[20];
 
-    snprintf(tempstr, 20, "%-8s", titleStr);
+    snprintf(tempstr, sizeof(tempstr), "%-8s", titleStr);
     GUI_DispString(exhibitRect.x0, exhibitRect.y0, (uint8_t *) tempstr);
   }
 

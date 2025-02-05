@@ -153,7 +153,7 @@ void ParseACKJsonParser::value(const char * value)
       break;
 
     case pos:
-      coordinateSetAxisActual((AXIS)index, strtod((char *) value, NULL));
+      coordinateSetAxisActual((AXIS) index, strtod((char *) value, NULL));
       break;
 
     case sfactor:
