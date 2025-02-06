@@ -179,9 +179,11 @@ bool powerFailedExist(void)
 
 void powerFailedCreate(const char * path)
 {
-  powerFailedDelete();  // close and delete PLR file, if any, first
+  // close and delete PLR file, if any, first
+  powerFailedDelete();
 
-  if (!infoSettings.plr)  // if PLR is disabled
+  // if PLR is disabled, nothing to do
+  if (!infoSettings.plr)
     return;
 
   if (infoFile.source >= FS_ONBOARD_MEDIA)  // onboard media not supported now

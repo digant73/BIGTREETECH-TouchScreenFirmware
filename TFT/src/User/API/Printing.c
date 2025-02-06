@@ -293,12 +293,12 @@ static void shutdownStart(void)
 
   snprintf(tempMsg, MAX_MSG_LENGTH, textSelect(LABEL_WAIT_TEMP_SHUT_DOWN), infoSettings.auto_shutdown_temp);
 
+  popupDialog(DIALOG_TYPE_INFO, LABEL_SHUT_DOWN, tempMsg, LABEL_FORCE_SHUT_DOWN, LABEL_CANCEL, shutdown, NULL, shutdownLoop);
+
   for (uint8_t i = 0; i < infoSettings.fan_count; i++)
   {
     mustStoreCmd(fanCmd[i], infoSettings.fan_max[i]);
   }
-
-  popupDialog(DIALOG_TYPE_INFO, LABEL_SHUT_DOWN, tempMsg, LABEL_FORCE_SHUT_DOWN, LABEL_CANCEL, shutdown, NULL, shutdownLoop);
 }
 
 static void initPrintSummary(void)
